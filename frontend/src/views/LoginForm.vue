@@ -3,24 +3,25 @@
     <div class="login-box">
       <v-card class="mx-auto px-6 py-8" max-width="344">
         <h3>로그인</h3>
-        <v-form v-model="form" @submit.prevent="onSubmit" method="post">
+        <v-form v-model="form" @submit.prevent="login" method="post">
           <v-text-field
-            v-model="id"
+            v-model="userId"
             :readonly="loading"
             :rules="[required]"
             class="mb-2"
             clearable
+            required
             label="아이디"
           ></v-text-field>
           <v-text-field
-            v-model="password"
+            v-model="userPassword"
+            type="password"
             :readonly="loading"
             :rules="[required]"
             clearable
             label="비밀번호"
           ></v-text-field>
           <v-btn
-            :disabled="!form"
             :loading="loading"
             block
             color="success"
@@ -37,51 +38,44 @@
 </template>
 
 <script>
+// import axios from "axios";
+import { loginUser } from "@/api/index";
 export default {
   data() {
     return {
       form: false,
-      id: null,
-      password: null,
+      userId: null,
+      userPassword: null,
       loading: false,
     };
   },
   methods: {
-    onSubmit() {
+    required(v) {
+      return !!v || "빈칸을 채워주세요!";
+    },
+    async login() {
       if (!this.form) return;
       this.loading = true;
       setTimeout(() => (this.loading = false), 2000);
       this.$emit("onSubmit", this.form);
-    },
-    required(v) {
-      return !!v || "빈칸을 채워주세요!";
+      const userData = {
+        userId: this.userId,
+        userPassword: this.userPassword,
+      };
+      const { data } = await loginUser(userData);
+      // console.log(data.user.userId);
+      this.$store.commit("setUserId", data.userId);
+      this.$router.push("/");
+      //   this.initForm();
+      // },
+      // initForm() {
+      //   this.form = false;
     },
   },
+
   props: {
     isClicked: Boolean,
   },
-
-  //   let saveData = {};
-  //   saveData.userId = this.userId;
-  //   saveData.userPassword = this.userPassword;
-
-  // try {
-  //   this.$axios
-  //     .post(PORT, JSON.stringify(saveData), {
-  //       headers: {
-  //         "Content-Type": `application/json`,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         // 로그인 성공시 처리해줘야할 부분
-  //         this.$store.commit("login", res.data);
-  //         this.$router.push("/login", res.data);
-  //       }
-  //     });
-  // } catch (error) {
-  //   console.error(error);
-  // }
 };
 </script>
 

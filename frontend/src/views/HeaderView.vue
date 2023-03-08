@@ -3,8 +3,21 @@
     <ul>
       <li>linkV</li>
       <slot name="login" :childData="isForm">
-        <li class="login" v-bind:class="{ click: isForm }" @click="setForm">
+        <li
+          v-if="!$store.getters.isLogin"
+          class="login"
+          v-bind:class="{ click: isForm }"
+          @click="setForm"
+        >
           로그인
+        </li>
+        <li
+          v-if="$store.getters.isLogin"
+          class="logout"
+          v-bind:class="{ click: isForm }"
+          @click="setForm"
+        >
+          로그아웃
         </li>
       </slot>
     </ul>
