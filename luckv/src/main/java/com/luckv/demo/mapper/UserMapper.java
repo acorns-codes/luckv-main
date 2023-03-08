@@ -10,5 +10,19 @@ import com.luckv.demo.dto.user;
 @Mapper
 @Repository
 public interface UserMapper {
-	List<user> getUserList();
+	
+	// 아이디 중복확인
+	int getId(user user);
+	
+	// 회원가입
+    int addMember(user user);
+    
+    // 로그인
+    user login(user user);
+
+    // 회원정보수정
+	user updateMember(user user);
+    
+	user infoMember(int mno);
+    
 }

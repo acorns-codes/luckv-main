@@ -39,6 +39,11 @@ dependencies {
 	
 	// log4j2
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	
+	// json
+	implementation group: 'net.sf.json-lib', name: 'json-lib', version: '2.4'
+	
+	
 }
 
 tasks.named('test') {

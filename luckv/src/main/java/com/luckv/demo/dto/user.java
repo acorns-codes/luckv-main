@@ -1,15 +1,13 @@
 package com.luckv.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.sql.Date;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+import lombok.Data;
+
+
+@Data
 public class user {
+	
 	private int mno;
     private String mid;
     private String pwd;
@@ -17,5 +15,6 @@ public class user {
     private String ph;
     private String auth;
     private String acccount;
-    private String birth_date;
+    private Date birthDate;
+    
 }
