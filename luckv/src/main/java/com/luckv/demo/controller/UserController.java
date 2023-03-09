@@ -61,15 +61,15 @@ public class UserController {
 	    }
 	    
 	    
-//	    // 회원정보 조회
-//	    @GetMapping("/infoMember/{mno}")
-//	    public int infoMember(@PathVariable int mno) {
-//	      return service.infoMember();
-//	    }
+	    // 회원정보 조회
+	    @GetMapping("/infoMember")
+	    public user infoMember(int mno) {
+	      return service.infoMember(mno);
+	    }
 	    
 	    // 회원정보 수정	    
-	    @PutMapping("/updateMembe/{mno}")
-	    public user updateMember(@PathVariable int mno, @RequestBody user user) {
-	    	return service.updateMember(user);
+	    @GetMapping("/updateMember")
+	    public void updateMember(user user) {
+	    	service.updateMember(user);
 	    }
 }

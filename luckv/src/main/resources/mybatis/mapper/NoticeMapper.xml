@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.luckv.demo.mapper.NoticeMapper">
+
+	 <!--공지사항 조회 -->
+    <select id="noticeList"  resultType="com.luckv.demo.dto.Notice">
+        SELECT 
+        	nno as no,
+        	title,
+        	create_at
+        FROM notice
+    		ORDER BY no DESC
+    </select>
+    
+    <!-- 공지사항 페이징처리 -->
+    <select id="getBbsListSearchPage"  parameterType="com.luckv.demo.dto.Notice"  resultType="com.luckv.demo.dto.Notice">
+	  SELECT 
+        	nno as no,
+        	title,
+        	create_at
+        FROM notice
+	  WHERE 1 = 1
+	    ORDER BY no DESC
+	    WHERE notice BETWEEN #{start} AND #{end}
+	</select>
+    <!-- 공지사항 작성 -->
+    <insert id="insertNotice"  parameterType="com.luckv.demo.dto.Notice">
+        INSERT INTO 
+        	NOTICE (
+        		title,
+        		content,
+        		create_at,
+        		nid
+	        ) VALUES (
+	        	#{title},
+	        	#{content},
+	        	now(),
+	        	#{nid}
+	        )
+    </insert>
+    
+    <!-- 공지사항 상세보기 -->
+       <select id="noticeDetail"  parameterType="Integer" resultType="com.luckv.demo.dto.Notice">
+       		SELECT
+       			 n.nno as no, 
+       			 n.title, 
+       			 n.content,
+       			 n.create_at,
+       			 u.mid as id 
+       		FROM notice n 
+       		INNER JOIN user u ON  n.nid = u.mno 
+       		WHERE n.nno = #{nno}
+       </select>
+       
+      <!-- 공지사항 수정 -->
+		<update id="noticeUpdate" parameterType="com.luckv.demo.dto.Notice">
+		  UPDATE 
+		  	notice
+		  SET 
+		  	title = #{title}, 
+		  	content = #{content},
+		  	update_at = now()
+		  WHERE nno = #{nno}
+		</update>
+       
+</mapper>
