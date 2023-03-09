@@ -2,6 +2,9 @@
   <div class="main-container">
     <div class="login-box">
       <v-card class="mx-auto px-6 py-8" max-width="344">
+        <div class="btn-box">
+          <img :src="require(`@/assets/images/close.svg`)" />
+        </div>
         <h3>로그인</h3>
         <v-form v-model="form" @submit.prevent="login" method="post">
           <v-text-field
@@ -79,7 +82,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 h3 {
   font-size: 1.5rem;
   padding-bottom: 10px;
@@ -96,5 +99,15 @@ h3 {
 }
 .login-box {
   width: 500px;
+}
+.btn-box {
+  display: flex;
+  justify-content: flex-end;
+  & > img {
+    width: 10px;
+  }
+  & > img:hover {
+    cursor: pointer;
+  }
 }
 </style>

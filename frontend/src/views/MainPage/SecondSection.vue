@@ -6,11 +6,9 @@
       <p>합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!</p>
       <div class="deadlineData" v-for="(item, index) in data" :key="index">
         <div>
-          <p>{{ item.title }}</p>
+          <h4>{{ item.title }}</h4>
           <p>{{ item.content }}</p>
-
-          <p>마감일자</p>
-          <p>{{ item.end }}</p>
+          <p><span>마감일자</span> {{ item.end }}</p>
           <div>
             <p>시작가</p>
             <p>{{ item.startprice }}</p>
@@ -21,7 +19,8 @@
             <p>{{ item.topprice }}</p>
             <p>{{ item.user_id }}</p>
           </div>
-          <v-btn variant="outlined">입찰</v-btn>
+
+          <v-btn variant="flat" color="#FF9414"> 입찰 </v-btn>
         </div>
         <div>
           <img :src="item.thumbnail" />
@@ -46,7 +45,7 @@ export default {
           end: "2023.04.01 토요일 12:00",
           startprice: "12,345원",
           seller_id: "yeonju05**",
-          topprice: "34,56원",
+          topprice: "34,567원",
           user_id: "kuro**",
         },
       ],
@@ -66,11 +65,7 @@ section {
     padding: 90px;
     display: flex;
     flex-direction: column;
-    background-color: seagreen;
-    & > h3,
-    p {
-      text-align: end;
-    }
+    text-align: end;
   }
 }
 .deadlineData {
@@ -79,22 +74,43 @@ section {
   align-items: center;
   & > div:nth-child(1) {
     width: 725px;
-    background-color: salmon;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    & span {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ff5e5e;
+    }
+
     & > div {
       display: flex;
+      width: 50%;
+      padding: 5px;
+      justify-content: space-between;
+      & > p:nth-child(1) {
+        background-color: #343434;
+        color: white;
+        border-radius: 5px;
+        padding: 4px 5px 0 5px;
+        font-size: 0.8rem;
+      }
+      & > p:not(:first-of-type) {
+        width: 100px;
+      }
     }
   }
   & > div:nth-child(2) {
     width: 485px;
-    background: cadetblue;
     & > img {
       width: 360px;
       height: 350px;
       object-fit: cover;
     }
   }
+}
+button {
+  width: 200px;
+  margin: 15px;
 }
 </style>

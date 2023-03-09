@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "../views/MainPage.vue";
-import LoginSuccess from "../views/LoginSuccess.vue";
+import LoginSuccess from "../views/Login/LoginSuccess.vue";
+import MyPageMain from "../views/MyPage/MyPageMain.vue";
 const routes = [
   {
     path: "/",
@@ -20,6 +21,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: LoginSuccess,
+  },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: MyPageMain,
   },
 ];
 

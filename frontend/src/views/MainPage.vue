@@ -1,5 +1,6 @@
 <template>
   <HeaderView @child="LoginFormOpen" />
+  <!-- <SignUpForm /> -->
   <LoginForm
     v-if="isClicked"
     :isClicked="isClicked"
@@ -12,12 +13,13 @@
 </template>
 
 <script>
-import HeaderView from "./HeaderView.vue";
-import NavBar from "./NavBar.vue";
-import FirstSection from "./FirstSection.vue";
-import SecondSection from "./SecondSection.vue";
-import LoginForm from "./LoginForm.vue";
-import ThirdSection from "./ThirdSection.vue";
+import HeaderView from "@/components/HeaderView.vue";
+import NavBar from "@/components/NavBar.vue";
+import FirstSection from "./MainPage/FirstSection.vue";
+import SecondSection from "./MainPage/SecondSection.vue";
+import ThirdSection from "./MainPage/ThirdSection.vue";
+import LoginForm from "./Login/LoginForm.vue";
+// import SignUpForm from "./Login/SignUpForm.vue";
 export default {
   name: "MainPage",
   components: {
@@ -27,6 +29,7 @@ export default {
     SecondSection,
     LoginForm,
     ThirdSection,
+    // SignUpForm,
   },
   data() {
     return {
