@@ -10,7 +10,7 @@
       <div class="img-box">
         <span class="item item1">
           <img
-            src="https://img.freepik.com/free-photo/beautiful-colorful-firework-display-night-celebrate_74190-9527.jpg?t=st=1678242809~exp=1678243409~hmac=2b4178df739b6e483ecf73c745d8a62a1f793e994cebfbc5450283c2fd2dbb7d"
+            src="https://img.freepik.com/free- photo/beautiful-colorful-firework-display-night-celebrate_74190-9527.jpg?t=st=1678242809~exp=1678243409~hmac=2b4178df739b6e483ecf73c745d8a62a1f793e994cebfbc5450283c2fd2dbb7d"
           />
         </span>
         <span class="item item2"
