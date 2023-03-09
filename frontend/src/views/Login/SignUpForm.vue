@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <v-card class="mx-auto px-6 py-8" max-width="450">
-      <v-form fast-fail @submit.prevent>
+      <v-form fast-fail @submit.prevent="signUp">
         <v-text-field
           v-model="id"
           label="아이디"
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import { resiseteUser } from "@/api/idnex";
 export default {
   data() {
     return {
@@ -104,6 +105,9 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    signUp() {},
   },
 };
 </script>
