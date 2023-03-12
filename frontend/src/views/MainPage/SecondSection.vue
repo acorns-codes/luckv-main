@@ -1,14 +1,14 @@
 <template>
   <section>
     <div>
-      <h3>마감이 임박한 동영상입니다.</h3>
+      <h2>마감이 임박한 동영상입니다.</h2>
       <p>마감이 얼마 남지 않은 동영상입니다.</p>
       <p>합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!</p>
       <div class="deadlineData" v-for="(item, index) in data" :key="index">
         <div>
-          <h4>{{ item.title }}</h4>
+          <h2>{{ item.title }}</h2>
           <p>{{ item.content }}</p>
-          <p><span>마감일자</span> {{ item.end }}</p>
+          <p><span>마감일자 </span> {{ item.end }}</p>
           <div>
             <p>시작가</p>
             <p>{{ item.startprice }}</p>
@@ -38,9 +38,8 @@ export default {
         {
           thumbnail:
             "https://img.freepik.com/free-photo/rear-view-excited-fans-having-fun-music-festival-taking-pictures-stage-with-their-smart-phones-copy-space_637285-607.jpg?w=900&t=st=1678263326~exp=1678263926~hmac=acca962073b1fd2598a218c9d18d688541746b56d4bd525b92a9f521ec5a6bbe",
-          title: "3D 영화를 보고 있는 남자",
-          content:
-            "교정하고 있는 남자아이가 ㄴ3D안경을 착용하고 팝콘을 먹으면서 웃고 있는 남자입니다.",
+          title: "호응하는 사람들",
+          content: `콘서트가 시작되기 전에 모든 관람객들이 환호하고 있는 동영상입니다.`,
 
           end: "2023.04.01 토요일 12:00",
           startprice: "12,345원",
@@ -66,28 +65,40 @@ section {
     display: flex;
     flex-direction: column;
     text-align: end;
+    & > p {
+      letter-spacing: -1px;
+    }
   }
 }
 .deadlineData {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
   & > div:nth-child(1) {
     width: 725px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    & span {
-      font-size: 20px;
+    & > h2 {
+      margin: 5px;
+    }
+    & > p:nth-child(3) {
+      margin: 5px;
       font-weight: bold;
-      color: #ff5e5e;
+      & span {
+        color: #ff5e5e;
+      }
     }
 
     & > div {
       display: flex;
       width: 50%;
       padding: 5px;
+      margin-bottom: 5px;
       justify-content: space-between;
+      border-bottom: 1px solid #343434;
+
       & > p:nth-child(1) {
         background-color: #343434;
         color: white;
@@ -102,6 +113,7 @@ section {
   }
   & > div:nth-child(2) {
     width: 485px;
+
     & > img {
       width: 360px;
       height: 350px;

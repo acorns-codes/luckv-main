@@ -1,10 +1,18 @@
 <template>
-  <!-- <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> -->
-  <router-view />
+  <div id="app">
+    <app-layout-home>
+      <router-view />
+    </app-layout-home>
+  </div>
 </template>
 
-<script></script>
+<script>
+import AppLayoutHome from "./Layouts/AppLayoutHome.vue";
+export default {
+  name: "App",
+  components: { AppLayoutHome },
+};
+</script>
 
 <style lang="scss">
 @import "@/styles/sass/variables.scss";

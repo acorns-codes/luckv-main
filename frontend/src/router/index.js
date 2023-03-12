@@ -1,36 +1,44 @@
 import { createRouter, createWebHistory } from "vue-router";
-import MainPage from "../views/MainPage.vue";
-import LoginSuccess from "../views/Login/LoginSuccess.vue";
-import MyPageMain from "../views/MyPage/MyPageMain.vue";
+
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: MainPage,
+    name: "Home",
+    component: () => import("@/views/MainPage"),
+
+    // 메타 필드
+    // $route.matched를 반복하여 라우터 레코드의 메타필드를 검사한다.
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/video",
+    name: "video",
+    component: () => import("@/views/VideoPage"),
   },
   {
-    path: "/login",
-    name: "login",
-    component: LoginSuccess,
+    path: "/freevideo",
+    name: "freevideo",
+    component: () => import("@/views/FreeVideoPage"),
+  },
+
+  {
+    path: "/subscription",
+    name: "subscription",
+    component: () => import("@/views/SubscriptionPage"),
+  },
+  {
+    path: "/cscenter",
+    name: "cscenter",
+    component: () => import("@/views/CscenterPage"),
   },
   {
     path: "/mypage",
     name: "mypage",
-    component: MyPageMain,
+    component: () => import("@/views/MyPage"),
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 });
 

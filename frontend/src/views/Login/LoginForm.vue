@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="login-box">
       <v-card class="mx-auto px-6 py-8" max-width="344">
-        <div class="btn-box">
+        <div class="btn-box" @click="this.$store.state.isClicked = false">
           <img :src="require(`@/assets/images/close.svg`)" />
         </div>
         <h3>로그인</h3>
@@ -35,6 +35,7 @@
             로그인
           </v-btn>
         </v-form>
+        <button class="sign-up">회원가입</button>
       </v-card>
     </div>
   </div>
@@ -57,27 +58,25 @@ export default {
       return !!v || "빈칸을 채워주세요!";
     },
     async login() {
-      if (!this.form) return;
-      this.loading = true;
-      setTimeout(() => (this.loading = false), 2000);
-      this.$emit("onSubmit", this.form);
-      const userData = {
-        userId: this.userId,
-        userPassword: this.userPassword,
-      };
-      const { data } = await loginUser(userData);
-      // console.log(data.user.userId);
-      this.$store.commit("setUserId", data.userId);
-      this.$router.push("/");
-      //   this.initForm();
-      // },
-      // initForm() {
-      //   this.form = false;
-    },
-  },
+      try {
+        console.log("로그인");
+        // if (!this.form) return;
+        // this.loading = true;
+        // setTimeout(() => (this.loading = false), 2000);
 
-  props: {
-    isClicked: Boolean,
+        const userData = {
+          userId: this.userId,
+          password: this.userPassword,
+        };
+        console.log(userData);
+        const { data } = await loginUser(userData);
+
+        this.$store.commit("setUserId", data.login[0].userId);
+        this.$store.state.isClicked = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>
@@ -105,9 +104,11 @@ h3 {
   justify-content: flex-end;
   & > img {
     width: 10px;
-  }
-  & > img:hover {
     cursor: pointer;
   }
+}
+.sign-up {
+  padding-top: 10px;
+  border-bottom: 1px solid #343434;
 }
 </style>

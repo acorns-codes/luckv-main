@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { resiseteUser } from "@/api/idnex";
+// import { registerUser } from "@/api/idnex";
 export default {
   data() {
     return {
@@ -107,7 +107,20 @@ export default {
     };
   },
   methods: {
-    signUp() {},
+    // async signUp() {
+    //   console.log("폼 제출");
+    //   const userData = {
+    //     id: this.id,
+    //     passWord: this.passWord,
+    //     name: this.name,
+    //     ph: this.ph,
+    //     birthDate: this.birthDate,
+    //     auth: this.auth,
+    //     bank: this.bank + this.account,
+    //   };
+    //   const { data } = await registerUser(userData);
+    //   console.log(data.name);
+    // },
   },
 };
 </script>
