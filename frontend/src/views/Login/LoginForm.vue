@@ -70,7 +70,6 @@ export default {
         };
         console.log(userData);
         const { data } = await loginUser(userData);
-
         this.$store.commit("setUserId", data.login[0].userId);
         this.$store.state.isClicked = false;
       } catch (error) {
