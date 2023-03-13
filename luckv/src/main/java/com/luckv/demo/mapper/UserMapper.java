@@ -20,9 +20,10 @@ public interface UserMapper {
     // 로그인
     user login(user user);
 
-    // 회원정보수정
-	user updateMember(user user);
-    
+	// 회원정보 조회
 	user infoMember(int mno);
+    
+    // 회원정보수정
+	void  updateMember(user user);
     
 }
