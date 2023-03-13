@@ -110,13 +110,13 @@ export default {
     // async signUp() {
     //   console.log("폼 제출");
     //   const userData = {
-    //     id: this.id,
-    //     passWord: this.passWord,
+    //     mid: this.id,
+    //     pwd: this.passWord,
     //     name: this.name,
     //     ph: this.ph,
-    //     birthDate: this.birthDate,
+    //     birth_date: this.birthDate,
     //     auth: this.auth,
-    //     bank: this.bank + this.account,
+    //     account: this.bank + this.account,
     //   };
     //   const { data } = await registerUser(userData);
     //   console.log(data.name);
