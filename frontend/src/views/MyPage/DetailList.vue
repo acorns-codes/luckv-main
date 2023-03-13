@@ -1,5 +1,6 @@
 <template>
-  <div class="main-container">
+  <MypageNav />
+  <div class="container">
     <div>
       <div>
         <h2>경매 참여내역</h2>
@@ -31,7 +32,9 @@
   </div>
 </template>
 <script>
+import MypageNav from "@/components/MypageNav.vue";
 export default {
+  components: { MypageNav },
   data() {
     return {
       itemsPerPage: 5,
@@ -115,9 +118,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.main-container {
-  width: 100%;
-  height: 100%;
+.container {
   display: flex;
   flex-direction: column;
   justify-content: center;

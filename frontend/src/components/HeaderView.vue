@@ -2,7 +2,7 @@
   <LoginForm v-if="this.$store.state.isClicked" />
   <div id="header">
     <ul>
-      <li>linkV</li>
+      <li @click="goHome">linkV</li>
       <template v-if="!$store.getters.isLogin">
         <li @click="onClicked">로그인</li>
       </template>
@@ -18,6 +18,7 @@
       <router-link to="/subscription">구독</router-link>
       <router-link to="/cscenter">고객센터</router-link>
       <router-link to="/mypage">마이페이지</router-link>
+      <router-link to="/sellerpage">판매자페이지</router-link>
     </div>
   </div>
 </template>
@@ -40,9 +41,14 @@ export default {
     },
   },
   methods: {
+    goHome() {
+      this.$router.push({
+        path: "/",
+      });
+    },
     onClicked() {
       this.$store.state.isClicked = !this.$store.state.isClicked;
-      console.log(this.$store.state.isClicked);
+      // console.log(this.$store.state.isClicked);
     },
   },
 };

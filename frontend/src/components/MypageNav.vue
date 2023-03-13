@@ -1,41 +1,60 @@
 <template>
   <div class="main-container">
-    <div>
-      <h1>마이페이지</h1>
-      <ul>
-        <li>회원정보수정</li>
-        <li>구매내역</li>
-        <li>구독내역</li>
-      </ul>
+    <h1>마이페이지</h1>
+    <div v-for="item in navList" :key="item">
+      <router-link :to="{ path: item.value }">{{ item.name }}</router-link>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      navList: [
+        {
+          name: "회원정보수정",
+          value: "/mypage",
+        },
+        {
+          name: "구매내역",
+          value: "/mydetailList",
+        },
+        {
+          name: "구독내역",
+          value: "/mysublist",
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .main-container {
-  width: 100%;
+  width: 1400px;
   height: 90px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 10px;
+  border-bottom: 1px solid black;
+  h1 {
+    width: 360px;
+  }
   & > div {
-    width: 1400px;
+    width: 150px;
     display: flex;
-    align-items: end;
-    margin-bottom: 10px;
-    border-bottom: 1px solid black;
-    h1 {
-      width: 360px;
-    }
-    & > ul {
-      width: 1040px;
-      list-style: none;
+
+    & > a {
       display: flex;
       justify-content: space-around;
       font-size: 1.5rem;
+      text-decoration: none;
+      color: #343434;
+    }
+    & > a.router-link-exact-active {
+      font-weight: bold;
     }
   }
 }
