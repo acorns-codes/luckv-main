@@ -44,6 +44,7 @@
 <script>
 // import axios from "axios";
 import { loginUser } from "@/api/index";
+
 export default {
   data() {
     return {
@@ -65,8 +66,8 @@ export default {
         // setTimeout(() => (this.loading = false), 2000);
 
         const userData = {
-          userId: this.userId,
-          password: this.userPassword,
+          mid : this.userId,
+          pwd: this.userPassword,
         };
         console.log(userData);
         const { data } = await loginUser(userData);
