@@ -48,8 +48,11 @@
 
 <script>
 // import axios from "axios";
+
 // import { loginUser } from "@/api/index";
 import SignUpForm from "./SignUpForm.vue";
+
+
 export default {
   components: {
     SignUpForm,
@@ -78,6 +81,7 @@ export default {
     //     // this.loading = true;
     //     // setTimeout(() => (this.loading = false), 2000);
 
+
     //     const userData = {
     //       mid: this.userId,
     //       pwd: this.userPassword,
@@ -97,6 +101,19 @@ export default {
         pwd: this.userPassword,
       };
       this.$axios.post("http://localhost:8080/login", userData);
+
+        const userData = {
+          mid : this.userId,
+          pwd: this.userPassword,
+        };
+        console.log(userData);
+        const { data } = await loginUser(userData);
+        this.$store.commit("setUserId", data.login[0].userId);
+        this.$store.state.isClicked = false;
+      } catch (error) {
+        console.log(error);
+      }
+
     },
   },
 };

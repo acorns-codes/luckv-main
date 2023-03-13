@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.luckv.demo.mapper.FrequentlyMapper">
+
+	 <!--FaQ 조회 -->
+    <select id="frequentlyList"  parameterType="com.luckv.demo.dto.Frequently" resultType="com.luckv.demo.dto.Frequently">
+        SELECT 
+        	fno as no, /*FaQ 순번*/
+        	f_title as questions, /*FaQ 질문*/
+        	f_content as asked,  /*FaQ 답변*/
+        	category /*FaQ 카테고리*/
+        FROM frequently
+        WHERE  1=1
+	     <if test="category != null  and category != ''">
+	        AND category =  ${category} /*카테고리구분*/
+	     </if>
+    		ORDER BY no DESC
+    </select>
+    
+    <!-- FaQ 총 개수 -->
+    <select id="frequentlyCount" parameterType="com.luckv.demo.dto.Frequently" resultType="Integer">
+    	 SELECT IFNULL(COUNT(*), 0) AS CNT FROM frequently
+  		WHERE 1 = 1
+    </select>
+    
+    <!-- FaQ 페이징처리 -->
+    <select id="frequentlyPage"  parameterType="com.luckv.demo.dto.Frequently"  resultType="com.luckv.demo.dto.Frequently">
+	  SELECT 
+        	fno as no, /*FaQ 순번*/
+        	f_title as questions, /*FaQ 질문*/
+        	f_content as asked,  /*FaQ 답변*/
+        	category /*FaQ 카테고리*/
+        FROM frequently
+	  WHERE 1 = 1
+	  <if test="category != null  and category != ''">
+	        AND category =  ${category} /*카테고리구분*/
+	    </if>
+	  	AND fno between  #{start} AND #{end}
+	   ORDER BY no DESC
+	    <!-- LIMIT #{start}, #{end} -->
+	</select>
+	
+    <!-- FaQ 작성 -->
+    <insert id="insertFrequently"  parameterType="com.luckv.demo.dto.Frequently">
+        INSERT INTO 
+        	frequently (
+        		f_title, /*FaQ 질문*/
+        		f_content,  /*FaQ 답변*/
+        		f_create, /*FaQ 작성일*/
+        		category, /*카테고리*/
+        		fid /*작성자*/
+	        ) VALUES (
+	        	#{questions},
+	        	#{asked},
+	        	now(),
+	        	#{category},
+	        	#{fid}
+	        )
+    </insert>
+    
+
+      <!-- FaQ 수정 -->
+		<update id="frequentlyUpdate" parameterType="com.luckv.demo.dto.Frequently">
+		  UPDATE 
+		  	frequently
+		  SET 
+			f_title = #{questions}, /*FaQ 질문*/
+       		f_content = #{asked},  /*FaQ 답변*/
+       		f_update = now(), /*FaQ 수정일*/
+       		category = #{category} /*카테고리*/
+		  WHERE fno = #{fno}
+		</update>
+       
+       <!-- FaQ 삭제 -->
+       <delete id="frequentlyDelete" parameterType="com.luckv.demo.dto.Frequently">
+	       DELETE FROM 
+	       	frequently
+	       WHERE fno = #{fno}
+       </delete>
+       
+</mapper>
