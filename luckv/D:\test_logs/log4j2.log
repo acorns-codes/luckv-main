@@ -153,3 +153,9 @@ java.lang.IllegalArgumentException: Invalid character found in method name [0x16
 2023-03-13 13:21:01  WARN [org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver] Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported]
 2023-03-13 13:21:14  WARN [org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver] Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported]
 2023-03-13 13:21:52  WARN [org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver] Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported]
+2023-03-13 14:44:26  INFO [org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener] Restarting due to 29 class path changes (18 additions, 6 deletions, 5 modifications)
+2023-03-13 14:44:26  INFO [org.apache.coyote.http11.Http11NioProtocol] Pausing ProtocolHandler ["http-nio-8080"]
+2023-03-13 14:44:26  INFO [org.apache.catalina.core.StandardService] Stopping service [Tomcat]
+2023-03-13 14:44:26  INFO [org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]] Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-03-13 14:44:26  INFO [org.apache.coyote.http11.Http11NioProtocol] Stopping ProtocolHandler ["http-nio-8080"]
+2023-03-13 14:44:26  INFO [org.apache.coyote.http11.Http11NioProtocol] Destroying ProtocolHandler ["http-nio-8080"]
