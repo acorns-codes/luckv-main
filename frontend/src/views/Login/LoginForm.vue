@@ -49,13 +49,12 @@
 <script>
 // import axios from "axios";
 
-// import { loginUser } from "@/api/index";
-import SignUpForm from "./SignUpForm.vue";
-
+import { loginUser } from "@/api/index";
+// import SignUpForm from "./SignUpForm.vue";
 
 export default {
   components: {
-    SignUpForm,
+    // SignUpForm,
   },
   data() {
     return {
@@ -74,46 +73,26 @@ export default {
     required(v) {
       return !!v || "빈칸을 채워주세요!";
     },
-    // async login() {
-    //   try {
-    //     console.log("로그인");
-    //     // if (!this.form) return;
-    //     // this.loading = true;
-    //     // setTimeout(() => (this.loading = false), 2000);
-
-
-    //     const userData = {
-    //       mid: this.userId,
-    //       pwd: this.userPassword,
-    //     };
-    //     console.log(userData);
-    //     const { data } = await loginUser(userData);
-    //     // this.$store.commit("setUserId", data.login[0].userId);
-    //     console.log(data);
-    //     this.$store.state.isClicked = false;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-    login() {
-      const userData = {
-        mid: this.userId,
-        pwd: this.userPassword,
-      };
-      this.$axios.post("http://localhost:8080/login", userData);
-
+    async login() {
+      try {
+        console.log("로그인");
+        if (!this.form) return;
+        this.loading = true;
+        setTimeout(() => (this.loading = false), 2000);
         const userData = {
-          mid : this.userId,
+          mid: this.userId,
           pwd: this.userPassword,
         };
         console.log(userData);
-        const { data } = await loginUser(userData);
-        this.$store.commit("setUserId", data.login[0].userId);
+        const res = await loginUser(userData);
+        console.log(res);
+        console.log("로그인성공");
+        //     // this.$store.commit("setUserId", data.login[0].userId);
+        //     console.log(data);
         this.$store.state.isClicked = false;
       } catch (error) {
         console.log(error);
       }
-
     },
   },
 };
