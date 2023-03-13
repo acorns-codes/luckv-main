@@ -65,7 +65,7 @@ public class NoticeController {
 	    // 공지사항 수정
 	    @GetMapping("noticeUpdate")
 	    public void noticeUpdate(Notice notice) {  
-	        logger.info("BbsController noticeUpdate()");
+	        logger.info("NoticeController noticeUpdate()");
 	        noticeService.noticeUpdate(notice);
 	    }
 	    

@@ -16,6 +16,7 @@ public interface  NoticeMapper {
 	
 	// 공지사항 갯수
 	int noticeCount(Notice notice);
+	
 	// 공지사항 페이지처리
 	List<Notice> noticePage(Notice notice);
 	

@@ -33,7 +33,6 @@ public class UserController {
 	        if(b) {
 	            return "아이디 사용가능";
 	        }
-
 	        return "아이디 중복";
 
 	    }

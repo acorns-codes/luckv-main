@@ -6,32 +6,40 @@
 	 <!--공지사항 조회 -->
     <select id="noticeList"  resultType="com.luckv.demo.dto.Notice">
         SELECT 
-        	nno as no,
-        	title,
-        	create_at
+        	nno as no, /*공지사항 순번*/
+        	title, /*공지사항 제목*/
+        	create_at /*공지사항 작성일*/
         FROM notice
     		ORDER BY no DESC
     </select>
     
+    <!-- 공지사항 총 개수 -->
+    <select id="noticeCount" parameterType="com.luckv.demo.dto.Notice" resultType="Integer">
+    	 SELECT IFNULL(COUNT(*), 0) AS CNT FROM notice
+  		WHERE 1 = 1
+    </select>
+    
     <!-- 공지사항 페이징처리 -->
-    <select id="getBbsListSearchPage"  parameterType="com.luckv.demo.dto.Notice"  resultType="com.luckv.demo.dto.Notice">
+    <select id="noticePage"  parameterType="com.luckv.demo.dto.Notice"  resultType="com.luckv.demo.dto.Notice">
 	  SELECT 
-        	nno as no,
-        	title,
-        	create_at
+        	nno as no, /*공지사항 순번*/
+        	title, /*공지사항 제목*/
+        	create_at /*공지사항 작성일*/
         FROM notice
 	  WHERE 1 = 1
-	    ORDER BY no DESC
-	    WHERE notice BETWEEN #{start} AND #{end}
+	  	AND nno between  #{start} AND #{end}
+	   ORDER BY no DESC
+	    <!-- LIMIT #{start}, #{end} -->
 	</select>
+	
     <!-- 공지사항 작성 -->
     <insert id="insertNotice"  parameterType="com.luckv.demo.dto.Notice">
         INSERT INTO 
         	NOTICE (
-        		title,
-        		content,
-        		create_at,
-        		nid
+        		title, /*공지사항 제목*/
+        		content, /*공지사항 내용*/
+        		create_at, /*공지사항 작성일*/
+        		nid /*작성자*/
 	        ) VALUES (
 	        	#{title},
 	        	#{content},
@@ -43,11 +51,11 @@
     <!-- 공지사항 상세보기 -->
        <select id="noticeDetail"  parameterType="Integer" resultType="com.luckv.demo.dto.Notice">
        		SELECT
-       			 n.nno as no, 
-       			 n.title, 
-       			 n.content,
-       			 n.create_at,
-       			 u.mid as id 
+       			 n.nno as no, /*공지사항 순번*/
+       			 n.title,  /*공지사항 제목*/
+       			 n.content, /*공지사항 내용*/
+       			 n.create_at, /*공지사항 작성일*/
+       			 u.mid as id /*작성자*/
        		FROM notice n 
        		INNER JOIN user u ON  n.nid = u.mno 
        		WHERE n.nno = #{nno}
@@ -58,9 +66,9 @@
 		  UPDATE 
 		  	notice
 		  SET 
-		  	title = #{title}, 
-		  	content = #{content},
-		  	update_at = now()
+		  	title = #{title}, /*공지사항 제목*/
+		  	content = #{content},  /*공지사항 내용*/
+		  	update_at = now() /*공지사항 수정일*/
 		  WHERE nno = #{nno}
 		</update>
        
