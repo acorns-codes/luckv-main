@@ -9,6 +9,7 @@
 
 <script>
 export default {
+
   data() {
     return {
       navList: [
@@ -18,7 +19,7 @@ export default {
         },
         {
           name: "경매내역",
-          value: "/sellerAuction",
+          value: "/sellerauction",
         },
       ],
     };
