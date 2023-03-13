@@ -1,5 +1,6 @@
 <template>
-  <div class="main-container">
+  <SellerMypageNav />
+  <div class="container">
     <div>
       <div>
         <h2>경매 판매내역</h2>
@@ -32,7 +33,9 @@
 </template>
 
 <script>
+import SellerMypageNav from "@/components/SellerMypageNav.vue";
 export default {
+  components: { SellerMypageNav },
   data() {
     return {
       itemsPerPage: 5,
@@ -128,5 +131,20 @@ export default {
   },
 };
 </script>
-
-<style></style>
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & > div {
+    width: 1440px;
+    padding: 90px;
+    & > div:nth-child(1) {
+      display: flex;
+      justify-content: flex-start;
+      padding-bottom: 10px;
+    }
+  }
+}
+</style>

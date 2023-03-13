@@ -33,7 +33,28 @@ const routes = [
   {
     path: "/mypage",
     name: "mypage",
-    component: () => import("@/views/MyPage"),
+    component: () => import("@/views/MyPage/MyPage.vue"),
+  },
+
+  {
+    path: "/mydetailList",
+    name: "/mydetailList",
+    component: () => import("@/views/MyPage/DetailList.vue"),
+  },
+  {
+    path: "/sellerpage",
+    name: "sellerpage",
+    component: () => import("@/views/SellerPage/SellerPage.vue"),
+  },
+  {
+    path: "/sellerauction",
+    name: "/sellerauction",
+    component: () => import("@/views/SellerPage/AuctionList.vue"),
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: () => import("@/views/Login/SignUpPage"),
   },
 ];
 

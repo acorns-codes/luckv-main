@@ -27,7 +27,21 @@
         <div v-show="show">
           <v-divider></v-divider>
           <v-card-text>
-            <form></form>
+            <form>
+              <v-row>
+                <v-col cols="6">
+                  <v-list-subheader>경매 참여 금액</v-list-subheader>
+                </v-col>
+
+                <v-col cols="10">
+                  <v-text-field
+                    label="Weight"
+                    model-value="28.00"
+                    suffix="lbs"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </form>
           </v-card-text>
         </div>
       </v-expand-transition>
