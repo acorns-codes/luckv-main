@@ -35,9 +35,9 @@
       <!-- 로그인 -->
     <select id="login"  parameterType="com.luckv.demo.dto.user"  resultType="com.luckv.demo.dto.user">
         SELECT 
-        	MID, NAME, AUTH 
-        FROM USER
-        WHERE MID = #{mid} AND PWD = #{pwd}
+        	mid, name, auth 
+        FROM user
+        WHERE mid = #{mid} AND pwd = #{pwd}
     </select>
     
     <!-- 회원정보 수정 -->
