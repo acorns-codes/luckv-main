@@ -1,15 +1,16 @@
 <template>
   <div class="main-container">
-    <h1>마이페이지</h1>
-    <div v-for="item in navList" :key="item">
-      <router-link :to="{ path: item.value }">{{ item.name }}</router-link>
+    <div>
+      <h1>마이페이지</h1>
+      <div v-for="item in navList" :key="item">
+        <router-link :to="{ path: item.value }">{{ item.name }}</router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-
   data() {
     return {
       navList: [
@@ -29,29 +30,32 @@ export default {
 
 <style lang="scss" scoped>
 .main-container {
-  width: 1400px;
-  height: 90px;
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: end;
-  margin-bottom: 10px;
-  border-bottom: 1px solid black;
-  h1 {
-    width: 360px;
-  }
+  justify-content: center;
   & > div {
-    width: 150px;
+    width: 1400px;
+    height: 90px;
     display: flex;
-
-    & > a {
-      display: flex;
-      justify-content: space-around;
-      font-size: 1.5rem;
-      text-decoration: none;
-      color: #343434;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px solid black;
+    h1 {
+      width: 360px;
     }
-    & > a.router-link-exact-active {
-      font-weight: bold;
+    & > div {
+      width: 150px;
+
+      & > a {
+        font-size: 1.5rem;
+        text-decoration: none;
+        color: #343434;
+      }
+      & > a.router-link-exact-active {
+        font-weight: bold;
+      }
     }
   }
 }

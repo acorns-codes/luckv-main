@@ -1,6 +1,6 @@
 import axios from "axios";
 const instance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80",
 });
 
 function registerUser(userData) {

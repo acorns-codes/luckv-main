@@ -28,6 +28,95 @@
           </tr>
         </tbody>
       </v-table>
+      <v-row justify="center">
+        <v-dialog v-model="dialog" persistent width="500">
+          <template v-slot:activator="{ props }">
+            <v-btn color="success" v-bind="props"> 경매 내역 추가하기 </v-btn>
+          </template>
+          <v-card>
+            <h3>경매 등록</h3>
+
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field
+                      label="제목"
+                      v-model="this.title"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                      label="내용"
+                      v-model="this.content"
+                      required
+                    ></v-textarea>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      label="경매 시작가"
+                      v-model="this.payStart"
+                      suffix="원"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      label="시작 날짜"
+                      v-model="this.startDay"
+                      type="date"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      label="시작 시간"
+                      v-model="this.startTime"
+                      type="time"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12" sm="6">
+                    <v-text-field
+                      label="마감 날짜"
+                      v-model="this.lastDay"
+                      type="date"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      label="마감 시간"
+                      v-model="this.lastTime"
+                      type="time"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="dialog = false"
+              >
+                Close
+              </v-btn>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="dialog = false"
+              >
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </div>
   </div>
 </template>
@@ -40,12 +129,6 @@ export default {
     return {
       itemsPerPage: 5,
       headers: [
-        // {
-        //   title: "Dessert (100g serving)",
-        //   align: "start",
-        //   sortable: false,
-        //   key: "name",
-        // },
         { title: "index", value: "번호" },
         { title: "name", value: "제목" },
         { title: "content", value: "내용" },
@@ -127,7 +210,35 @@ export default {
           status: "22",
         },
       ],
+      dialog: false,
+      title: "",
+      content: "",
+      payStart: "",
+      startDay: "",
+      startTime: "",
+      lastDay: "",
+      lastTime: "",
     };
+  },
+  methods: {
+    registration() {
+      console.log("상품등록");
+      const validate = this.$refs.form.validate();
+      if (validate) {
+        if (confirm("새로운 경매를 등록하시겠습니까?")) {
+          const videoData = {
+            title: this.title,
+            content: this.content,
+            payStart: this.payStart,
+            startDay: this.startDay,
+            startTime: this.startTime,
+            lastDay: this.lastDay,
+            lastTime: this.lastTime,
+          };
+          console.log(videoData);
+        }
+      }
+    },
   },
 };
 </script>
@@ -146,5 +257,34 @@ export default {
       padding-bottom: 10px;
     }
   }
+}
+h3 {
+  padding: 20px;
+  font-size: 1.5rem;
+  padding-bottom: 10px;
+}
+.add-box {
+  /* width: 100%;
+  height: 100%;
+  position: absolute; */
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.496);
+}
+.form-box {
+  width: 500px;
+}
+.btn-box {
+  display: flex;
+  justify-content: flex-end;
+  & > img {
+    width: 10px;
+    cursor: pointer;
+  }
+}
+.h3 {
+  text-align: center;
 }
 </style>

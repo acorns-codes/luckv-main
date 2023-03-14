@@ -38,7 +38,14 @@ export default {
   data() {
     return {
       itemsPerPage: 5,
-
+      headers: [
+        { title: "index", value: "번호" },
+        { title: "name", value: "제목" },
+        { title: "content", value: "내용" },
+        { title: "payMax", value: "최고가" },
+        { title: "bidding", value: "입찰가" },
+        { title: "status", value: "진행사항" },
+      ],
       desserts: [
         {
           name: "Frozen Yogurt",

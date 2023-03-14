@@ -5,6 +5,8 @@ import router from "./router";
 import store from "./store";
 import axios from "axios";
 import VueCookies from "vue-cookies";
+import "@mdi/font/css/materialdesignicons.css";
+// icon이 안나와서 import 하니까 바로 나타남
 
 // Vuetify
 import "vuetify/styles";
