@@ -35,7 +35,7 @@
 
                 <v-col cols="10">
                   <v-text-field
-                    label="Weight"
+                    label=""
                     model-value="28.00"
                     suffix="lbs"
                   ></v-text-field>
@@ -58,3 +58,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+</style>
