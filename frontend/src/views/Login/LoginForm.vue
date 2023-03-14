@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { loginUser } from "@/api/index";
+// import { loginUser } from "@/api/index";
 
 export default {
   data() {
@@ -51,6 +51,7 @@ export default {
       userId: null,
       userPassword: null,
       loading: false,
+      name: "",
     };
   },
   methods: {
@@ -63,26 +64,71 @@ export default {
     required(v) {
       return !!v || "빈칸을 채워주세요!";
     },
-    async login() {
-      try {
-        console.log("로그인");
-        if (!this.form) return;
-        this.loading = true;
-        setTimeout(() => (this.loading = false), 2000);
-        const userData = {
-          mid: this.userId,
-          pwd: this.userPassword,
-        };
-        console.log(userData);
-        const res = await loginUser(userData);
+    // async login() {
+    //   try {
+    //     console.log("로그인");
+    //     if (!this.form) return;
+    //     this.loading = true;
+    //     setTimeout(() => (this.loading = false), 2000);
+    //     const userData = {
+    //       mid: this.userId,
+    //       pwd: this.userPassword,
+    //     };
+    //     console.log(userData);
+    //     const res = await loginUser(userData);
+    //     console.log(res);
+    //     console.log("로그인성공");
+    //     if (userData === "") {
+    //       alert("아이디 또는 비밀번호를 확인하세요.");
+    //       this.userId.val("");
+    //       this.userPassword.val("");
+    //     } else {
+    //       // 로그인 정보를 세션에 저장
+    //       sessionStorage.setItem("login", JSON.stringify(userData));
+    //       alert(`${this.userId}님 환영합니다!`);
+    //       this.$router.push({
+    //         path: "/",
+    //       });
+
+    //       //     // this.$store.commit("setUserId", data.login[0].userId);
+    //       //     console.log(data);
+    //       // this.$store.state.isClicked = false;
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    login() {
+      const userData = {
+        mid: this.userId,
+        pwd: this.userPassword,
+      };
+      this.$axios.post("http://localhost:8080/login", userData).then((res) => {
         console.log(res);
-        console.log("로그인성공");
-        //     // this.$store.commit("setUserId", data.login[0].userId);
-        //     console.log(data);
-        this.$store.state.isClicked = false;
-      } catch (error) {
-        console.log(error);
-      }
+      });
+      //   url: "http://localhost:8080/login",
+      //   type: "POST",
+      //   data: {
+      //     mid: this.userId,
+      //     pwd: this.userPassword,
+      //   },
+      //   success: function (json) {
+      //     // alert('success');
+      //     // alert(JSON.stringify(json));
+      //     if (json === "") {
+      //       alert("아이디 또는 비밀번호를 확인하세요.");
+      //       this.userId = "";
+      //       this.userPassword = "";
+      //     } else {
+      //       // 로그인 정보를 세션에 저장
+      //       sessionStorage.setItem("login", JSON.stringify(json));
+      //       alert(`${json.name}님 환영합니다!`);
+      //     }
+      //   },
+      //   catch(error) {
+      //     console.log(error);
+      //   },
+      // });
     },
   },
 };

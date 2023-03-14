@@ -33,22 +33,22 @@
             <v-radio label="구매자" value="B"></v-radio>
           </v-radio-group>
           <!-- 판매자 선택시에만 나올 수 있도록 -->
-          <v-select
-            v-model="bank"
-            :hint="힌트"
-            :items="bankList"
-            label="은행"
-            persistent-hint
-            return-object
-            single-line
-          ></v-select>
-
-          <v-text-field
-            v-model="account"
-            label="계좌번호"
-            :rules="acoountRules"
-          ></v-text-field>
-
+          <template v-if="`${this.auth}` === 'A'">
+            <v-select
+              v-model="bank"
+              :hint="힌트"
+              :items="bankList"
+              label="은행"
+              persistent-hint
+              return-object
+              single-line
+            ></v-select>
+            <v-text-field
+              v-model="account"
+              label="계좌번호"
+              :rules="acoountRules"
+            ></v-text-field>
+          </template>
           <v-btn
             type="submit"
             block
@@ -118,8 +118,11 @@ export default {
           account: this.bank + this.account,
         };
         console.log(userData);
-        // const res = await registerUser(userData);
-        // console.log(res);
+        const res = await this.$axios(
+          "http://localhost:8080/addMember",
+          userData
+        );
+        console.log(res);
         console.log("회원가입완료");
         this.$router.push({
           path: "/",
