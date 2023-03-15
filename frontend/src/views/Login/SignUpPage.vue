@@ -32,11 +32,11 @@
             required
           ></v-text-field>
           <v-radio-group inline label="회원구분" v-model="auth" required>
-            <v-radio label="판매자" value="A"></v-radio>
+            <v-radio label="판매자" value="S"></v-radio>
             <v-radio label="구매자" value="B"></v-radio>
           </v-radio-group>
           <!-- 판매자 선택시에만 나올 수 있도록 -->
-          <template v-if="`${this.auth}` === 'A'">
+          <template v-if="`${this.auth}` === 'S'">
             <v-select v-model="bank" :items="bankList" label="은행"></v-select>
             <v-text-field v-model="account" label="계좌번호"></v-text-field>
           </template>

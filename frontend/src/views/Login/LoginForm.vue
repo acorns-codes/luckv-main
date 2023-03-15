@@ -70,34 +70,46 @@ export default {
         if (!this.form) return;
         this.loading = true;
         setTimeout(() => (this.loading = false), 2000);
-        const userData = {
-          mid: this.mid,
-          pwd: this.pwd,
-        };
-        console.log(userData);
-        console.log(this.mid);
-        const res = await this.$axios.post(
-          "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/login",
-          userData
-        );
+        // const userData = {
+        //   mid: this.mid,
+        //   pwd: this.pwd,
+        // };
+        // console.log(userData);
+        // console.log(this.mid);
+        const res = await this.$axios({
+          headers: {
+            "Content-type": "application/x-www-form-urlencoded",
+          },
+          method: "POST",
+          url: "http://localhost:8080/login",
+          data: {
+            mid: this.mid,
+            pwd: this.pwd,
+          },
+        });
         console.log(res);
         console.log("로그인성공");
-        if (userData === "") {
-          alert("아이디 또는 비밀번호를 확인하세요.");
-          this.mid.val("");
-          this.pwd.val("");
-        } else {
-          // 로그인 정보를 세션에 저장
-          sessionStorage.setItem("login", JSON.stringify(userData));
-          alert(`${this.mid}님 환영합니다!`);
-          this.$router.push({
-            path: "/",
-          });
+        sessionStorage.setItem("login", JSON.stringify(res.data));
+        alert(`${this.mid}님 환영합니다!`);
+        this.$router.push({
+          path: "/",
+        });
+        // if (userData === "") {
+        //   alert("아이디 또는 비밀번호를 확인하세요.");
+        //   this.mid.val("");
+        //   this.pwd.val("");
+        // } else {
+        //   // 로그인 정보를 세션에 저장
+        //   sessionStorage.setItem("login", JSON.stringify(userData));
+        //   alert(`${this.mid}님 환영합니다!`);
+        //   this.$router.push({
+        //     path: "/",
+        //   });
 
-          //     // this.$store.commit("setUserId", data.login[0].userId);
-          //     console.log(data);
-          // this.$store.state.isClicked = false;
-        }
+        //     // this.$store.commit("setUserId", data.login[0].userId);
+        //     console.log(data);
+        // this.$store.state.isClicked = false;
+        // }
       } catch (error) {
         console.log(error);
       }
