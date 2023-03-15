@@ -33,12 +33,17 @@ dependencies {
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
+	// json
+	implementation group: 'org.json', name: 'json', version: '20220924'
+	
+	
 	// swagger
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	
 	// log4j2
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 	
 	// JWT Token
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
