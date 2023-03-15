@@ -1,15 +1,19 @@
 import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
     userId: "",
     isClicked: false,
     accessToken: "",
+    sessionStorageData: "",
+    userData: "",
   },
   getters: {
     isLogin(state) {
-      return state.userId !== "";
+      return state.sessionStorageData !== "";
     },
+    // && sessionStorage.clear("login")
     isSignUp(state) {
       return state.signUp;
     },
@@ -18,8 +22,33 @@ export default createStore({
     setUserId(state, userId) {
       state.userId = userId;
     },
-    clearUserId(state) {
-      state.userId = "";
+    clearUser(state) {
+      sessionStorage.clear("login");
+      state.sessionStorageData = "";
     },
+    setSessionStorage(state, payload) {
+      sessionStorage.setItem("login", payload);
+    },
+    readSessionStorage(state, payload) {
+      if (sessionStorage.getItem("login", payload) != null) {
+        state.sessionStorageData = JSON.parse(
+          sessionStorage.getItem("login", state)
+        );
+      }
+    },
+    getUserData(state, userData) {
+      state.userData = userData;
+    },
+    // getSessionStorage(state) {
+    //   state.sessionStorageData = JSON.parse(
+    //     sessionStorage.getItem("login", state)
+    //   );
+    // },
   },
+
+  plugins: [
+    createPersistedState({
+      paths: ["sessionStorageData"],
+    }),
+  ],
 });

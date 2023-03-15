@@ -51,7 +51,7 @@ const routes = [
     component: () => import("@/views/MyPage/DetailList.vue"),
   },
   {
-    path: "/sellerpage",
+    path: "/sellerpage/:mid",
     name: "sellerpage",
     component: () => import("@/views/SellerPage/SellerPageEdit.vue"),
   },

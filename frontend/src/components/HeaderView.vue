@@ -5,6 +5,7 @@
       <li @click="goHome">linkV</li>
       <template v-if="!$store.getters.isLogin">
         <li @click="onClicked">로그인</li>
+        <li @click="signUp">회원가입</li>
       </template>
       <template v-else>
         <li>마이페이지</li>
@@ -17,8 +18,19 @@
       <router-link to="/freevideo">무료</router-link>
       <router-link to="/subscription">구독</router-link>
       <router-link to="/cscenter">고객센터</router-link>
-      <router-link to="/mypage">마이페이지</router-link>
-      <router-link to="/sellerpage">판매자페이지</router-link>
+      <router-link
+        v-if="this.$store.state.sessionStorageData.auth === 'B'"
+        to="/mypage"
+        >마이페이지</router-link
+      >
+      <router-link
+        v-if="this.$store.state.sessionStorageData.auth === 'S'"
+        :to="{
+          name: 'sellerpage',
+          params: { mid: `${this.$store.state.sessionStorageData.mno}` },
+        }"
+        >판매자페이지</router-link
+      >
     </div>
   </div>
 </template>
@@ -37,13 +49,18 @@ export default {
       return this.$store.getters.isLogin;
     },
     logoutUser() {
-      return this.$store.commit("clearUserId");
+      return this.$store.commit("clearUser");
     },
   },
   methods: {
     goHome() {
       this.$router.push({
         path: "/",
+      });
+    },
+    signUp() {
+      this.$router.push({
+        path: "/signup",
       });
     },
     onClicked() {

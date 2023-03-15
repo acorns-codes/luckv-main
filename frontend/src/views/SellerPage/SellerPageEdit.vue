@@ -10,7 +10,7 @@
         <v-from>
           <v-text-field
             label="아이디"
-            v-model="this.id"
+            v-model="this.$store.state.userData.mid"
             readonly
           ></v-text-field>
           <v-text-field
@@ -75,9 +75,29 @@ export default {
     };
   },
   methods: {
+    //회원정보불러오기
+    async getuserInfo() {
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/infoMember?mno=${this.$store.state.sessionStorageData.mno}`,
+          params: { mno: this.$store.state.sessionStorageData.mno },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    // 회원정보수정
     editInfo() {
       console.log("회원정보수정");
     },
+  },
+  created() {
+    this.getuserInfo();
   },
 };
 </script>
