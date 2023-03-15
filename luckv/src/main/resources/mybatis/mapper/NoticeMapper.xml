@@ -5,42 +5,42 @@
 
 	 <!--공지사항 조회 -->
     <select id="noticeList"  resultType="com.luckv.demo.dto.Notice">
-        SELECT 
+        select 
         	nno as no, /*공지사항 순번*/
         	title, /*공지사항 제목*/
         	create_at /*공지사항 작성일*/
-        FROM notice
-    		ORDER BY no DESC
+        from notice
+    		order by no desc
     </select>
     
     <!-- 공지사항 총 개수 -->
     <select id="noticeCount" parameterType="com.luckv.demo.dto.Notice" resultType="Integer">
-    	 SELECT IFNULL(COUNT(*), 0) AS CNT FROM notice
-  		WHERE 1 = 1
+    	 select ifnull(count(*), 0) as cnt from notice
+  		where 1 = 1
     </select>
     
     <!-- 공지사항 페이징처리 -->
     <select id="noticePage"  parameterType="com.luckv.demo.dto.Notice"  resultType="com.luckv.demo.dto.Notice">
-	  SELECT 
+	  select 
         	nno as no, /*공지사항 순번*/
         	title, /*공지사항 제목*/
         	create_at /*공지사항 작성일*/
-        FROM notice
-	  WHERE 1 = 1
-	  	AND nno between  #{start} AND #{end}
-	   ORDER BY no DESC
+        from notice
+	  where 1 = 1
+	  	and nno between  #{start} and #{end}
+	   order by no desc
 	    <!-- LIMIT #{start}, #{end} -->
 	</select>
 	
     <!-- 공지사항 작성 -->
     <insert id="insertNotice"  parameterType="com.luckv.demo.dto.Notice">
-        INSERT INTO 
-        	NOTICE (
+        insert into 
+        	notice (
         		title, /*공지사항 제목*/
         		content, /*공지사항 내용*/
         		create_at, /*공지사항 작성일*/
         		nid /*작성자*/
-	        ) VALUES (
+	        ) values (
 	        	#{title},
 	        	#{content},
 	        	now(),
@@ -50,26 +50,26 @@
     
     <!-- 공지사항 상세보기 -->
        <select id="noticeDetail"  parameterType="Integer" resultType="com.luckv.demo.dto.Notice">
-       		SELECT
+       		select
        			 n.nno as no, /*공지사항 순번*/
        			 n.title,  /*공지사항 제목*/
        			 n.content, /*공지사항 내용*/
        			 n.create_at, /*공지사항 작성일*/
        			 u.mid as id /*작성자*/
-       		FROM notice n 
-       		INNER JOIN user u ON  n.nid = u.mno 
-       		WHERE n.nno = #{nno}
+       		from notice n 
+       		inner join user u on  n.nid = u.mno 
+       		where n.nno = #{nno}
        </select>
        
       <!-- 공지사항 수정 -->
 		<update id="noticeUpdate" parameterType="com.luckv.demo.dto.Notice">
-		  UPDATE 
+		  update 
 		  	notice
-		  SET 
+		  set 
 		  	title = #{title}, /*공지사항 제목*/
 		  	content = #{content},  /*공지사항 내용*/
 		  	update_at = now() /*공지사항 수정일*/
-		  WHERE nno = #{nno}
+		  where nno = #{nno}
 		</update>
        
 </mapper>

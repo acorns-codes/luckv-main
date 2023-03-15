@@ -5,52 +5,52 @@
 
 	 <!--FaQ 조회 -->
     <select id="frequentlyList"  parameterType="com.luckv.demo.dto.Frequently" resultType="com.luckv.demo.dto.Frequently">
-        SELECT 
-        	fno as no, /*FaQ 순번*/
-        	f_title as questions, /*FaQ 질문*/
-        	f_content as asked,  /*FaQ 답변*/
-        	category /*FaQ 카테고리*/
-        FROM frequently
-        WHERE  1=1
+        select 
+        	fno as no, /*faq 순번*/
+        	f_title as questions, /*faq 질문*/
+        	f_content as asked,  /*faq 답변*/
+        	category /*faq 카테고리*/
+        from frequently
+        where  1=1
 	     <if test="category != null  and category != ''">
-	        AND category =  ${category} /*카테고리구분*/
+	        and category =  ${category} /*카테고리구분*/
 	     </if>
-    		ORDER BY no DESC
+    		order by no desc
     </select>
     
     <!-- FaQ 총 개수 -->
     <select id="frequentlyCount" parameterType="com.luckv.demo.dto.Frequently" resultType="Integer">
-    	 SELECT IFNULL(COUNT(*), 0) AS CNT FROM frequently
-  		WHERE 1 = 1
+    	 select ifnull(count(*), 0) as cnt from frequently
+  		where 1 = 1
     </select>
     
     <!-- FaQ 페이징처리 -->
     <select id="frequentlyPage"  parameterType="com.luckv.demo.dto.Frequently"  resultType="com.luckv.demo.dto.Frequently">
-	  SELECT 
-        	fno as no, /*FaQ 순번*/
-        	f_title as questions, /*FaQ 질문*/
-        	f_content as asked,  /*FaQ 답변*/
-        	category /*FaQ 카테고리*/
-        FROM frequently
-	  WHERE 1 = 1
+	  select 
+        	fno as no, /*faq 순번*/
+        	f_title as questions, /*faq 질문*/
+        	f_content as asked,  /*faq 답변*/
+        	category /*faq 카테고리*/
+        from frequently
+	  where 1 = 1
 	  <if test="category != null  and category != ''">
-	        AND category =  ${category} /*카테고리구분*/
+	        and category =  ${category} /*카테고리구분*/
 	    </if>
-	  	AND fno between  #{start} AND #{end}
-	   ORDER BY no DESC
+	  	and fno between  #{start} and #{end}
+	   order by no desc
 	    <!-- LIMIT #{start}, #{end} -->
 	</select>
 	
     <!-- FaQ 작성 -->
     <insert id="insertFrequently"  parameterType="com.luckv.demo.dto.Frequently">
-        INSERT INTO 
+        insert into 
         	frequently (
-        		f_title, /*FaQ 질문*/
-        		f_content,  /*FaQ 답변*/
-        		f_create, /*FaQ 작성일*/
+        		f_title, /*faq 질문*/
+        		f_content,  /*faq 답변*/
+        		f_create, /*faq 작성일*/
         		category, /*카테고리*/
         		fid /*작성자*/
-	        ) VALUES (
+	        ) values (
 	        	#{questions},
 	        	#{asked},
 	        	now(),
@@ -62,21 +62,21 @@
 
       <!-- FaQ 수정 -->
 		<update id="frequentlyUpdate" parameterType="com.luckv.demo.dto.Frequently">
-		  UPDATE 
+		  update 
 		  	frequently
-		  SET 
-			f_title = #{questions}, /*FaQ 질문*/
-       		f_content = #{asked},  /*FaQ 답변*/
-       		f_update = now(), /*FaQ 수정일*/
+		  set 
+			f_title = #{questions}, /*faq 질문*/
+       		f_content = #{asked},  /*faq 답변*/
+       		f_update = now(), /*faq 수정일*/
        		category = #{category} /*카테고리*/
-		  WHERE fno = #{fno}
+		  where fno = #{fno}
 		</update>
        
        <!-- FaQ 삭제 -->
        <delete id="frequentlyDelete" parameterType="com.luckv.demo.dto.Frequently">
-	       DELETE FROM 
+	       delete from 
 	       	frequently
-	       WHERE fno = #{fno}
+	       where fno = #{fno}
        </delete>
        
 </mapper>
