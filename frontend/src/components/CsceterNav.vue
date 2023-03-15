@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <div>
-      <h1>마이페이지</h1>
+      <h1>고객센터</h1>
       <div v-for="item in navList" :key="item">
         <router-link :to="{ path: item.value }">{{ item.name }}</router-link>
       </div>
@@ -15,16 +15,16 @@ export default {
     return {
       navList: [
         {
-          name: "회원정보수정",
-          value: "/mypage",
+          name: "공지사항",
+          value: "/cscenter",
         },
         {
-          name: "구매내역",
-          value: "/mydetailList",
+          name: "QnA",
+          value: "/csqna",
         },
         {
-          name: "구독내역",
-          value: "/mysublist",
+          name: "FAQ",
+          value: "/csfaq",
         },
       ],
     };

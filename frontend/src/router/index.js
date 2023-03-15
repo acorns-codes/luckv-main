@@ -28,12 +28,22 @@ const routes = [
   {
     path: "/cscenter",
     name: "cscenter",
-    component: () => import("@/views/CscenterPage"),
+    component: () => import("@/views/Cscenter/NoticePage"),
+  },
+  {
+    path: "/csqna",
+    name: "csqna",
+    component: () => import("@/views/Cscenter/QnApage.vue"),
+  },
+  {
+    path: "/csfaq",
+    name: "csfaq",
+    component: () => import("@/views/Cscenter/FAQpage.vue"),
   },
   {
     path: "/mypage",
     name: "mypage",
-    component: () => import("@/views/MyPage/MyPage.vue"),
+    component: () => import("@/views/MyPage/MyPageEdit.vue"),
   },
   {
     path: "/mydetailList",
@@ -43,7 +53,7 @@ const routes = [
   {
     path: "/sellerpage",
     name: "sellerpage",
-    component: () => import("@/views/SellerPage/SellerPage.vue"),
+    component: () => import("@/views/SellerPage/SellerPageEdit.vue"),
   },
   {
     path: "/sellerauction",
