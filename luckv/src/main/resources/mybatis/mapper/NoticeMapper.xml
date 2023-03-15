@@ -55,9 +55,9 @@
        			 n.title,  /*공지사항 제목*/
        			 n.content, /*공지사항 내용*/
        			 n.create_at, /*공지사항 작성일*/
-       			 u.mid as id /*작성자*/
+       			 u.mid /*작성자*/
        		from notice n 
-       		inner join user u on  n.nid = u.mno 
+       		left join user u on  n.nid = u.mno 
        		where n.nno = #{nno}
        </select>
        

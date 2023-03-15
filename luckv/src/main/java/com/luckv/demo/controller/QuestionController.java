@@ -77,4 +77,30 @@ public class QuestionController {
 		        questionService.questionDelete(qno);
 		    }
 		    
+		    //  QnA 댓글작성
+		    @GetMapping("/qnaAnswer")
+		    public void qnaAnswer(Question question) {
+		        questionService.qnaAnswer(question);
+		    }
+		    
+		    //  QnA 댓글수정 
+		    @GetMapping("/qnaAnswerUpdate")
+		    public void qnaAnswerUpdate(Question question) {
+		        questionService.qnaAnswerUpdate(question);		    
+		    }
+		    
+		    //  QnA 댓글
+		    @GetMapping("/qnaAnswerList")
+		    public List<Question> qnaAnswerList(int qno) {
+		        logger.info("QuestionController qnaAnswerList");
+		    return questionService.qnaAnswerList(qno);
+		    }
+		    
+		 // QnA 댓글삭제
+		    @GetMapping("/qnaAnswerDelete")
+		    public void qnaAnswerDelete(Question question) {  
+		        logger.info("QuestionController qnaAnswerDelete()");
+		        questionService.qnaAnswerDelete(question);
+		    }
+		    
 }
