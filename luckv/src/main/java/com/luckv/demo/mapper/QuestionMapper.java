@@ -34,6 +34,14 @@ public interface QuestionMapper {
 	
 	// QnA 답변작성
 	void qnaAnswer(Question question);
+	
 	// QnA 답변수정
-    int qnaAnswerUpdate(Question question); 
+    void qnaAnswerUpdate(Question question); 
+    
+    // QnA 답변
+    List<Question> qnaAnswerList(int qno);
+    
+    // QnA 답변삭제
+ 	void qnaAnswerDelete(Question question);
+    
 }

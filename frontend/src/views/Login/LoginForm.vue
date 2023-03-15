@@ -81,7 +81,7 @@ export default {
             "Content-type": "application/x-www-form-urlencoded",
           },
           method: "POST",
-          url: "http://localhost:8080/login",
+          url: "http://localhost:80/login",
           data: {
             mid: this.mid,
             pwd: this.pwd,
