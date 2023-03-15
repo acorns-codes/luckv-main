@@ -44,5 +44,14 @@ public class QuestionService {
 	public void questionDelete(int qno) {
         questionMapper.questionDelete(qno);
 	}
+	
+	// QnA 댓글
+	public void qnaAnswer(Question question) { 
+		questionMapper.qnaAnswer(question);
+    }
+
+    public int qnaAnswerUpdate(Question question) {
+        return questionMapper.qnaAnswerUpdate(question);
+    }
 
 }

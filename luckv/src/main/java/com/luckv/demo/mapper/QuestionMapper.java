@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import com.luckv.demo.dto.Frequently;
 import com.luckv.demo.dto.Question;
 
 @Mapper
@@ -14,21 +13,27 @@ public interface QuestionMapper {
 
 	List<Question> questionList(Question question);
 
-	// FaQ 갯수
+	// QnA 갯수
 	int questionCount(Question question);
 	
-	// FaQ 페이지처리
+	// QnA 페이지처리
 	List<Question> questionPage(Question question);
 	
-	// FaQ 등록
+	// QnA 등록
 	void insertQuestion(Question question);
 	
-	// FaQ 상세보기
+	// QnA 상세보기
 	Question questionDetail(int qno);
 	
-	// FaQ 수정
+	// QnA 수정
 	void questionUpdate(Question question);
 	
-	// FaQ 삭제
+	// QnA 삭제
 	void questionDelete(int qno);
+	
+	
+	// QnA 답변작성
+	void qnaAnswer(Question question);
+	// QnA 답변수정
+    int qnaAnswerUpdate(Question question); 
 }
