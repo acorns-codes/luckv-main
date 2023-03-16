@@ -8,7 +8,7 @@
         <h3>로그인</h3>
         <v-form v-model="form" @submit.prevent="login">
           <v-text-field
-            v-model="mid"
+            v-model="userId"
             :readonly="loading"
             :rules="[required]"
             class="mb-2"
@@ -17,7 +17,7 @@
             label="아이디"
           ></v-text-field>
           <v-text-field
-            v-model="pwd"
+            v-model="userPassword"
             type="password"
             :readonly="loading"
             :rules="[required]"
@@ -48,12 +48,12 @@ export default {
   data() {
     return {
       form: false,
-      mid: "",
-      pwd: "",
+      userId: "",
+      userPassword: "",
       loading: false,
-      name: "",
     };
   },
+
   methods: {
     openSignUp() {
       this.$store.state.isClicked = false;
@@ -66,14 +66,14 @@ export default {
     },
     async login() {
       try {
-        console.log("로그인");
+        // console.log("로그인");
         if (!this.form) return;
         this.loading = true;
         setTimeout(() => (this.loading = false), 2000);
-        // const userData = {
-        //   mid: this.mid,
-        //   pwd: this.pwd,
-        // };
+        const userData = {
+          mid: this.userId,
+          pwd: this.userPassword,
+        };
         // console.log(userData);
         // console.log(this.mid);
         const res = await this.$axios({
@@ -82,33 +82,34 @@ export default {
           },
           method: "POST",
           url: "http://localhost:80/login",
+
           data: {
             mid: this.mid,
             pwd: this.pwd,
           },
+
         });
         console.log(res);
-        console.log("로그인성공");
-        sessionStorage.setItem("login", JSON.stringify(res.data));
-        alert(`${this.mid}님 환영합니다!`);
-        this.$router.push({
-          path: "/",
-        });
-        // if (userData === "") {
-        //   alert("아이디 또는 비밀번호를 확인하세요.");
-        //   this.mid.val("");
-        //   this.pwd.val("");
-        // } else {
-        //   // 로그인 정보를 세션에 저장
-        //   sessionStorage.setItem("login", JSON.stringify(userData));
-        //   alert(`${this.mid}님 환영합니다!`);
-        //   this.$router.push({
-        //     path: "/",
-        //   });
+        if (userData === "" || res.data === "") {
+          console.log("로그인불가");
+          alert("아이디 또는 비밀번호를 확인하세요.");
+        } else {
+          console.log("로그인성공");
+          // sessionStorage.setItem("login", JSON.stringify(res.data));
+          // 세션에 받은 data 저장
+          this.$store.commit("setUserId", res.data.mid);
+          this.$store.commit("setSessionStorage", JSON.stringify(res.data));
+          this.$store.commit(
+            "readSessionStorage",
+            this.$store.state.sessionStorageData
+          );
+          alert(`${res.data.name}님 환영합니다!`);
+          this.$store.state.isClicked = false;
+          this.$router.push({
+            path: "/",
+          });
+        }
 
-        //     // this.$store.commit("setUserId", data.login[0].userId);
-        //     console.log(data);
-        // this.$store.state.isClicked = false;
         // }
       } catch (error) {
         console.log(error);

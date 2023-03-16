@@ -10,37 +10,41 @@
         <v-from>
           <v-text-field
             label="아이디"
-            v-model="this.id"
+            v-model="this.$store.state.userData.mid"
             readonly
           ></v-text-field>
           <v-text-field
             label="비밀번호"
-            v-model="this.pwd"
+            v-model="this.$store.state.userData.pwd"
             type="password"
           ></v-text-field>
           <v-text-field
-            v-model="this.name"
+            v-model="this.$store.state.userData.name"
             label="이름"
             readonly
           ></v-text-field>
-          <v-text-field label="휴대전화" v-model="this.ph"></v-text-field>
+          <v-text-field
+            label="휴대전화"
+            v-model="this.$store.state.userData.ph"
+          ></v-text-field>
           <v-text-field
             label="생년월일"
-            v-model="this.birhDate"
+            v-model="this.$store.state.userData.birthDate"
             type="date"
           ></v-text-field>
-          <v-radio-group inline label="회원구분" v-model="auth">
-            <v-radio label="판매자" value="A"></v-radio>
+          <v-radio-group
+            inline
+            label="회원구분"
+            v-model="this.$store.state.userData.auth"
+            readonly
+          >
+            <v-radio label="판매자" value="S"></v-radio>
             <v-radio label="구매자" value="B"></v-radio>
           </v-radio-group>
           <!-- 판매자 선택시에만 나올 수 있도록 -->
-          <template v-if="`${this.auth}` === 'A'">
+          <template v-if="`${this.$store.state.userData.auth}` === 'S'">
             <v-select v-model="bank" :items="bankList" label="은행"></v-select>
-            <v-text-field
-              v-model="account"
-              label="계좌번호"
-              model-value="12345678"
-            ></v-text-field>
+            <v-text-field label="계좌번호" v-model="this.bank"></v-text-field>
           </template>
           <v-btn
             type="submit"
@@ -64,7 +68,6 @@ export default {
   },
   data() {
     return {
-      id: "아이디수정불가",
       pwd: "비밀번호입력자리",
       name: "이름수정불가",
       ph: "휴대전화입력자리",
@@ -72,12 +75,55 @@ export default {
       birhDate: "1993-05-11",
       bank: "은행변경가능",
       bankList: ["국민", "농협", "기업", "카카오", "신한"],
+      dataBank: `(${this.$store.state.userData.bank}).indexOf(:)`,
+      // (this.$store.state.userData.bank).indexOf(":")`
+      // dataBank:"this.$store.state.userData.bank(this.$store.state.userData.bank).indexOf(":")"
     };
   },
   methods: {
-    editInfo() {
-      console.log("회원정보수정");
+    //회원정보불러오기
+    async getuserInfo() {
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/infoMember?mno=${this.$store.state.sessionStorageData.mno}`,
+          params: { mno: this.$store.state.sessionStorageData.mno },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
     },
+
+    // 회원정보수정
+    async editInfo() {
+      console.log("회원정보수정");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/updateMember?mno=${this.$store.state.sessionStorageData.mno}`,
+          params: {
+            ph: this.$store.state.sessionStorageData.ph,
+            pwd: this.$store.state.sessionStorageData.pwd,
+          },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  created() {
+    this.getuserInfo();
+  },
+  mounted() {
+    console.log(this.$store.state.userData.acccount);
+    const bank = this.$store.state.userData.acccount.indexOf(":");
+    console.log(bank);
   },
 };
 </script>
