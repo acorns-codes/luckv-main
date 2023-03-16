@@ -87,6 +87,7 @@ export default {
           alert("아이디 또는 비밀번호를 확인하세요.");
         } else {
           console.log("로그인성공");
+          this.$store.commit("getUserId", res.data.data.mid);
           // 로그인 성공이면 받아온 data를 json 화 하여 sessionStorageData에 저장
           this.$store.commit(
             "setSessionStorage",
@@ -97,7 +98,7 @@ export default {
             "readSessionStorage",
             this.$store.state.sessionStorageData
           );
-
+          console.log(this.$store.state.sessionStorageData.auth);
           alert(`${res.data.data.name}님 환영합니다!`);
           this.$store.state.isClicked = false;
           this.$router.push({

@@ -9,18 +9,18 @@
       </div>
       <div v-else>
         <router-link
-          v-if="sessionData.auth === 'B'"
+          v-if="this.$store.state.sessionStorageData.auth === 'B'"
           :to="{
             name: 'mypage',
-            params: { mno: sessionData.mno },
+            params: { mno: this.sessionData.mno },
           }"
           >마이페이지</router-link
         >
         <router-link
-          v-if="this.sessionData.auth === 'S'"
+          v-if="this.$store.state.sessionStorageData.auth === 'S'"
           :to="{
             name: 'sellerpage',
-            params: { mno: sessionData.mno },
+            params: { mno: this.sessionData.mno },
           }"
           >판매자페이지</router-link
         >

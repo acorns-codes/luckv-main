@@ -13,7 +13,7 @@ export default createStore({
   getters: {
     // 로그인 확인
     isLogin(state) {
-      return state.sessionStorageData !== "";
+      return state.userId !== "";
     },
   },
   mutations: {
@@ -35,6 +35,10 @@ export default createStore({
           sessionStorage.getItem("login", state)
         );
       }
+    },
+    // 로그인하면 id 저장
+    getUserId(state, userId) {
+      state.userId = userId;
     },
     // 회원정보 불러와서 UserData에 저장
     getUserData(state, userData) {

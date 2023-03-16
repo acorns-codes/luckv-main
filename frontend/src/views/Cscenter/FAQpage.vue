@@ -2,21 +2,12 @@
   <CsceterNav />
   <div class="cscenter">
     <h1>This is an faq page</h1>
-    <!-- <div>
-      <v-expansion-panels v-for="(item, index) in FAQLIst" :key="index">
-        <v-expansion-panel>
-          <template v-slot:header>
-            {{ item.questions }}
-          </template>
+    <div>
+      <v-expansion-panels v-for="item in FAQList" :key="item">
+        <v-expansion-panel :title="`${item.questions}`" :text="`${item.asked}`">
         </v-expansion-panel>
       </v-expansion-panels>
-      <v-expansion-panels>
-        <v-expansion-panel>
-          {{ item.questions }}
-          <template> </template
-        ></v-expansion-panel>
-      </v-expansion-panels>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -27,7 +18,7 @@ export default {
   data() {
     return {
       panel: [0, 1],
-      FAQLIst: this.$store.state.FAQList,
+      FAQList: this.$store.state.FAQList,
     };
   },
   methods: {

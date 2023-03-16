@@ -7,7 +7,7 @@
       </div>
       <!-- 회원정보불러오기 -->
       <div class="form-box">
-        <v-from v-model="valid" @submit.prevent="editInfo">
+        <v-form v-model="valid" @submit.prevent="editInfo">
           <v-text-field
             label="아이디"
             v-model="this.userData.mid"
@@ -31,9 +31,9 @@
           ></v-text-field>
           <v-text-field
             label="생년월일"
-            v-model="this.birthDate"
+            v-model="this.userData.birthDate"
             type="date"
-            :rules="birthDateRules"
+            readonly
           ></v-text-field>
           <v-radio-group
             inline
@@ -61,7 +61,7 @@
             class="mt-2"
             >회원정보수정</v-btn
           >
-        </v-from>
+        </v-form>
       </div>
     </div>
   </div>
@@ -71,21 +71,21 @@
 import MypageNav from "@/components/MypageNav.vue";
 
 export default {
+  created() {
+    this.getuserInfo();
+    console.log("userinfo 받아오기");
+    console.log(`mno: ${this.sessionData.mno}`);
+  },
+  mounted() {},
   components: {
     MypageNav,
   },
   data() {
     return {
       sessionData: this.$store.state.sessionStorageData,
-      userData: this.$store.state.userData,
+      userData: "",
       valid: false,
-      id: "아이디수정불가",
-      pwd: "비밀번호입력자리",
-      name: "이름수정불가",
-      ph: "휴대전화입력자리",
       auth: "B",
-      birhDate: "1993-05-11",
-      bank: "은행변경가능",
       bankList: ["국민", "농협", "기업", "카카오", "신한"],
       state: "ins",
       passWordRules: [
@@ -115,32 +115,37 @@ export default {
   methods: {
     //회원정보불러오기
     async getuserInfo() {
+      this.userData = this.$store.state.userData;
       try {
         const res = await this.$axios({
           headers: {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: "http://localhost:80/infoMember/",
+          url: `http://localhost:80/infoMember?mno=${this.sessionData.mno}`,
           data: { mno: this.sessionData.mno },
         });
         console.log(res);
-        this.$store.commit("getUserData", res.data);
+        this.$store.commit("getUserData", res.data.data);
         console.log(this.$store.state.userData);
       } catch (error) {
         console.log(error);
       }
     },
+    //회원정보수정
     async editInfo() {
       console.log("회원정보수정");
       try {
         const res = await this.$axios({
+          headers: {
+            "Content-type": "application/json",
+          },
           method: "POST",
-          url: `http://localhost:80/updateMember`,
+          url: `http://localhost:80/updateMember/`,
           data: {
-            mno: this.sessionData.mno,
-            ph: this.sessionData.ph,
-            pwd: this.sessionData.pwd,
+            mno: this.userData.mno,
+            ph: this.userData.ph,
+            pwd: this.userData.pwd,
           },
         });
         console.log(res);
@@ -150,11 +155,6 @@ export default {
         console.log(error);
       }
     },
-  },
-  created() {
-    this.getuserInfo();
-    console.log("userinfo 받아오기");
-    console.log(`mno: ${this.sessionData.mno}`);
   },
 };
 </script>
