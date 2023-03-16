@@ -3,14 +3,16 @@
     <div class="form-box">
       <v-card class="mx-auto px-6 py-8">
         <h3>회원가입</h3>
-        <v-form ref="form" fast-fail @submit.prevent="signUp">
+        <v-form v-model="valid" fast-fail @submit.prevent="signUp">
           <v-text-field
             v-model="id"
             label="아이디"
             :rules="idRules"
             :disabled="state == 'ins' ? false : true"
+            @blur="idCheck"
             required
           ></v-text-field>
+
           <v-text-field
             v-model="passWord"
             label="비밀번호"
@@ -18,7 +20,12 @@
             :rules="passWordRules"
             required
           ></v-text-field>
-          <v-text-field v-model="name" label="이름"></v-text-field>
+          <v-text-field
+            v-model="name"
+            label="이름"
+            :rules="nameRules"
+            ß
+          ></v-text-field>
           <v-text-field
             v-model="ph"
             label="휴대전화"
@@ -27,8 +34,9 @@
           ></v-text-field>
           <v-text-field
             v-model="birthDate"
-            label="셍년월일"
+            label="생년월일"
             type="date"
+            :rules="birthDateRules"
             required
           ></v-text-field>
           <v-radio-group inline label="회원구분" v-model="auth" required>
@@ -37,8 +45,19 @@
           </v-radio-group>
           <!-- 판매자 선택시에만 나올 수 있도록 -->
           <template v-if="`${this.auth}` === 'S'">
-            <v-select v-model="bank" :items="bankList" label="은행"></v-select>
-            <v-text-field v-model="account" label="계좌번호"></v-text-field>
+            <v-select
+              required
+              v-model="bank"
+              :items="bankList"
+              :rules="bankRules"
+              label="은행"
+            ></v-select>
+            <v-text-field
+              required
+              v-model="account"
+              :rules="accountRules"
+              label="계좌번호"
+            ></v-text-field>
           </template>
           <v-btn
             type="submit"
@@ -62,6 +81,7 @@ export default {
     return {
       state: "ins",
       id: "",
+      valid: false,
       idRules: [
         (v) => !!v || "아이디는 필수 입력사항입니다.",
         (v) =>
@@ -79,50 +99,111 @@ export default {
           "패스워드는 8~16자 영문 및 숫자 조합으로 입력해주세요",
       ],
       name: "",
+      nameRules: [
+        (v) =>
+          this.state === "ins" ? !!v || "이름은 필수 입력사항입니다." : true,
+      ],
       ph: "",
       phRules: [
         (v) =>
           this.state === "ins"
             ? !!v || "휴대전화는 필수 입력사항입니다."
             : true,
-        (v) => /^[0-9]{11}$/.test(v) || "숫자 11자리 이하로 입력해주세요",
+        (v) => /^[0-9]+/g.test(v) || "숫자만 입력해주세요",
       ],
       birthDate: "",
-      auth: "",
+      birthDateRules: [
+        (v) =>
+          this.state === "ins"
+            ? !!v || "생년월일은 필수 입력사항입니다."
+            : true,
+      ],
+      auth: "B",
+      authRules: [
+        (v) =>
+          this.state === "ins"
+            ? !!v || "회원구분은 필수 입력사항입니다."
+            : true,
+      ],
       bank: "",
+      bankRules: [
+        (v) =>
+          this.state === "ins" ? !!v || "은행은 필수 입력사항입니다." : true,
+      ],
       bankList: ["국민", "농협", "기업", "카카오", "신한"],
       account: "",
+      accountRules: [
+        (v) =>
+          this.state === "ins"
+            ? !!v || "계좌번호는 필수 입력사항입니다."
+            : true,
+      ],
     };
   },
+  watch: {
+    valid: {
+      handler(item) {
+        console.log(item);
+      },
+      immediate: true,
+    },
+  },
   methods: {
+    // 회원가입
     async signUp() {
-      const validate = this.$refs.form.validate();
-      if (validate) {
-        if (confirm("가입하시겠습니까?")) {
-          const userData = {
-            mid: this.id,
-            pwd: this.passWord,
-            name: this.name,
-            ph: this.ph,
-            birth_date: this.birthDate,
-            auth: this.auth,
-            account: this.bank + this.account,
-          };
-          try {
-            console.log(userData);
-            const res = await this.$axios.post(
-              "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/addMember",
-              userData
-            );
-            console.log(res);
-            console.log("회원가입완료");
-            this.$router.push({
-              path: "/",
-            });
-          } catch (error) {
-            console.log(error);
-          }
+      try {
+        const userData = {
+          mid: this.id,
+          pwd: this.passWord,
+          name: this.name,
+          ph: this.ph,
+          birthDate: this.birthDate,
+          auth: this.auth,
+          account:
+            this.auth === "S" ? `${this.bank}:` + this.account : "해당없음",
+        };
+
+        console.log(userData);
+
+        if (!this.valid) {
+          console.log(this.valid);
+          alert("가입 형식을 지켜주세요!");
+          return;
+        } else {
+          const res = await this.$axios({
+            headers: {
+              "Content-type": "application/x-www-form-urlencoded",
+            },
+            method: "POST",
+            url: "http://localhost:80/addMember",
+            data: userData,
+          });
+          console.log(res);
+          console.log("회원가입완료");
+          this.$router.push({
+            path: "/",
+          });
         }
+        // console.log(this.valid);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async idCheck() {
+      const res = await this.$axios({
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+        method: "POST",
+        url: "http://localhost:80/getId",
+        data: { mid: this.id },
+      });
+      // console.log(res);
+      if (res.data === "아이디 중복") {
+        return;
+      } else {
+        alert("중복된 아이디입니다!");
+        this.id = "";
       }
     },
   },
