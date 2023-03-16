@@ -33,8 +33,9 @@ public class NoticeService {
 		
 	
 	// 공지사항 등록
-	public void insertNotice(Notice notice) {
-		noticeMapper.insertNotice(notice);
+	public boolean insertNotice(Notice notice) {
+        int n = noticeMapper.insertNotice(notice);
+        return n > 0;
 	}
 		
 	// 공지사항 상세

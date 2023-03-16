@@ -21,7 +21,7 @@ public interface  NoticeMapper {
 	List<Notice> noticePage(Notice notice);
 	
 	// 공지사항 등록
-	void insertNotice(Notice notice);
+	int insertNotice(Notice notice);
 	
 	// 공지사항 상세보기
 	Notice noticeDetail(int nno);

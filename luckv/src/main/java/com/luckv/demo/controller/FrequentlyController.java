@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.Frequently;
@@ -51,7 +52,7 @@ public class FrequentlyController {
 		  
 
 		   // FaQ 등록
-		    @GetMapping("/insertFrequently")
+		  @PostMapping("/insertFrequently")
 		    public void insertFrequently(Frequently frequently) {
 		        logger.info("FrequentlyController insertFrequently()");
 		        frequentlyService.insertFrequently(frequently);
@@ -65,7 +66,7 @@ public class FrequentlyController {
 //		    }
 		    
 		    // FaQ 수정
-		    @GetMapping("frequentlyUpdate")
+		  @PostMapping("frequentlyUpdate")
 		    public void frequentlyUpdate(Frequently frequently) {  
 		        logger.info("FrequentlyController frequentlyUpdate()");
 		        frequentlyService.frequentlyUpdate(frequently);

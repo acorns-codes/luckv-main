@@ -1,9 +1,16 @@
 package com.luckv.demo.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.Notice;
+import com.luckv.demo.response.DefaultRes;
+import com.luckv.demo.response.ResponseMessage;
+import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.NoticeService;
 
 import java.util.List;
@@ -50,10 +57,15 @@ public class NoticeController {
 	    }
 
 	   // 공지사항 등록
-	    @GetMapping("/insertNotice")
-	    public void insertNotice(Notice notice) {
+	  @PostMapping("/insertNotice")
+	    public ResponseEntity<String> insertNotice(@RequestBody Notice notice) {
 	        logger.info("NoticeController insertNotice()");
-	        noticeService.insertNotice(notice);
+	        boolean b = noticeService.insertNotice(notice);
+
+	        if(b) {
+	            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+	        }
+	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
 	    }
 	    // 공지사항 상세
 	    @GetMapping("/noticeDetail")
@@ -63,7 +75,7 @@ public class NoticeController {
 	    }
 	    
 	    // 공지사항 수정
-	    @GetMapping("noticeUpdate")
+	    @PostMapping("noticeUpdate")
 	    public void noticeUpdate(Notice notice) {  
 	        logger.info("NoticeController noticeUpdate()");
 	        noticeService.noticeUpdate(notice);
