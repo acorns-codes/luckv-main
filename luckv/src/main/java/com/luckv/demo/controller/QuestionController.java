@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.Question;
@@ -50,7 +51,7 @@ public class QuestionController {
 		  
 
 		   // QnA 등록
-		    @GetMapping("/insertQuestion")
+		  @PostMapping("/insertQuestion")
 		    public void insertQuestion(Question question) {
 		        logger.info("QuestionController insertQuestion()");
 		        questionService.insertQuestion(question);
@@ -64,7 +65,7 @@ public class QuestionController {
 		    }
 		    
 		    // QnA 수정
-		    @GetMapping("questionUpdate")
+		    @PostMapping("questionUpdate")
 		    public void questionUpdate(Question question) {  
 		        logger.info("QuestionController questionUpdate()");
 		        questionService.questionUpdate(question);
@@ -78,13 +79,13 @@ public class QuestionController {
 		    }
 		    
 		    //  QnA 댓글작성
-		    @GetMapping("/qnaAnswer")
+		    @PostMapping("/qnaAnswer")
 		    public void qnaAnswer(Question question) {
 		        questionService.qnaAnswer(question);
 		    }
 		    
 		    //  QnA 댓글수정 
-		    @GetMapping("/qnaAnswerUpdate")
+		    @PostMapping("/qnaAnswerUpdate")
 		    public void qnaAnswerUpdate(Question question) {
 		        questionService.qnaAnswerUpdate(question);		    
 		    }
