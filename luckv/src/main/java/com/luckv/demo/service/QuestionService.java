@@ -34,6 +34,7 @@ public class QuestionService {
 	}
 
 	public Question questionDetail(int qno) {
+		questionMapper.qnaAnswerList(qno);
         return questionMapper.questionDetail(qno);
 	}
 
@@ -50,8 +51,16 @@ public class QuestionService {
 		questionMapper.qnaAnswer(question);
     }
 
-    public int qnaAnswerUpdate(Question question) {
-        return questionMapper.qnaAnswerUpdate(question);
+    public void qnaAnswerUpdate(Question question) {
+        questionMapper.qnaAnswerUpdate(question);
     }
+    
+    public List<Question> qnaAnswerList(int qno) {
+		return questionMapper.qnaAnswerList(qno);
+	}
+    
+    public void qnaAnswerDelete(Question question) {
+        questionMapper.qnaAnswerDelete(question);
+	}
 
 }

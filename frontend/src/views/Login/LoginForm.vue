@@ -82,7 +82,12 @@ export default {
           },
           method: "POST",
           url: "http://localhost:80/login",
-          data: userData,
+
+          data: {
+            mid: this.mid,
+            pwd: this.pwd,
+          },
+
         });
         console.log(res);
         if (userData === "" || res.data === "") {
