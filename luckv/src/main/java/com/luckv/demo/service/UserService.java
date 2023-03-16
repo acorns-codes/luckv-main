@@ -38,8 +38,9 @@ public class UserService {
     }
 
     // 회원정보 수정
-	public void updateMember(user user) {
-	     userMapper.updateMember(user);
+	public boolean updateMember(user user) {
+		int n = userMapper.updateMember(user);
+        return n > 0;
 	}
 
 	
