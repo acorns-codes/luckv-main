@@ -23,6 +23,7 @@ export default createStore({
       state.userId = userId;
     },
     clearUser(state) {
+      console.log("클리어유저");
       sessionStorage.clear("login");
       state.sessionStorageData = "";
     },

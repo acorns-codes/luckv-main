@@ -41,7 +41,7 @@ const routes = [
     component: () => import("@/views/Cscenter/FAQpage.vue"),
   },
   {
-    path: "/mypage",
+    path: "/mypage/:mno",
     name: "mypage",
     component: () => import("@/views/MyPage/MyPageEdit.vue"),
   },
@@ -51,7 +51,7 @@ const routes = [
     component: () => import("@/views/MyPage/DetailList.vue"),
   },
   {
-    path: "/sellerpage/:mid",
+    path: "/sellerpage/:mno",
     name: "sellerpage",
     component: () => import("@/views/SellerPage/SellerPageEdit.vue"),
   },

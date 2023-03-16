@@ -9,8 +9,10 @@
             label="아이디"
             :rules="idRules"
             :disabled="state == 'ins' ? false : true"
+            @blur="idCheck"
             required
           ></v-text-field>
+
           <v-text-field
             v-model="passWord"
             label="비밀번호"
@@ -157,7 +159,8 @@ export default {
           ph: this.ph,
           birthDate: this.birthDate,
           auth: this.auth,
-          account: this.auth === "S" ? this.bank + this.account : "해당없음",
+          account:
+            this.auth === "S" ? `${this.bank}:` + this.account : "해당없음",
         };
 
         console.log(userData);
@@ -186,17 +189,23 @@ export default {
         console.log(error);
       }
     },
-    // async idCheck() {
-    //   const res = await this.$axios({
-    //     headers: {
-    //       "Content-type": "application/x-www-form-urlencoded",
-    //     },
-    //     method: "POST",
-    //     url: "http://localhost:80/getId",
-    //     data: { mid: this.id },
-    //   });
-    //   console.log(res);
-    // },
+    async idCheck() {
+      const res = await this.$axios({
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+        method: "POST",
+        url: "http://localhost:80/getId",
+        data: { mid: this.id },
+      });
+      // console.log(res);
+      if (res.data === "아이디 중복") {
+        return;
+      } else {
+        alert("중복된 아이디입니다!");
+        this.id = "";
+      }
+    },
   },
 };
 </script>

@@ -16,7 +16,7 @@ export default {
       navList: [
         {
           name: "회원정보수정",
-          value: "/sellerpage",
+          value: `/sellerpage/${this.$store.state.sessionStorageData.mno}`,
         },
         {
           name: "경매내역",

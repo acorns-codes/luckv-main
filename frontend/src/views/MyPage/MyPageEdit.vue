@@ -6,42 +6,48 @@
         <h1>회원정보수정</h1>
       </div>
       <!-- 회원정보불러오기 -->
-      <div class="form-box" @submit.prevent="editInfo">
-        <v-from>
+      <div class="form-box">
+        <v-from v-model="valid" @submit.prevent="editInfo">
           <v-text-field
             label="아이디"
-            v-model="this.id"
+            v-model="this.$store.state.userData.mid"
             readonly
           ></v-text-field>
           <v-text-field
             label="비밀번호"
-            v-model="this.pwd"
+            v-model="this.$store.state.userData.pwd"
             type="password"
+            :rules="passWordRules"
           ></v-text-field>
           <v-text-field
-            v-model="this.name"
+            v-model="this.$store.state.userData.name"
             label="이름"
             readonly
           ></v-text-field>
-          <v-text-field label="휴대전화" v-model="this.ph"></v-text-field>
+          <v-text-field
+            label="휴대전화"
+            v-model="this.$store.state.userData.ph"
+            :rules="phRules"
+          ></v-text-field>
           <v-text-field
             label="생년월일"
-            v-model="this.birhDate"
+            v-model="this.$store.state.userData.birthDate"
             type="date"
+            :rules="birthDateRules"
           ></v-text-field>
-          <v-radio-group inline label="회원구분" v-model="auth">
-            <v-radio label="판매자" value="A"></v-radio>
+          <v-radio-group inline label="회원구분" v-model="auth" readonly>
+            <v-radio label="판매자" value="S"></v-radio>
             <v-radio label="구매자" value="B"></v-radio>
           </v-radio-group>
           <!-- 판매자 선택시에만 나올 수 있도록 -->
-          <template v-if="`${this.auth}` === 'A'">
+          <!-- <template v-if="`${this.auth}` === 'A'">
             <v-select v-model="bank" :items="bankList" label="은행"></v-select>
             <v-text-field
               v-model="account"
               label="계좌번호"
               model-value="12345678"
             ></v-text-field>
-          </template>
+          </template> -->
           <v-btn
             type="submit"
             block
@@ -65,6 +71,7 @@ export default {
   },
   data() {
     return {
+      valid: false,
       id: "아이디수정불가",
       pwd: "비밀번호입력자리",
       name: "이름수정불가",
@@ -73,12 +80,68 @@ export default {
       birhDate: "1993-05-11",
       bank: "은행변경가능",
       bankList: ["국민", "농협", "기업", "카카오", "신한"],
+      state: "ins",
+      passWordRules: [
+        (v) =>
+          this.state === "ins"
+            ? !!v || "패스워드는 필수 입력사항입니다."
+            : true,
+        (v) =>
+          /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/.test(v) ||
+          "패스워드는 8~16자 영문 및 숫자 조합으로 입력해주세요",
+      ],
+      phRules: [
+        (v) =>
+          this.state === "ins"
+            ? !!v || "휴대전화는 필수 입력사항입니다."
+            : true,
+        (v) => /^[0-9]+/g.test(v) || "숫자만 입력해주세요",
+      ],
+      birthDateRules: [
+        (v) =>
+          this.state === "ins"
+            ? !!v || "생년월일은 필수 입력사항입니다."
+            : true,
+      ],
     };
   },
   methods: {
-    editInfo() {
-      console.log("회원정보수정");
+    //회원정보불러오기
+    async getuserInfo() {
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/infoMember?mno=${this.$store.state.sessionStorageData.mno}`,
+          params: { mno: this.$store.state.sessionStorageData.mno },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
     },
+    async editInfo() {
+      console.log("회원정보수정");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/updateMember?mno=${this.$store.state.sessionStorageData.mno}`,
+          params: {
+            ph: this.$store.state.sessionStorageData.ph,
+            pwd: this.$store.state.sessionStorageData.pwd,
+          },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  created() {
+    this.getuserInfo();
   },
 };
 </script>
