@@ -9,18 +9,18 @@
       </div>
       <div v-else>
         <router-link
-          v-if="this.$store.state.sessionStorageData.auth === 'B'"
+          v-if="sessionData.auth === 'B'"
           :to="{
             name: 'mypage',
-            params: { mno: `${this.$store.state.sessionStorageData.mno}` },
+            params: { mno: sessionData.mno },
           }"
           >마이페이지</router-link
         >
         <router-link
-          v-if="this.$store.state.sessionStorageData.auth === 'S'"
+          v-if="this.sessionData.auth === 'S'"
           :to="{
             name: 'sellerpage',
-            params: { mno: `${this.$store.state.sessionStorageData.mno}` },
+            params: { mno: sessionData.mno },
           }"
           >판매자페이지</router-link
         >
@@ -44,7 +44,9 @@ export default {
     LoginForm,
   },
   data() {
-    return {};
+    return {
+      sessionData: this.$store.state.sessionStorageData,
+    };
   },
   computed: {
     isUserLogin() {
@@ -61,6 +63,10 @@ export default {
       // console.log(this.$store.state.isClicked);
     },
   },
+  // created() {
+  //   console.log(this.$store.state.sessionStorageData);
+  //   console.log(this.userData);
+  // },
 };
 </script>
 

@@ -10,32 +10,32 @@
         <v-from>
           <v-text-field
             label="아이디"
-            v-model="this.$store.state.userData.mid"
+            v-model="this.sessionData.mid"
             readonly
           ></v-text-field>
           <v-text-field
             label="비밀번호"
-            v-model="this.$store.state.userData.pwd"
+            v-model="this.sessionData.pwd"
             type="password"
           ></v-text-field>
           <v-text-field
-            v-model="this.$store.state.userData.name"
+            v-model="this.sessionData.name"
             label="이름"
             readonly
           ></v-text-field>
           <v-text-field
             label="휴대전화"
-            v-model="this.$store.state.userData.ph"
+            v-model="this.sessionData.ph"
           ></v-text-field>
           <v-text-field
             label="생년월일"
-            v-model="this.$store.state.userData.birthDate"
+            v-model="this.sessionData.birthDate"
             type="date"
           ></v-text-field>
           <v-radio-group
             inline
             label="회원구분"
-            v-model="this.$store.state.userData.auth"
+            v-model="this.sessionData.auth"
             readonly
           >
             <v-radio label="판매자" value="S"></v-radio>
@@ -68,6 +68,8 @@ export default {
   },
   data() {
     return {
+      sessionData: this.$store.state.sessionStorageData,
+      userData: this.$store.state.userData,
       pwd: "비밀번호입력자리",
       name: "이름수정불가",
       ph: "휴대전화입력자리",
@@ -85,9 +87,12 @@ export default {
     async getuserInfo() {
       try {
         const res = await this.$axios({
-          method: "GET",
-          url: `http://localhost:80/infoMember?mno=${this.$store.state.sessionStorageData.mno}`,
-          params: { mno: this.$store.state.sessionStorageData.mno },
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: "http://localhost:80/infoMember",
+          data: { mno: this.sessionData.mno },
         });
         console.log(res);
         this.$store.commit("getUserData", res.data);
@@ -97,16 +102,17 @@ export default {
       }
     },
 
-    // 회원정보수정
+    //회원정보수정
     async editInfo() {
       console.log("회원정보수정");
       try {
         const res = await this.$axios({
-          method: "GET",
-          url: `http://localhost:80/updateMember?mno=${this.$store.state.sessionStorageData.mno}`,
-          params: {
-            ph: this.$store.state.sessionStorageData.ph,
-            pwd: this.$store.state.sessionStorageData.pwd,
+          method: "POST",
+          url: `http://localhost:80/updateMember`,
+          data: {
+            mno: this.sessionData.mno,
+            ph: this.sessionData.ph,
+            pwd: this.sessionData.pwd,
           },
         });
         console.log(res);
@@ -121,9 +127,10 @@ export default {
     this.getuserInfo();
   },
   mounted() {
-    console.log(this.$store.state.userData.acccount);
-    const bank = this.$store.state.userData.acccount.indexOf(":");
-    console.log(bank);
+    console.log("셀러페이지");
+    // console.log(this.$store.state.userData.acccount);
+    // const bank = this.$store.state.userData.acccount.indexOf(":");
+    // console.log(bank);
   },
 };
 </script>
