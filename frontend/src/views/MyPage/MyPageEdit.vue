@@ -10,32 +10,37 @@
         <v-from v-model="valid" @submit.prevent="editInfo">
           <v-text-field
             label="아이디"
-            v-model="this.$store.state.userData.mid"
+            v-model="this.userData.mid"
             readonly
           ></v-text-field>
           <v-text-field
             label="비밀번호"
-            v-model="this.$store.state.userData.pwd"
+            v-model="this.userData.pwd"
             type="password"
             :rules="passWordRules"
           ></v-text-field>
           <v-text-field
-            v-model="this.$store.state.userData.name"
+            v-model="this.userData.name"
             label="이름"
             readonly
           ></v-text-field>
           <v-text-field
             label="휴대전화"
-            v-model="this.$store.state.userData.ph"
+            v-model="this.userData.ph"
             :rules="phRules"
           ></v-text-field>
           <v-text-field
             label="생년월일"
-            v-model="this.$store.state.userData.birthDate"
+            v-model="this.birthDate"
             type="date"
             :rules="birthDateRules"
           ></v-text-field>
-          <v-radio-group inline label="회원구분" v-model="auth" readonly>
+          <v-radio-group
+            inline
+            label="회원구분"
+            v-model="this.userData.auth"
+            readonly
+          >
             <v-radio label="판매자" value="S"></v-radio>
             <v-radio label="구매자" value="B"></v-radio>
           </v-radio-group>
@@ -71,6 +76,8 @@ export default {
   },
   data() {
     return {
+      sessionData: this.$store.state.sessionStorageData,
+      userData: this.$store.state.userData,
       valid: false,
       id: "아이디수정불가",
       pwd: "비밀번호입력자리",
@@ -110,9 +117,12 @@ export default {
     async getuserInfo() {
       try {
         const res = await this.$axios({
-          method: "GET",
-          url: `http://localhost:80/infoMember?mno=${this.$store.state.sessionStorageData.mno}`,
-          params: { mno: this.$store.state.sessionStorageData.mno },
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: "http://localhost:80/infoMember/",
+          data: { mno: this.sessionData.mno },
         });
         console.log(res);
         this.$store.commit("getUserData", res.data);
@@ -125,11 +135,12 @@ export default {
       console.log("회원정보수정");
       try {
         const res = await this.$axios({
-          method: "GET",
-          url: `http://localhost:80/updateMember?mno=${this.$store.state.sessionStorageData.mno}`,
-          params: {
-            ph: this.$store.state.sessionStorageData.ph,
-            pwd: this.$store.state.sessionStorageData.pwd,
+          method: "POST",
+          url: `http://localhost:80/updateMember`,
+          data: {
+            mno: this.sessionData.mno,
+            ph: this.sessionData.ph,
+            pwd: this.sessionData.pwd,
           },
         });
         console.log(res);
@@ -142,6 +153,8 @@ export default {
   },
   created() {
     this.getuserInfo();
+    console.log("userinfo 받아오기");
+    console.log(`mno: ${this.sessionData.mno}`);
   },
 };
 </script>

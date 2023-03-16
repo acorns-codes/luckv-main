@@ -8,28 +8,27 @@ export default createStore({
     accessToken: "",
     sessionStorageData: "",
     userData: "",
+    FAQList: "",
   },
   getters: {
+    // 로그인 확인
     isLogin(state) {
       return state.sessionStorageData !== "";
     },
-    // && sessionStorage.clear("login")
-    isSignUp(state) {
-      return state.signUp;
-    },
   },
   mutations: {
-    setUserId(state, userId) {
-      state.userId = userId;
-    },
+    // 로그아웃 클릭 시, sessionStorage 삭제 및 data 삭제
     clearUser(state) {
       console.log("클리어유저");
       sessionStorage.clear("login");
       state.sessionStorageData = "";
     },
+    // "login"으로 session에 저장
     setSessionStorage(state, payload) {
       sessionStorage.setItem("login", payload);
     },
+    // session storage에 있는 데이터 가져오기
+    // 데이터가 존재하면, sessionStorageData에 객체 형태로 저장
     readSessionStorage(state, payload) {
       if (sessionStorage.getItem("login", payload) != null) {
         state.sessionStorageData = JSON.parse(
@@ -37,16 +36,15 @@ export default createStore({
         );
       }
     },
+    // 회원정보 불러와서 UserData에 저장
     getUserData(state, userData) {
       state.userData = userData;
     },
-    // getSessionStorage(state) {
-    //   state.sessionStorageData = JSON.parse(
-    //     sessionStorage.getItem("login", state)
-    //   );
-    // },
+    getFAQList(state, FAQList) {
+      state.FAQList = FAQList;
+    },
   },
-
+  // 새로고침해도 session정보 유지 될 수 있도록 했음
   plugins: [
     createPersistedState({
       paths: ["sessionStorageData"],

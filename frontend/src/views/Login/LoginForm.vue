@@ -42,8 +42,6 @@
 </template>
 
 <script>
-// import { loginUser } from "@/api/index";
-
 export default {
   data() {
     return {
@@ -55,6 +53,7 @@ export default {
   },
 
   methods: {
+    // 클릭 시 회원가입으로 이동
     openSignUp() {
       this.$store.state.isClicked = false;
       this.$router.push({
@@ -64,9 +63,9 @@ export default {
     required(v) {
       return !!v || "빈칸을 채워주세요!";
     },
+    // 로그인 확인
     async login() {
       try {
-        // console.log("로그인");
         if (!this.form) return;
         this.loading = true;
         setTimeout(() => (this.loading = false), 2000);
@@ -74,20 +73,13 @@ export default {
           mid: this.userId,
           pwd: this.userPassword,
         };
-        // console.log(userData);
-        // console.log(this.mid);
         const res = await this.$axios({
           headers: {
-            "Content-type": "application/x-www-form-urlencoded",
+            "Content-type": "application/json",
           },
           method: "POST",
           url: "http://localhost:80/login",
-
-          data: {
-            mid: this.mid,
-            pwd: this.pwd,
-          },
-
+          data: userData,
         });
         console.log(res);
         if (userData === "" || res.data === "") {
@@ -95,44 +87,26 @@ export default {
           alert("아이디 또는 비밀번호를 확인하세요.");
         } else {
           console.log("로그인성공");
-          // sessionStorage.setItem("login", JSON.stringify(res.data));
-          // 세션에 받은 data 저장
-          this.$store.commit("setUserId", res.data.mid);
-          this.$store.commit("setSessionStorage", JSON.stringify(res.data));
+          // 로그인 성공이면 받아온 data를 json 화 하여 sessionStorageData에 저장
+          this.$store.commit(
+            "setSessionStorage",
+            JSON.stringify(res.data.data)
+          );
+          // 세션에 저장된 데이터를 다시 객체화 시켜 저장
           this.$store.commit(
             "readSessionStorage",
             this.$store.state.sessionStorageData
           );
-          alert(`${res.data.name}님 환영합니다!`);
+
+          alert(`${res.data.data.name}님 환영합니다!`);
           this.$store.state.isClicked = false;
           this.$router.push({
             path: "/",
           });
         }
-
-        // }
       } catch (error) {
         console.log(error);
       }
-      // },
-      // login() {
-      //   const userData = {
-      //     mid: this.userId,
-      //     pwd: this.userPassword,
-      //   };
-      //   this.$axios
-      //     .post("http://localhost:8080/login", userData)
-      //     .then((res) => {
-      //       console.log(res);
-      //     })
-      //     .then((userData) => {
-      //       console.log(userData);
-      //       sessionStorage.setItem("login", JSON.stringify(userData));
-      //       alert(`${userData.id}님 환영합니다!`);
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //     });
     },
   },
 };
