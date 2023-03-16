@@ -35,7 +35,7 @@
       <!-- 로그인 -->
     <select id="login"  parameterType="com.luckv.demo.dto.user"  resultType="com.luckv.demo.dto.user">
         select 
-        	mid, name, auth 
+        	mid, name, auth, mno
         from user
         where mid = #{mid} and pwd = #{pwd}
     </select>
@@ -49,7 +49,7 @@
 	</update>
 	
 	 <!--회원조회 -->
-    <select id="infoMember"  parameterType="com.luckv.demo.dto.user"  resultType="com.luckv.demo.dto.user">
+    <select id="infoMember"  parameterType="integer"  resultType="com.luckv.demo.dto.user">
         select 
         	*
         from user

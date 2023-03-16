@@ -29,37 +29,29 @@ public class UserController {
 
 	    // 아이디 중복확인
 	    @PostMapping("/getId")
-	    public String getId(user user) {
+	    public ResponseEntity<String> getId(@RequestBody user user) {
 	        logger.info("MemberController getId()");
 	        boolean b = service.getId(user);
-	        if(b) {
-	            return "아이디 사용가능";
+	        if(b) {	            
+	        	return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.ID_UNAVAILABLE, b), HttpStatus.OK);
 	        }
-	        return "아이디 중복";
-
+	        return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.ID_AVAILABLE, b), HttpStatus.OK);
 	    }
 
 	    // 회원가입
 	    @PostMapping("/addMember")
-	    public String addMember(user user) {
+	    public ResponseEntity<String> addMember(@RequestBody user user) {
 	        logger.info("MemberController addMember()");
 	        boolean b = service.addMember(user);
 
 	        logger.info(user.toString());
 
 	        if(b) {
-	            return "회원가입 완료";
+	            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_USER, b), HttpStatus.OK);
 	        }
-
-	        return "회원가입 불가";
+	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_USER, b), HttpStatus.OK);
 	    }
 
-	    // 로그인
-//	    @PostMapping("/login")
-//	    public user login(user user) {
-//	        logger.info("MemberController login()");
-//	        return service.login(user);
-//	    }
 	    
 	    @PostMapping("login")
 	    public ResponseEntity login(@RequestBody user user) {  	
@@ -71,13 +63,21 @@ public class UserController {
 	    
 	    // 회원정보 조회
 	    @PostMapping("/infoMember")
-	    public user infoMember(int mno) {
-	      return service.infoMember(mno);
+	    public ResponseEntity infoMember(int mno) {
+	      return service.infoMember(mno) == null?  
+	        		new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_FOUND_USER, service.infoMember(mno)), HttpStatus.OK)
+	        		: new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_USER, service.infoMember(mno)), HttpStatus.OK);
 	    }
 	    
 	    // 회원정보 수정	    
 	    @PostMapping("/updateMember")
-	    public void updateMember(user user) {
-	    	service.updateMember(user);
+	    public ResponseEntity<String> updateMember(@RequestBody user user) {
+	    	
+	    	boolean b = service.updateMember(user);
+	        if(b) {
+	            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_USER, b), HttpStatus.OK);
+	        }
+	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_USER, b), HttpStatus.OK);
 	    }
+	    
 }

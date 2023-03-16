@@ -22,6 +22,6 @@ public interface UserMapper {
 	user infoMember(int mno);
     
     // 회원정보수정
-	void  updateMember(user user);
+	int  updateMember(user user);
     
 }
