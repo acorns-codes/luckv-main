@@ -2,11 +2,17 @@ package com.luckv.demo.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.user;
+import com.luckv.demo.response.DefaultRes;
+import com.luckv.demo.response.ResponseMessage;
+import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -49,21 +55,28 @@ public class UserController {
 	    }
 
 	    // 로그인
-	    @PostMapping("/login")
-	    public user login(user user) {
-	        logger.info("MemberController login()");
-	        return service.login(user);
+//	    @PostMapping("/login")
+//	    public user login(user user) {
+//	        logger.info("MemberController login()");
+//	        return service.login(user);
+//	    }
+	    
+	    @PostMapping("login")
+	    public ResponseEntity login(@RequestBody user user) {  	
+	        return service.login(user) == null?  
+	        		new ResponseEntity(DefaultRes.res(StatusCode.UNAUTHORIZED, ResponseMessage.NOT_FOUND_USER, service.login(user)), HttpStatus.OK) :
+	        		new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, service.login(user)), HttpStatus.OK);
 	    }
 	    
 	    
 	    // 회원정보 조회
-	    @GetMapping("/infoMember")
+	    @PostMapping("/infoMember")
 	    public user infoMember(int mno) {
 	      return service.infoMember(mno);
 	    }
 	    
 	    // 회원정보 수정	    
-	    @GetMapping("/updateMember")
+	    @PostMapping("/updateMember")
 	    public void updateMember(user user) {
 	    	service.updateMember(user);
 	    }
