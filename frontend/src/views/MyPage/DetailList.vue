@@ -1,33 +1,37 @@
 <template>
-  <MypageNav />
-  <div class="container">
-    <div>
-      <div>
-        <h2>경매 참여내역</h2>
+  <div id="root">
+    <div id="mypage-root">
+      <MypageNav />
+      <div class="container">
+        <div>
+          <div>
+            <h2>구매내역</h2>
+          </div>
+          <v-table>
+            <thead>
+              <tr>
+                <th
+                  v-for="(item, index) in headers"
+                  :key="index"
+                  class="text-center"
+                >
+                  {{ item.value }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in desserts" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.content }}</td>
+                <td>{{ item.payMax }}</td>
+                <td>{{ item.bidding }}</td>
+                <td>{{ item.status }}</td>
+              </tr>
+            </tbody>
+          </v-table>
+        </div>
       </div>
-      <v-table fixed-header height="600px">
-        <thead>
-          <tr>
-            <th
-              v-for="(item, index) in headers"
-              :key="index"
-              class="text-center"
-            >
-              {{ item.value }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in desserts" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.content }}</td>
-            <td>{{ item.payMax }}</td>
-            <td>{{ item.bidding }}</td>
-            <td>{{ item.status }}</td>
-          </tr>
-        </tbody>
-      </v-table>
     </div>
   </div>
 </template>
@@ -125,15 +129,30 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+#mypage-root {
+  width: 1440px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
 .container {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 110px;
   & > div {
-    width: 1440px;
-    padding: 90px;
+    width: 100%;
     & > div:nth-child(1) {
+      width: 100%;
       display: flex;
       justify-content: flex-start;
       padding-bottom: 10px;

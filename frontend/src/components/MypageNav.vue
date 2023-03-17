@@ -1,32 +1,26 @@
 <template>
   <div class="main-container">
-    <div>
-      <h1>마이페이지</h1>
-      <div v-for="item in navList" :key="item">
-        <router-link :to="{ path: item.value }">{{ item.name }}</router-link>
-      </div>
+    <h1>마이페이지</h1>
+    <div v-if="sessionData.auth === 'B'">
+      <router-link :to="`/mypage/${sessionData.mno}`">회원정보수정</router-link>
+      <router-link to="/mydetailList">구매내역</router-link>
+      <router-link to="/">구독내역</router-link>
+    </div>
+    <div v-else>
+      <router-link :to="`/mypage/${sessionData.mno}`">회원정보수정</router-link>
+      <router-link to="/sellerauction">경매내역</router-link>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  mounted() {
+    console.log(this.$store.state.sessionStorageData.auth);
+  },
   data() {
     return {
-      navList: [
-        {
-          name: "회원정보수정",
-          value: `/mypage/${this.$store.state.sessionStorageData.mno}`,
-        },
-        {
-          name: "구매내역",
-          value: "/mydetailList",
-        },
-        {
-          name: "구독내역",
-          value: "/mysublist",
-        },
-      ],
+      sessionData: JSON.parse(sessionStorage.getItem("login")),
     };
   },
 };
@@ -34,33 +28,28 @@ export default {
 
 <style lang="scss" scoped>
 .main-container {
-  width: 100%;
-  height: 100%;
+  width: 300px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  padding: 40px;
   & > div {
-    width: 1400px;
-    height: 90px;
     display: flex;
-    align-items: end;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    border-bottom: 1px solid black;
-    h1 {
-      width: 360px;
-    }
-    & > div {
-      width: 150px;
-
-      & > a {
-        font-size: 1.5rem;
-        text-decoration: none;
-        color: #343434;
-      }
-      & > a.router-link-exact-active {
-        font-weight: bold;
-      }
-    }
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  h1 {
+    border-bottom: 1px solid #343434;
+    margin-bottom: 15px;
+  }
+  a {
+    font-size: 1.3rem;
+    text-decoration: none;
+    color: #343434;
+    padding: 5px;
+  }
+  a.router-link-exact-active {
+    font-weight: bold;
   }
 }
 </style>

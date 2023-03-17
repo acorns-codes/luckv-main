@@ -1,67 +1,75 @@
 <template>
-  <MypageNav />
-  <div class="container">
-    <div>
-      <div>
-        <h1>회원정보수정</h1>
-      </div>
-      <!-- 회원정보불러오기 -->
-      <div class="form-box">
-        <v-form v-model="valid" @submit.prevent="editInfo">
-          <v-text-field
-            label="아이디"
-            v-model="this.userData.mid"
-            readonly
-          ></v-text-field>
-          <v-text-field
-            label="비밀번호"
-            v-model="this.userData.pwd"
-            type="password"
-            :rules="passWordRules"
-          ></v-text-field>
-          <v-text-field
-            v-model="this.userData.name"
-            label="이름"
-            readonly
-          ></v-text-field>
-          <v-text-field
-            label="휴대전화"
-            v-model="this.userData.ph"
-            :rules="phRules"
-          ></v-text-field>
-          <v-text-field
-            label="생년월일"
-            v-model="this.userData.birthDate"
-            type="date"
-            readonly
-          ></v-text-field>
-          <v-radio-group
-            inline
-            label="회원구분"
-            v-model="this.userData.auth"
-            readonly
-          >
-            <v-radio label="판매자" value="S"></v-radio>
-            <v-radio label="구매자" value="B"></v-radio>
-          </v-radio-group>
-          <!-- 판매자 선택시에만 나올 수 있도록 -->
-          <!-- <template v-if="`${this.auth}` === 'A'">
-            <v-select v-model="bank" :items="bankList" label="은행"></v-select>
-            <v-text-field
-              v-model="account"
-              label="계좌번호"
-              model-value="12345678"
-            ></v-text-field>
-          </template> -->
-          <v-btn
-            type="submit"
-            block
-            color="success"
-            variant="elevated"
-            class="mt-2"
-            >회원정보수정</v-btn
-          >
-        </v-form>
+  <div id="root">
+    <div id="mypage-root">
+      <MypageNav />
+      <div class="container">
+        <div>
+          <div>
+            <h2>회원정보수정</h2>
+          </div>
+          <!-- 회원정보불러오기 -->
+          <div class="form-box">
+            <v-form v-model="valid" @submit.prevent="editInfo">
+              <v-text-field
+                label="아이디"
+                v-model="this.userData.mid"
+                readonly
+              ></v-text-field>
+              <v-text-field
+                label="비밀번호"
+                v-model="this.userData.pwd"
+                type="password"
+                :rules="passWordRules"
+              ></v-text-field>
+              <v-text-field
+                v-model="this.userData.name"
+                label="이름"
+                readonly
+              ></v-text-field>
+              <v-text-field
+                label="휴대전화"
+                v-model="this.userData.ph"
+                :rules="phRules"
+              ></v-text-field>
+              <v-text-field
+                label="생년월일"
+                v-model="this.userData.birthDate"
+                type="date"
+                readonly
+              ></v-text-field>
+              <v-radio-group
+                inline
+                label="회원구분"
+                v-model="this.userData.auth"
+                readonly
+              >
+                <v-radio label="판매자" value="S"></v-radio>
+                <v-radio label="구매자" value="B"></v-radio>
+              </v-radio-group>
+              <!-- 판매자 선택시에만 나올 수 있도록 -->
+              <template v-if="`${this.userData.auth}` === 'S'">
+                <v-select
+                  v-model="bank"
+                  :items="bankList"
+                  label="은행"
+                ></v-select>
+                <v-text-field
+                  v-model="account"
+                  label="계좌번호"
+                  model-value="12345678"
+                ></v-text-field>
+              </template>
+              <v-btn
+                type="submit"
+                block
+                color="success"
+                variant="elevated"
+                class="mt-2"
+                >회원정보수정</v-btn
+              >
+            </v-form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -75,6 +83,7 @@ export default {
     this.getuserInfo();
     console.log("userinfo 받아오기");
     console.log(`mno: ${this.sessionData.mno}`);
+    console.log(this.$store.state.sessionStorageData.auth);
   },
   mounted() {},
   components: {
@@ -85,7 +94,6 @@ export default {
       sessionData: this.$store.state.sessionStorageData,
       userData: "",
       valid: false,
-      auth: "B",
       bankList: ["국민", "농협", "기업", "카카오", "신한"],
       state: "ins",
       passWordRules: [
@@ -126,6 +134,7 @@ export default {
           data: { mno: this.sessionData.mno },
         });
         console.log(res);
+
         this.$store.commit("getUserData", res.data.data);
         console.log(this.$store.state.userData);
       } catch (error) {
@@ -160,14 +169,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+#mypage-root {
+  width: 1440px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  padding-top: 110px;
+
   & > div {
-    width: 1440px;
-    padding: 90px;
     display: flex;
     flex-direction: column;
     align-items: center;

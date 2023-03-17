@@ -1,5 +1,5 @@
 <template>
-  <SellerMypageNav />
+  <MypageNav />
   <div class="container">
     <div>
       <div>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import SellerMypageNav from "@/components/SellerMypageNav.vue";
+import MypageNav from "@/components/MypageNav.vue";
 export default {
   created() {
     this.getuserInfo();
@@ -69,7 +69,7 @@ export default {
     console.log(`mno: ${this.sessionData.mno}`);
   },
   components: {
-    SellerMypageNav,
+    MypageNav,
   },
   data() {
     return {

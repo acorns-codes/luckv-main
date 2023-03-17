@@ -1,5 +1,5 @@
 <template>
-  <SellerMypageNav />
+  <MypageNav />
   <div class="container">
     <div>
       <div>
@@ -52,6 +52,12 @@
                       v-model="this.content"
                       required
                     ></v-textarea>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-file-input
+                      label="동영상 올리기"
+                      prepend-icon="mdi-video"
+                    ></v-file-input>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
@@ -121,9 +127,9 @@
 </template>
 
 <script>
-import SellerMypageNav from "@/components/SellerMypageNav.vue";
+import MypageNav from "@/components/MypageNav.vue";
 export default {
-  components: { SellerMypageNav },
+  components: { MypageNav },
   data() {
     return {
       itemsPerPage: 5,
