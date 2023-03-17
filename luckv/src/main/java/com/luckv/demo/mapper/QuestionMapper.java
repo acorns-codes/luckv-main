@@ -20,28 +20,28 @@ public interface QuestionMapper {
 	List<Question> questionPage(Question question);
 	
 	// QnA 등록
-	void insertQuestion(Question question);
+	int insertQuestion(Question question);
 	
 	// QnA 상세보기
 	Question questionDetail(int qno);
 	
 	// QnA 수정
-	void questionUpdate(Question question);
+	int questionUpdate(Question question);
 	
 	// QnA 삭제
-	void questionDelete(int qno);
+	int questionDelete(int qno);
 	
 	
 	// QnA 답변작성
-	void qnaAnswer(Question question);
+	int qnaAnswer(Question question);
 	
 	// QnA 답변수정
-    void qnaAnswerUpdate(Question question); 
+	int qnaAnswerUpdate(Question question); 
     
     // QnA 답변
     List<Question> qnaAnswerList(int qno);
     
     // QnA 답변삭제
- 	void qnaAnswerDelete(Question question);
+    int qnaAnswerDelete(Question question);
     
 }

@@ -44,8 +44,10 @@ public class NoticeService {
 	}
 	
 	// 공지사항 수정
-	public void noticeUpdate(Notice notice) {
-		noticeMapper.noticeUpdate(notice);
+	public boolean noticeUpdate(Notice notice) {
+		int n = noticeMapper.noticeUpdate(notice);
+        return n > 0;
+		
     }
 	
 

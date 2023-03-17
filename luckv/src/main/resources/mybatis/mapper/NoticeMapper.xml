@@ -69,7 +69,7 @@
 		  	title = #{title}, /*공지사항 제목*/
 		  	content = #{content},  /*공지사항 내용*/
 		  	update_at = now() /*공지사항 수정일*/
-		  where nno = #{nno}
+		  where nno = #{no} and nid = #{nid}
 		</update>
        
 </mapper>

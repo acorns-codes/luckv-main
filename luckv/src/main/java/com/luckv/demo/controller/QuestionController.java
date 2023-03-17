@@ -4,11 +4,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.Question;
+import com.luckv.demo.response.DefaultRes;
+import com.luckv.demo.response.ResponseMessage;
+import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.QuestionService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,22 +27,24 @@ public class QuestionController {
 	
 		 // QnA 조회
 		 @GetMapping("/questionList")
-		    public List<Question> questionList(Question question) {
-		        logger.info("QuestionController questionList");
-		        return questionService.questionList(question);
+		    public ResponseEntity<List<Question>> questionList(Question question) {
+			 List<Question> qna = questionService.questionList(question);
+			 try {
+					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, qna), HttpStatus.OK);
+				} catch (Exception e) {
+					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+					}
 		    }
 		 
 		  // QnA 갯수
 		 @GetMapping("/questionCount")
 		    public int questionCount(Question question) {
-		        logger.info("QuestionController questionCount");
 		        return questionService.questionCount(question);
 		    }
 		 
 		// QnA 페이징처리
 		  @GetMapping("/questionPage")
 		    public List<Question> questionPage(Question question) {
-		        logger.info("QuestionController questionPage");
 
 		        // 페이지 설정
 		        int sn = question.getPage();   // 현재 페이지
@@ -52,56 +60,86 @@ public class QuestionController {
 
 		   // QnA 등록
 		  @PostMapping("/insertQuestion")
-		    public void insertQuestion(Question question) {
-		        logger.info("QuestionController insertQuestion()");
-		        questionService.insertQuestion(question);
+		    public ResponseEntity insertQuestion(@RequestBody Question question) {
+		        
+		        boolean b = questionService.insertQuestion(question);
+		        
+		        if(b) {
+		            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+		        }
+		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
 		    }
 		    
 		    // QnA 상세
 		    @GetMapping("/questionDetail")
-		    public Question questionDetail(int qno) {
-		        logger.info("QuestionController questionDetail()");
-		        return questionService.questionDetail(qno);
+		    public ResponseEntity questionDetail(int qno) {
+		    	Question question = questionService.questionDetail(qno);
+		    	
+		    	return question != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, question), HttpStatus.OK)
+				:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 		    }
 		    
 		    // QnA 수정
 		    @PostMapping("questionUpdate")
-		    public void questionUpdate(Question question) {  
-		        logger.info("QuestionController questionUpdate()");
-		        questionService.questionUpdate(question);
+		    public ResponseEntity questionUpdate(@RequestBody Question question) {  
+		    	boolean b = questionService.questionUpdate(question);
+
+				  if(b) {
+			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BOARD, b), HttpStatus.OK);
+			        }
+			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
 		    }
 
 		    // QnA 삭제
 		    @GetMapping("questionDelete")
-		    public void questionDelete(int qno) {  
-		        logger.info("QuestionController questionDelete()");
-		        questionService.questionDelete(qno);
+		    public ResponseEntity questionDelete(int qno) {  
+		    	boolean b = questionService.questionDelete(qno);
+				  if(b) {
+			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
+			        }
+			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);
 		    }
+
 		    
 		    //  QnA 댓글작성
 		    @PostMapping("/qnaAnswer")
-		    public void qnaAnswer(Question question) {
-		        questionService.qnaAnswer(question);
+		    public ResponseEntity<String> qnaAnswer(@RequestBody Question question) {
+		    	boolean b =  questionService.qnaAnswer(question);
+
+		        if(b) {
+		            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+		        }
+		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
+		       
 		    }
 		    
 		    //  QnA 댓글수정 
 		    @PostMapping("/qnaAnswerUpdate")
-		    public void qnaAnswerUpdate(Question question) {
-		        questionService.qnaAnswerUpdate(question);		    
+		    public ResponseEntity<String> qnaAnswerUpdate(@RequestBody Question question) {
+		        boolean b = questionService.qnaAnswerUpdate(question);
+				  if(b) {
+			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BOARD, b), HttpStatus.OK);
+			        }
+			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
 		    }
 		    
 		    //  QnA 댓글
 		    @GetMapping("/qnaAnswerList")
-		    public List<Question> qnaAnswerList(int qno) {
-		        logger.info("QuestionController qnaAnswerList");
-		    return questionService.qnaAnswerList(qno);
+		    public ResponseEntity<List<Question>> qnaAnswerList(int qno) {
+		    List<Question> question =  questionService.qnaAnswerList(qno);
+		    return question != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, question), HttpStatus.OK)
+					:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+
 		    }
 		    
 		 // QnA 댓글삭제
 		    @GetMapping("/qnaAnswerDelete")
-		    public void qnaAnswerDelete(Question question) {  
-		        logger.info("QuestionController qnaAnswerDelete()");
-		        questionService.qnaAnswerDelete(question);
+		    public ResponseEntity<String> qnaAnswerDelete(@RequestBody Question question) {  
+		    	boolean b = questionService.qnaAnswerDelete(question);
+				  if(b) {
+			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
+			        }
+			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);	        
 		    }
 		    
 }

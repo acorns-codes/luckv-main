@@ -48,6 +48,10 @@ dependencies {
 	// JWT Token
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	
+	// fileuplode
+	implementation 'commons-io:commons-io:2.8.0'
+	implementation 'commons-fileupload:commons-fileupload:1.4'
+	
 }
 
 tasks.named('test') {
