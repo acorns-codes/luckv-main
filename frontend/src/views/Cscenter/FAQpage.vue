@@ -1,8 +1,14 @@
 <template>
   <CsceterNav />
-  <div class="cscenter">
-    <h1>This is an faq page</h1>
-    <div>
+  <div id="cs-center">
+    <h1>자주 물어보는 질문</h1>
+    <div class="panels-container">
+      <div class="button-box">
+        <button>All</button>
+        <button>카테고리1</button>
+        <button>카테고리2</button>
+        <button>카테고리3</button>
+      </div>
       <v-expansion-panels v-for="item in FAQList" :key="item">
         <v-expansion-panel :title="`${item.questions}`" :text="`${item.asked}`">
         </v-expansion-panel>
@@ -42,3 +48,31 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+#cs-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.panels-container {
+  width: 960px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.button-box {
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > button {
+    color: #343434;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    padding: 2px 10px 2px 10px;
+  }
+}
+</style>
