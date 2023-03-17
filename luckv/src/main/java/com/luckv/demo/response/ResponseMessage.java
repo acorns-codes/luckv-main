@@ -21,11 +21,14 @@ public class ResponseMessage {
     public static final String READ_BOARD = "게시판조회 성공";
     public static final String NOT_READ_BOARD = "게시판조회 실패";
     public static final String CREATED_BOARD = "게시글등록 성공";
-    public static final String NOT_CREATED_BOARD = "게시글등록 성공";
+    public static final String NOT_CREATED_BOARD = "게시글등록 실패";
     public static final String UPDATE_BOARD = "게시글수정 성공";
     public static final String NOT_UPDATE_BOARD = "게시글수정 실패";
     public static final String DELETE_BOARD = "게시글삭제 성공";
     public static final String NOT_DELETE_BOARD = "게시글삭제 실패";
 
-
+    public static final String CREATED_VIDEO = "동영상등록 성공";
+    public static final String NOT_CREATED_VIDEO = "동영상등록 실패";
+    public static final String DOWNLOAD_VIDEO = "동영상다운로드 성공";
+    public static final String NOT_DOWNLOAD_VIDEO = "동영상다운로드 실패";
 }
