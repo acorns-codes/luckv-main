@@ -170,9 +170,10 @@ export default {
           alert("가입 형식을 지켜주세요!");
           return;
         } else {
+          // 회원가입
           const res = await this.$axios({
             headers: {
-              "Content-type": "application/x-www-form-urlencoded",
+              "Content-type": "application/json",
             },
             method: "POST",
             url: "http://localhost:80/addMember",
@@ -189,17 +190,15 @@ export default {
         console.log(error);
       }
     },
+    // 아이디 중복 체크
     async idCheck() {
       const res = await this.$axios({
-        headers: {
-          "Content-type": "application/x-www-form-urlencoded",
-        },
         method: "POST",
         url: "http://localhost:80/getId",
         data: { mid: this.id },
       });
-      // console.log(res);
-      if (res.data === "아이디 중복") {
+      console.log(res);
+      if (!res.data.data) {
         return;
       } else {
         alert("중복된 아이디입니다!");
