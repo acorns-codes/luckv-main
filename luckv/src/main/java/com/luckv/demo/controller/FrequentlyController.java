@@ -4,11 +4,17 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.Frequently;
+import com.luckv.demo.response.DefaultRes;
+import com.luckv.demo.response.ResponseMessage;
+import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.FrequentlyService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,22 +28,24 @@ public class FrequentlyController {
 	
 		 // FaQ 조회
 		 @GetMapping("/frequentlyList")
-		    public List<Frequently> frequentlyList(Frequently frequently) {
-		        logger.info("FrequentlyController frequentlyList");
-		        return frequentlyService.frequentlyList(frequently);
-		    }
+		    public ResponseEntity<List<Frequently>> frequentlyList(Frequently frequently) {
+			 List<Frequently> faq =   frequentlyService.frequentlyList(frequently);
+			 try {
+					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, faq), HttpStatus.OK);
+				} catch (Exception e) {
+					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+					}
+			 }
 		 
 		  // FaQ 갯수
 		 @GetMapping("/frequentlyCount")
 		    public int frequentlyCount(Frequently frequently) {
-		        logger.info("FrequentlyController frequentlyCount");
 		        return frequentlyService.frequentlyCount(frequently);
 		    }
 		 
-		// 공지사항 페이징처리
+		// FaQ 페이징처리
 		  @GetMapping("/frequentlyPage")
 		    public List<Frequently> frequentlyPage(Frequently frequently) {
-		        logger.info("FrequentlyController frequentlyPage");
 
 		        // 페이지 설정
 		        int sn = frequently.getPage();   // 현재 페이지
@@ -53,9 +61,14 @@ public class FrequentlyController {
 
 		   // FaQ 등록
 		  @PostMapping("/insertFrequently")
-		    public void insertFrequently(Frequently frequently) {
-		        logger.info("FrequentlyController insertFrequently()");
-		        frequentlyService.insertFrequently(frequently);
+		    public ResponseEntity<String> insertFrequently(@RequestBody Frequently frequently) {		       
+		        
+		        boolean b = frequentlyService.insertFrequently(frequently);
+		        
+		        if(b) {
+		            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+		        }
+		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
 		    }
 		    
 		    // FaQ 상세
@@ -67,16 +80,22 @@ public class FrequentlyController {
 		    
 		    // FaQ 수정
 		  @PostMapping("frequentlyUpdate")
-		    public void frequentlyUpdate(Frequently frequently) {  
-		        logger.info("FrequentlyController frequentlyUpdate()");
-		        frequentlyService.frequentlyUpdate(frequently);
+		    public ResponseEntity<String> frequentlyUpdate(@RequestBody Frequently frequently) {  
+			  boolean b = frequentlyService.frequentlyUpdate(frequently);
+			  if(b) {
+		            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BOARD, b), HttpStatus.OK);
+		        }
+		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
 		    }
 
 		    // FaQ 삭제
 		    @GetMapping("frequentlyDelete")
-		    public void frequentlyDelete(int fno) {  
-		        logger.info("FrequentlyController frequentlyDelete()");
-		        frequentlyService.frequentlyDelete(fno);
+		    public ResponseEntity<String> frequentlyDelete(int fno) {  	        
+		        boolean b = frequentlyService.frequentlyDelete(fno);
+				  if(b) {
+			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
+			        }
+			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);
 		    }
 		    
 }

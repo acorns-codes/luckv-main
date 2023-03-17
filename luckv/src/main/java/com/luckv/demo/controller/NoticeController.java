@@ -28,22 +28,25 @@ public class NoticeController {
 	
 	  // 공지사항 조회
 	 @GetMapping("/noticeList")
-	    public List<Notice> noticeList() {
-	        logger.info("NoticeController noticeList");
-	        return noticeService.noticeList();
+	    public ResponseEntity<List<Notice>> noticeList() {
+		 List<Notice> notice = noticeService.noticeList();
+		 try {
+			return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, notice), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+			}
+
 	    }
 	 
 	  // 공지사항 갯수
 	 @GetMapping("/noticeCount")
 	    public int noticeCount(Notice notice) {
-	        logger.info("NoticeController noticeCount");
 	        return noticeService.noticeCount(notice);
 	    }
 	 
 	   // 공지사항 페이징처리
 	  @GetMapping("/noticePage")
 	    public List<Notice> noticePage(Notice notice) {
-	        logger.info("NoticeController noticePage");
 
 	        // 페이지 설정
 	        int sn = notice.getPage();   // 현재 페이지
@@ -58,27 +61,33 @@ public class NoticeController {
 
 	   // 공지사항 등록
 	  @PostMapping("/insertNotice")
-	    public ResponseEntity<String> insertNotice(@RequestBody Notice notice) {
-	        logger.info("NoticeController insertNotice()");
+	    public ResponseEntity insertNotice(@RequestBody Notice notice) {
 	        boolean b = noticeService.insertNotice(notice);
-
+	        
 	        if(b) {
 	            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
 	        }
 	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
 	    }
+	  
 	    // 공지사항 상세
 	    @GetMapping("/noticeDetail")
-	    public Notice noticeDetail(int nno) {
-	        logger.info("NoticeController noticeDetail()");
-	        return noticeService.noticeDetail(nno);
+	    public ResponseEntity noticeDetail(int nno) {    	
+		    	Notice notice = noticeService.noticeDetail(nno); 
+		 
+		    	return notice != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, notice), HttpStatus.OK)
+		    	:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 	    }
 	    
 	    // 공지사항 수정
 	    @PostMapping("noticeUpdate")
-	    public void noticeUpdate(Notice notice) {  
-	        logger.info("NoticeController noticeUpdate()");
-	        noticeService.noticeUpdate(notice);
+	    public ResponseEntity<String> noticeUpdate(@RequestBody Notice notice) {  
+	    	boolean b = noticeService.noticeUpdate(notice);
+	        if(b) {
+	            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BOARD, b), HttpStatus.OK);
+	        }
+	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
+	    
 	    }
 	    
 }

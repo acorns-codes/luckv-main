@@ -30,7 +30,6 @@ public class UserController {
 	    // 아이디 중복확인
 	    @PostMapping("/getId")
 	    public ResponseEntity<String> getId(@RequestBody user user) {
-	        logger.info("MemberController getId()");
 	        boolean b = service.getId(user);
 	        if(b) {	            
 	        	return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.ID_UNAVAILABLE, b), HttpStatus.OK);
@@ -41,10 +40,7 @@ public class UserController {
 	    // 회원가입
 	    @PostMapping("/addMember")
 	    public ResponseEntity<String> addMember(@RequestBody user user) {
-	        logger.info("MemberController addMember()");
 	        boolean b = service.addMember(user);
-
-	        logger.info(user.toString());
 
 	        if(b) {
 	            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_USER, b), HttpStatus.OK);

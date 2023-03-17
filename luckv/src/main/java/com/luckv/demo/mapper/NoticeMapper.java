@@ -27,7 +27,7 @@ public interface  NoticeMapper {
 	Notice noticeDetail(int nno);
 	
 	// 공지사항 수정
-	void noticeUpdate(Notice notice);
+	int noticeUpdate(Notice notice);
 	
 	// 공지사항 삭제
 	

@@ -34,8 +34,9 @@ private final FrequentlyMapper frequentlyMapper;;
 		
 	
 	// FaQ 등록
-	public void insertFrequently(Frequently frequently) {
-		frequentlyMapper.insertFrequently(frequently);
+	public boolean insertFrequently(Frequently frequently) {
+		 int n = frequentlyMapper.insertFrequently(frequently);
+	        return n > 0;
 	}
 		
 	// FaQ 상세
@@ -44,13 +45,15 @@ private final FrequentlyMapper frequentlyMapper;;
 //	}
 	
 	// FaQ 수정
-	public void frequentlyUpdate(Frequently frequently) {
-		frequentlyMapper.frequentlyUpdate(frequently);
+	public boolean frequentlyUpdate(Frequently frequently) {
+		int n = frequentlyMapper.frequentlyUpdate(frequently);
+        return n > 0;		
     }
 	
-	// FaQ 수정
-		public void frequentlyDelete(int fno) {
-			frequentlyMapper.frequentlyDelete(fno);
+	// FaQ 삭제
+		public boolean frequentlyDelete(int fno) {
+			int n = frequentlyMapper.frequentlyDelete(fno);
+	        return n > 0;
 	    }
 	
 }

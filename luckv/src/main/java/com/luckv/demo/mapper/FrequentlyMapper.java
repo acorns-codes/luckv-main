@@ -23,14 +23,14 @@ public interface FrequentlyMapper {
 	List<Frequently> frequentlyPage(Frequently frequently);
 	
 	// FaQ 등록
-	void insertFrequently(Frequently frequently);
+	int insertFrequently(Frequently frequently);
 	
 	// FaQ 상세보기
 //	Frequently frequentlyDetail(int fno);
 	
 	// FaQ 수정
-	void frequentlyUpdate(Frequently frequently);
+	int frequentlyUpdate(Frequently frequently);
 	
 	// FaQ 삭제
-	void frequentlyDelete(int fno);
+	int frequentlyDelete(int fno);
 }
