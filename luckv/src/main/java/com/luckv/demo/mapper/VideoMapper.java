@@ -11,6 +11,9 @@ import com.luckv.demo.dto.Video;
 @Repository
 public interface VideoMapper {
 	
-	public int videoInsert(Video video) throws Exception;
+	int videoUpload(Video video);
+	
+	Video videoDownload(int ano);
+
 
 }
