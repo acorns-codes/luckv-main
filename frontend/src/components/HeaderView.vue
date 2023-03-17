@@ -9,21 +9,13 @@
       </div>
       <div v-else>
         <router-link
-          v-if="this.$store.state.sessionStorageData.auth === 'B'"
           :to="{
             name: 'mypage',
             params: { mno: this.sessionData.mno },
           }"
           >마이페이지</router-link
         >
-        <router-link
-          v-if="this.$store.state.sessionStorageData.auth === 'S'"
-          :to="{
-            name: 'sellerpage',
-            params: { mno: this.sessionData.mno },
-          }"
-          >판매자페이지</router-link
-        >
+
         <a href="/" @click="logoutUser">로그아웃</a>
       </div>
     </div>
@@ -32,7 +24,7 @@
       <router-link to="/video">동영상</router-link>
       <router-link to="/freevideo">무료</router-link>
       <router-link to="/subscription">구독</router-link>
-      <router-link to="/cscenter">고객센터</router-link>
+      <router-link to="/cscenter/:page">고객센터</router-link>
     </div>
   </div>
 </template>
@@ -52,15 +44,16 @@ export default {
     isUserLogin() {
       return this.$store.getters.isLogin;
     },
-    logoutUser() {
-      console.log("로그아웃유저");
-      return this.$store.commit("clearUser");
-    },
   },
   methods: {
     onClicked() {
       this.$store.state.isClicked = !this.$store.state.isClicked;
       // console.log(this.$store.state.isClicked);
+    },
+    logoutUser() {
+      console.log("로그아웃유저");
+      this.$store.commit("clearUser");
+      window.location.reload();
     },
   },
   // created() {

@@ -20,11 +20,14 @@
 <script>
 import CsceterNav from "@/components/CsceterNav.vue";
 export default {
+  created() {
+    this.getFAQ();
+  },
   components: { CsceterNav },
   data() {
     return {
       panel: [0, 1],
-      FAQList: this.$store.state.FAQList,
+      FAQList: "",
     };
   },
   methods: {
@@ -36,15 +39,11 @@ export default {
           url: `http://localhost:80/frequentlyList`,
         });
         console.log(res);
-        this.$store.commit("getFAQList", res.data);
-        console.log(this.$store.state.FAQList);
+        this.FAQList = res.data.data;
       } catch (error) {
         console.log(error);
       }
     },
-  },
-  created() {
-    this.getFAQ();
   },
 };
 </script>
@@ -57,7 +56,6 @@ export default {
 }
 .panels-container {
   width: 960px;
-
   display: flex;
   flex-direction: column;
   align-items: center;

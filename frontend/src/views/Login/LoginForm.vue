@@ -9,7 +9,6 @@
         <v-form v-model="form" @submit.prevent="login">
           <v-text-field
             v-model="userId"
-            :readonly="loading"
             :rules="[required]"
             class="mb-2"
             clearable
@@ -19,13 +18,11 @@
           <v-text-field
             v-model="userPassword"
             type="password"
-            :readonly="loading"
             :rules="[required]"
             clearable
             label="비밀번호"
           ></v-text-field>
           <v-btn
-            :loading="loading"
             block
             color="success"
             size="large"
@@ -48,7 +45,6 @@ export default {
       form: false,
       userId: "",
       userPassword: "",
-      loading: false,
     };
   },
 
@@ -67,8 +63,6 @@ export default {
     async login() {
       try {
         if (!this.form) return;
-        this.loading = true;
-        setTimeout(() => (this.loading = false), 2000);
         const userData = {
           mid: this.userId,
           pwd: this.userPassword,
@@ -82,9 +76,10 @@ export default {
           data: userData,
         });
         console.log(res);
-        if (userData === "" || res.data === "") {
+        if (res.data.statusCode !== 200) {
           console.log("로그인불가");
-          alert("아이디 또는 비밀번호를 확인하세요.");
+          alert(`${res.data.responseMessage}`);
+          window.onload();
         } else {
           console.log("로그인성공");
           this.$store.commit("getUserId", res.data.data.mid);
@@ -101,9 +96,7 @@ export default {
           console.log(this.$store.state.sessionStorageData.auth);
           alert(`${res.data.data.name}님 환영합니다!`);
           this.$store.state.isClicked = false;
-          this.$router.push({
-            path: "/",
-          });
+          // window.location.reload(true);
         }
       } catch (error) {
         console.log(error);

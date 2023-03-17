@@ -26,7 +26,7 @@ const routes = [
     component: () => import("@/views/SubscriptionPage"),
   },
   {
-    path: "/cscenter",
+    path: "/cscenter/:page",
     name: "cscenter",
     component: () => import("@/views/Cscenter/NoticePage"),
   },
@@ -64,6 +64,11 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: () => import("@/views/Login/SignUpPage"),
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
   },
 ];
 

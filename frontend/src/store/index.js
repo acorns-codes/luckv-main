@@ -8,7 +8,6 @@ export default createStore({
     accessToken: "",
     sessionStorageData: "",
     userData: "",
-    FAQList: "",
   },
   getters: {
     // 로그인 확인
@@ -19,7 +18,6 @@ export default createStore({
   mutations: {
     // 로그아웃 클릭 시, sessionStorage 삭제 및 data 삭제
     clearUser(state) {
-      console.log("클리어유저");
       sessionStorage.clear("login");
       state.sessionStorageData = "";
     },
@@ -29,12 +27,10 @@ export default createStore({
     },
     // session storage에 있는 데이터 가져오기
     // 데이터가 존재하면, sessionStorageData에 객체 형태로 저장
-    readSessionStorage(state, payload) {
-      if (sessionStorage.getItem("login", payload) != null) {
-        state.sessionStorageData = JSON.parse(
-          sessionStorage.getItem("login", state)
-        );
-      }
+    readSessionStorage(state) {
+      state.sessionStorageData = JSON.parse(
+        sessionStorage.getItem("login", state)
+      );
     },
     // 로그인하면 id 저장
     getUserId(state, userId) {
@@ -43,9 +39,6 @@ export default createStore({
     // 회원정보 불러와서 UserData에 저장
     getUserData(state, userData) {
       state.userData = userData;
-    },
-    getFAQList(state, FAQList) {
-      state.FAQList = FAQList;
     },
   },
   // 새로고침해도 session정보 유지 될 수 있도록 했음

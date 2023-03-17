@@ -1,10 +1,13 @@
 <template>
   <div class="main-container">
+    <h1>고객센터</h1>
     <div>
-      <h1>고객센터</h1>
-      <div v-for="item in navList" :key="item">
-        <router-link :to="{ path: item.value }">{{ item.name }}</router-link>
-      </div>
+      <router-link
+        v-for="item in navList"
+        :key="item"
+        :to="{ path: item.value }"
+        >{{ item.name }}</router-link
+      >
     </div>
   </div>
 </template>
@@ -16,7 +19,7 @@ export default {
       navList: [
         {
           name: "공지사항",
-          value: "/cscenter",
+          value: "/cscenter/:page",
         },
         {
           name: "QnA",
@@ -34,33 +37,30 @@ export default {
 
 <style lang="scss" scoped>
 .main-container {
-  width: 100%;
-  height: 100%;
+  width: 300px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  padding: 40px;
   & > div {
-    width: 1400px;
-    height: 90px;
     display: flex;
-    align-items: end;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     margin-bottom: 10px;
-    border-bottom: 1px solid black;
-    h1 {
-      width: 360px;
-    }
-    & > div {
-      width: 150px;
+  }
+  h1 {
+    border-bottom: 1px solid #343434;
+    margin-bottom: 15px;
+  }
+  a {
+    font-size: 1.3rem;
+    text-decoration: none;
+    color: #343434;
+    padding: 5px;
+  }
 
-      & > a {
-        font-size: 1.5rem;
-        text-decoration: none;
-        color: #343434;
-      }
-      & > a.router-link-exact-active {
-        font-weight: bold;
-      }
-    }
+  a.router-link-exact-active {
+    font-weight: bold;
   }
 }
 </style>
