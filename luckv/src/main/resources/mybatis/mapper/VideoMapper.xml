@@ -24,4 +24,13 @@
         	where ano = #{ano}
     </select>
     
+    <!--QnA 조회 -->
+    <select id="videoPlay" parameterType="Integer" resultType="com.luckv.demo.dto.Video">
+        select 
+        	ano, /*경매 게시글 번호*/
+        	video_file /*동영상 이름*/
+        from video 
+        	where ano = #{ano}
+    </select>
+    
 </mapper>

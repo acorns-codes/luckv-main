@@ -15,5 +15,5 @@ public interface VideoMapper {
 	
 	Video videoDownload(int ano);
 
-
+	Video videoPlay(int ano);
 }
