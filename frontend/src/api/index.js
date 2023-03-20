@@ -1,9 +1,16 @@
 import axios from "axios";
-const instance = axios.create({
+import { setInterceptors } from "./common/interceptors";
 
-  baseURL: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80",
+// 엑시오스 초기화 함수
+function createInstance() {
+  const instance = axios.create({
+    baseURL: process.env.VUE_APP_API_URL,
+  });
 
-});
+  return setInterceptors(instance);
+}
+
+const instance = createInstance();
 
 function registerUser(userData) {
   return instance.post("/addMember", userData);

@@ -3,11 +3,20 @@
     <h1>고객센터</h1>
     <div>
       <router-link
-        v-for="item in navList"
-        :key="item"
-        :to="{ path: item.value }"
-        >{{ item.name }}</router-link
+        :to="{
+          name: 'cscenter',
+          params: { page: 1 },
+        }"
+        >공지사항</router-link
       >
+      <router-link
+        :to="{
+          name: 'csqna',
+          params: { page: 1 },
+        }"
+        >QnA</router-link
+      >
+      <router-link to="/csfaq">FAQ</router-link>
     </div>
   </div>
 </template>
@@ -15,22 +24,7 @@
 <script>
 export default {
   data() {
-    return {
-      navList: [
-        {
-          name: "공지사항",
-          value: "/cscenter/:page",
-        },
-        {
-          name: "QnA",
-          value: "/csqna",
-        },
-        {
-          name: "FAQ",
-          value: "/csfaq",
-        },
-      ],
-    };
+    return {};
   },
 };
 </script>

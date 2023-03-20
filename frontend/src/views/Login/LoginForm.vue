@@ -73,6 +73,7 @@ export default {
           },
           method: "POST",
           url: "http://localhost:80/login",
+          // url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/login",
           data: userData,
         });
         console.log(res);
