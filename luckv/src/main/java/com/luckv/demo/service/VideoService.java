@@ -23,8 +23,15 @@ public class VideoService {
 	}
 
 	
-	// 파일업로드
-		public Video videoDownload(int ano) {			
-	        return videoMapper.videoDownload(ano);
-		}
+	// 파일다운로드
+	public Video videoDownload(int ano) {			
+	       return videoMapper.videoDownload(ano);
+	}
+	
+	
+	// 동영상 스트리밍
+	public Video videoPlay(int ano) {			
+	       return videoMapper.videoPlay(ano);
+	}
+	
 }
