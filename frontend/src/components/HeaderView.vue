@@ -3,7 +3,7 @@
   <div id="root">
     <div id="header">
       <router-link to="/">linkV</router-link>
-      <div v-if="!$store.getters.isLogin">
+      <div v-if="!isUserLogin">
         <router-link to="/" @click="onClicked">로그인</router-link>
         <router-link to="/signup">회원가입</router-link>
       </div>
@@ -24,7 +24,13 @@
       <router-link to="/video">동영상</router-link>
       <router-link to="/freevideo">무료</router-link>
       <router-link to="/subscription">구독</router-link>
-      <router-link to="/cscenter/:page">고객센터</router-link>
+      <router-link
+        :to="{
+          name: 'cscenter',
+          params: { page: 1 },
+        }"
+        >고객센터</router-link
+      >
     </div>
   </div>
 </template>

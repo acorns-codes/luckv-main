@@ -29,9 +29,17 @@ const routes = [
     path: "/cscenter/:page",
     name: "cscenter",
     component: () => import("@/views/Cscenter/NoticePage"),
+    meta: { auth: true },
+    // children: [
+    //   {
+    //     path: "//content:no",
+    //     name: "content",
+    //     component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
+    //   },
+    // ],
   },
   {
-    path: "/csqna",
+    path: "/csqna/:page",
     name: "csqna",
     component: () => import("@/views/Cscenter/QnApage.vue"),
   },
@@ -44,21 +52,19 @@ const routes = [
     path: "/mypage/:mno",
     name: "mypage",
     component: () => import("@/views/MyPage/MyPageEdit.vue"),
+    meta: { auth: true },
   },
   {
     path: "/mydetailList",
     name: "/mydetailList",
+
     component: () => import("@/views/MyPage/DetailList.vue"),
-  },
-  {
-    path: "/sellerpage/:mno",
-    name: "sellerpage",
-    component: () => import("@/views/SellerPage/SellerPageEdit.vue"),
   },
   {
     path: "/sellerauction",
     name: "/sellerauction",
     component: () => import("@/views/SellerPage/AuctionList.vue"),
+    meta: { auth: true },
   },
   {
     path: "/signup",
@@ -66,9 +72,14 @@ const routes = [
     component: () => import("@/views/Login/SignUpPage"),
   },
   {
-    path: "/test",
-    name: "test",
+    path: "/content/:no",
+    name: "content",
     component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
+  },
+  {
+    path: "/postnotice",
+    name: "postnotice",
+    component: () => import("@/views/Cscenter/Notice/NoticePost.vue"),
   },
 ];
 
@@ -77,4 +88,10 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth) {
+    console.log("인증이 필요합니다");
+  }
+  next();
+});
 export default router;
