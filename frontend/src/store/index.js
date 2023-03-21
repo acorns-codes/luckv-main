@@ -12,7 +12,7 @@ export default createStore({
   getters: {
     // 로그인 확인
     isLogin(state) {
-      return state.userId !== "";
+      return state.sessionStorageData !== "";
     },
   },
   mutations: {

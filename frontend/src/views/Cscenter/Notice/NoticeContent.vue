@@ -11,18 +11,63 @@
             <thead>
               <tr>
                 <th>제목</th>
-                <td>제목입니당</td>
+                <td>{{ detaillData.title }}</td>
               </tr>
               <tr>
                 <th>내용</th>
-                <td class="content">내용입니다</td>
+                <td class="content">{{ detaillData.content }}</td>
               </tr>
             </thead>
           </v-table>
           <!-- 관리자만 보이게 설정해야함 -->
           <div>
-            <v-btn color="#eee">수정</v-btn>
-            <v-btn color="#eee">삭제</v-btn>
+            <!-- <v-dialog v-model="dialog" persistent width="500">
+              <template v-slot:activator="{ props }">
+                <v-btn color="#eee" v-bind="props"> 수정 </v-btn>
+              </template>
+              <v-card>
+                <h3>공지사항 수정</h3>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          label="제목"
+                          v-model="this.editData.title"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-textarea
+                          label="내용"
+                          v-model="this.editData.content"
+                          required
+                        ></v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="blue-darken-1"
+                    variant="text"
+                    @click="dialog = false"
+                  >
+                    Close
+                  </v-btn>
+                  <v-btn
+                    color="blue-darken-1"
+                    variant="text"
+                    @click="[(dialog = false), editNoticeDetail()]"
+                  >
+                    Save
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog> -->
+            <v-btn color="#eee" @click="edit"> 수정 </v-btn>
+            <v-btn color="#eee" @click="deleteNotice"> 삭제 </v-btn>
           </div>
         </div>
       </div>
@@ -37,81 +82,64 @@ export default {
   components: { CsceterNav },
   data() {
     return {
-      writer: "", // 작성자
-      title: "", // 글 제목
-      createdAt: "", // 작성일
-      updatedAt: "", // 최근 수정일
-      text: "", // 글 내용
-      editable: false, // 수정가능여부 (수정 버튼누르면 true로 바뀜)
+      detaillData: "",
+      editData: "",
+      dialog: false,
     };
   },
-  // mounted() {
-  //   axios({
-  //     url: "http://127.0.0.1:52273/content/content/",
-  //     method: "POST",
-  //     data: {
-  //       id: this.$route.query.id,
-  //     },
-  //   })
-  //     .then((res) => {
-  //       this.writer = res.data.writer;
-  //       this.title = res.data.title;
-  //       this.createdAt = res.data.createdAt.split("T")[0];
-  //       this.updatedAt = res.data.updatedAt.split("T")[0];
-  //       this.text = res.data.text;
-  //     })
-  //     .catch((err) => {
-  //       alert(err);
-  //     });
-  // },
-  // methods: {
-  //   moveback() {
-  //     window.history.back(); // window.history.back()을 통해 뒤로가기
-  //   },
-  //   deletecontent() {
-  //     // 글에 들어가서 삭제버튼 눌렀을 때
-  //     axios({
-  //       url: "http://127.0.0.1:52273/content/delete/",
-  //       method: "POST",
-  //       data: {
-  //         id: this.$route.query.id,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         alert(res.data.message);
-  //         window.location.href =
-  //           window.location.pathname.slice(0, -8) + "/?page=1";
-  //         // 삭제 후 그 게시판의 1페이지로 이동
-  //       })
-  //       .catch((err) => {
-  //         alert(err);
-  //       });
-  //   },
-  //   editcontent() {
-  //     this.editable = true;
-  //   },
-  //   editcontentfinish() {
-  //     // 수정완료 버튼을 눌렀을 때, 수정된 내용이 저장되야 되기 때문에 back서버와 통신 필요
-  //     axios({
-  //       url: "http://127.0.0.1:52273/content/edit/",
-  //       method: "POST",
-  //       data: {
-  //         id: this.$route.query.id,
-  //         text: this.text,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         alert(res.data.message);
-  //         this.editable = false;
-  //       })
-  //       .catch((err) => {
-  //         alert(err);
-  //       });
-  //   },
-  //   movetomain() {
-  //     window.location.href = "/";
-  //   },
-  // },
+
+  mounted() {
+    console.log(this.$route.params.no);
+    let pn = this.$route.params.no;
+    console.log(pn);
+    this.getNoticeDetail();
+  },
+  methods: {
+    async getNoticeDetail() {
+      console.log("내용가져오기");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/noticeDetail?nno=${this.$route.params.no}`,
+        });
+        this.detaillData = res.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    edit() {
+      this.$router.push({
+        name: "contentEdit",
+      });
+    },
+    deleteNotice() {
+      console.log("삭제버튼");
+    },
+    async editNoticeDetail() {
+      console.log("공지사항 수정");
+      try {
+        const noticeData = {
+          no: this.$route.params.no,
+          title: this.editData.title,
+          content: this.editData.content,
+          nid: this.$store.state.userdata.mno,
+        };
+        console.log(this.$store.state.userdata.mno);
+        const res = await this.$axios({
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/noticeUpdate",
+          data: noticeData,
+        });
+        console.log(res);
+        console.log(noticeData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 </script>
 
@@ -134,7 +162,6 @@ export default {
   align-items: center;
   width: 100%;
   padding-top: 110px;
-  background-color: antiquewhite;
   & > div {
     width: 100%;
     & > div:nth-child(1) {
@@ -160,7 +187,6 @@ export default {
 .content {
   height: 500px;
   /* vertical-align: top; */
-  background-color: aqua;
 }
 button {
   margin: 10px;

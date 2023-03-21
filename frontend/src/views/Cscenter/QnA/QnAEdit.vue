@@ -1,5 +1,5 @@
 <template>
-  <h1>공지사항등록</h1>
+  <h1>Qna수정페이지</h1>
 </template>
 
 <script>

@@ -29,7 +29,9 @@
         	q_create, /*QnA 작성일*/
         	u.mid as id /*작성자*/
         from question q
+
         left join user u on q.qid = u.mno 
+
 	  where 1 = 1
 	  	and qno between  #{start} and #{end}
 	   order by no desc
