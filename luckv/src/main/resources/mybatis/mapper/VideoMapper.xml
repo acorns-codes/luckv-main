@@ -15,7 +15,7 @@
 	        )
     </insert>
 	
-	<!--QnA 조회 -->
+	<!--동영상 다운로드 -->
     <select id="videoDownload" parameterType="Integer" resultType="com.luckv.demo.dto.Video">
         select 
         	ano, /*경매 게시글 번호*/
@@ -24,7 +24,7 @@
         	where ano = #{ano}
     </select>
     
-    <!--QnA 조회 -->
+    <!--동영상 스트리밍 -->
     <select id="videoPlay" parameterType="Integer" resultType="com.luckv.demo.dto.Video">
         select 
         	ano, /*경매 게시글 번호*/
