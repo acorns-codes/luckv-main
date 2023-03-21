@@ -48,17 +48,30 @@ const routes = [
     name: "contentEdit",
     component: () => import("@/views/Cscenter/Notice/NoticeEdit.vue"),
   },
+  // QnA 상세페이지
   {
     path: "/csqnadetail/:no",
     name: "csqnadetail",
     component: () => import("@/views/Cscenter/QnA/QnADetail.vue"),
   },
+  // QnA 수정
+  {
+    path: "/csqnadetail/:no/edit",
+    name: "csqnadetailEdit",
+    component: () => import("@/views/Cscenter/QnA/QnAEdit.vue"),
+  },
+  // QnA 목록
   {
     path: "/csqna/:page",
     name: "csqna",
     component: () => import("@/views/Cscenter/QnApage.vue"),
   },
-
+  // QnA 새로 등록
+  {
+    path: "/postqna",
+    name: "postqna",
+    component: () => import("@/views/Cscenter/QnA/QnAPost.vue"),
+  },
   {
     path: "/csfaq",
     name: "csfaq",
