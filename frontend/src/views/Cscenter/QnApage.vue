@@ -17,9 +17,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in qnaList" :key="item.no">
+              <tr
+                v-for="item in qnaList"
+                :key="item.no"
+                class="event"
+                @click="qnaDetail(item.no)"
+              >
                 <td>{{ item.no }}</td>
-                <td>{{ item.title }}</td>
+                <td style="width: 400px">{{ item.title }}</td>
                 <td>{{ item.id }}</td>
                 <td>{{ item.qcreate }}</td>
               </tr>
@@ -36,10 +41,7 @@
             <v-icon> mdi-chevron-right </v-icon>
           </button>
         </div>
-        <!-- 관리자만 보일 수 있도록 설정해야함 -->
-        <v-btn color="success" class="mt-2" @click="postNotice"
-          >공지사항 작성</v-btn
-        >
+        <v-btn color="success" class="mt-2" @click="postQna">QnA 작성</v-btn>
       </div>
     </div>
   </div>
@@ -76,13 +78,13 @@ export default {
     this.getQnaCnt();
   },
   methods: {
-    // 공지사항 불러오기
+    // qna 불러오기
     async getQna(page) {
-      console.log("공지사항 불러오기");
+      console.log("qna 러오기");
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/questionPage?page=${page}`,
+          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/questionPage?page=${page}`,
         });
         console.log(res.data);
         this.qnaList = res.data;
@@ -93,13 +95,13 @@ export default {
         console.log(error);
       }
     },
-    // 공지사항 글 개수 가져오기
+    // qna 글 개수 가져오기
     async getQnaCnt() {
-      console.log("공지사항 글 개수 가져오기");
+      console.log("qna 글 개수 가져오기");
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/questionCount`,
+          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/questionCount`,
         });
         this.cnt = res.data;
       } catch (error) {
@@ -131,6 +133,15 @@ export default {
         });
         this.getQna(this.$route.params.page);
       }
+    },
+
+    // 상세페이지로 이동
+    qnaDetail(no) {
+      console.log(no);
+      this.$router.push({
+        name: "csqnadetail",
+        params: { no: no },
+      });
     },
     // 글 작성기능
     postQna() {
@@ -175,5 +186,11 @@ export default {
 
 .page-box {
   display: flex;
+}
+
+.event:hover {
+  /* font-weight: bold; */
+  background-color: #eee;
+  cursor: pointer;
 }
 </style>

@@ -39,10 +39,26 @@ const routes = [
     // ],
   },
   {
+    path: "/content/:no",
+    name: "content",
+    component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
+  },
+  {
+    path: "/content/:no/edit",
+    name: "contentEdit",
+    component: () => import("@/views/Cscenter/Notice/NoticeEdit.vue"),
+  },
+  {
+    path: "/csqnadetail/:no",
+    name: "csqnadetail",
+    component: () => import("@/views/Cscenter/QnA/QnADetail.vue"),
+  },
+  {
     path: "/csqna/:page",
     name: "csqna",
     component: () => import("@/views/Cscenter/QnApage.vue"),
   },
+
   {
     path: "/csfaq",
     name: "csfaq",
@@ -70,16 +86,6 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: () => import("@/views/Login/SignUpPage"),
-  },
-  {
-    path: "/content/:no",
-    name: "content",
-    component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
-  },
-  {
-    path: "/postnotice",
-    name: "postnotice",
-    component: () => import("@/views/Cscenter/Notice/NoticePost.vue"),
   },
 ];
 

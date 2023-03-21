@@ -47,7 +47,6 @@ export default {
       userPassword: "",
     };
   },
-
   methods: {
     // 클릭 시 회원가입으로 이동
     openSignUp() {
@@ -72,8 +71,8 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: "http://localhost:80/login",
-          // url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/login",
+          // url: "http://localhost:80/login",
+          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/login",
           data: userData,
         });
         console.log(res);
@@ -97,6 +96,7 @@ export default {
           console.log(this.$store.state.sessionStorageData.auth);
           alert(`${res.data.data.name}님 환영합니다!`);
           this.$store.state.isClicked = false;
+          window.location.reload();
           // window.location.reload(true);
         }
       } catch (error) {
