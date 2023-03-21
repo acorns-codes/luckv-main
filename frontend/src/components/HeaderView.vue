@@ -15,7 +15,6 @@
           }"
           >마이페이지</router-link
         >
-
         <a href="/" @click="logoutUser">로그아웃</a>
       </div>
     </div>

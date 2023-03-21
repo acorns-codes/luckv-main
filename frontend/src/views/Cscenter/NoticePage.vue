@@ -19,10 +19,13 @@
               <tr
                 v-for="item in noticeList"
                 :key="item.no"
+                class="event"
                 @click="noticeContent(item.no)"
               >
                 <td>{{ item.no }}</td>
-                <td>{{ item.title }}</td>
+                <td>
+                  {{ item.title }}
+                </td>
                 <td>{{ item.createAt }}</td>
               </tr>
             </tbody>
@@ -39,9 +42,53 @@
           </button>
         </div>
         <!-- 관리자만 보일 수 있도록 설정해야함 -->
-        <v-btn color="success" class="mt-2" @click="postNotice"
-          >공지사항 작성</v-btn
-        >
+        <v-row justify="center">
+          <v-dialog v-model="dialog" persistent width="500">
+            <template v-slot:activator="{ props }">
+              <v-btn color="success" v-bind="props"> 공지사항 등록 </v-btn>
+            </template>
+            <v-card>
+              <h3>공지사항 등록</h3>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="제목"
+                        v-model="title"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-textarea
+                        label="내용"
+                        v-model="content"
+                        required
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="blue-darken-1"
+                  variant="text"
+                  @click="dialog = false"
+                >
+                  Close
+                </v-btn>
+                <v-btn
+                  color="blue-darken-1"
+                  variant="text"
+                  @click="[(dialog = false), postNotice()]"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
       </div>
     </div>
   </div>
@@ -56,6 +103,9 @@ export default {
       cnt: "",
       defaultCnt: 10,
       page: "",
+      dialog: false,
+      title: "",
+      content: "",
     };
   },
   components: { CsceterNav },
@@ -135,19 +185,37 @@ export default {
         this.getNotice(this.$route.params.page);
       }
     },
-    // 글 작성기능
-    postNotice() {
-      this.$router.push({
-        path: "/postnotice",
-      });
-    },
+
     // 상세페이지로 이동
     noticeContent(no) {
       console.log(no);
       this.$router.push({
-        path: "content",
+        name: "content",
         params: { no: no },
       });
+    },
+    // 새로운 공지사항 등록
+    async postNotice() {
+      try {
+        const noticeData = {
+          title: this.title,
+          content: this.content,
+          nid: this.$store.state.sessionStorageData.mno,
+        };
+        console.log(this.$store.state.userdata);
+        const res = await this.$axios({
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/insertNotice",
+          data: noticeData,
+        });
+        console.log(res);
+        console.log(noticeData);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
@@ -186,5 +254,12 @@ export default {
 
 .page-box {
   display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.event:hover {
+  /* font-weight: bold; */
+  background-color: #eee;
+  cursor: pointer;
 }
 </style>
