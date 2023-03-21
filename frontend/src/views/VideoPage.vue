@@ -2,12 +2,22 @@
   <div class="video">
     <h1>비디오페이지</h1>
     <div v-for="item in videoData" :key="item">
+      <video
+        src="http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoplay?ano=2"
+        controls
+      ></video>
       <v-card class="mx-auto" max-width="344">
-        <v-img
+        <div class="video-box">
+          <video
+            src="http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoplay?ano=1"
+            controls
+          ></video>
+        </div>
+        <!-- <v-img
           src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
           height="200px"
           cover
-        ></v-img>
+        ></v-img> -->
         <v-card-title> {{ item.title }} </v-card-title>
         <v-card-text> {{ item.content }} </v-card-text>
         <v-card-subtitle>
@@ -61,6 +71,7 @@
 export default {
   data() {
     return {
+      src: "",
       show: false,
       videoData: [
         {
@@ -75,6 +86,25 @@ export default {
         },
       ],
     };
+  },
+
+  mounted() {
+    this.video();
+  },
+  methods: {
+    async video() {
+      console.log("비디오");
+      try {
+        const res = await this.$axios({
+          methods: "GET",
+          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoplay?ano=1",
+        });
+        console.log(res.data);
+        this.src = res.data;
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
 </script>
@@ -98,5 +128,15 @@ span {
     border-radius: 5px;
     color: white;
   }
+}
+
+.video-box {
+  width: 300px;
+  height: auto;
+}
+video {
+  width: 300px;
+  height: auto;
+  object-fit: cover;
 }
 </style>

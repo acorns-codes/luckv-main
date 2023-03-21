@@ -13,6 +13,7 @@
               <v-text-field
                 label="아이디"
                 v-model="this.userData.mid"
+                :disabled="true"
                 readonly
               ></v-text-field>
               <v-text-field
