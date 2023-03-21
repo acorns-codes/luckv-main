@@ -1,18 +1,29 @@
 <template>
-  <CsceterNav />
-  <div id="cs-center">
-    <h1>자주 물어보는 질문</h1>
-    <div class="panels-container">
-      <div class="button-box">
-        <button>All</button>
-        <button>카테고리1</button>
-        <button>카테고리2</button>
-        <button>카테고리3</button>
+  <div id="root">
+    <div id="cscenter-root">
+      <CsceterNav />
+      <div class="cs-center">
+        <div>
+          <div>
+            <h1>자주 물어보는 질문</h1>
+          </div>
+          <div class="panels-container">
+            <div class="button-box">
+              <button>All</button>
+              <button>카테고리1</button>
+              <button>카테고리2</button>
+              <button>카테고리3</button>
+            </div>
+            <v-expansion-panels v-for="item in FAQList" :key="item">
+              <v-expansion-panel
+                :title="`${item.questions}`"
+                :text="`${item.asked}`"
+              >
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </div>
+        </div>
       </div>
-      <v-expansion-panels v-for="item in FAQList" :key="item">
-        <v-expansion-panel :title="`${item.questions}`" :text="`${item.asked}`">
-        </v-expansion-panel>
-      </v-expansion-panels>
     </div>
   </div>
 </template>
@@ -49,10 +60,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#cs-center {
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+#cscenter-root {
+  width: 1440px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.cs-center {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 110px;
 }
 .panels-container {
   width: 960px;
