@@ -7,22 +7,25 @@
           <div>
             <h2>QnA</h2>
           </div>
+          <!-- 작성자만 보일 수 있도록 설정해야 함 -->
+          <div class="btn-box">
+            <v-btn size="small" color="#eee" @click="editBtn"> 수정 </v-btn>
+            <v-btn size="small" color="#eee" @click="deleteNotice">
+              삭제
+            </v-btn>
+          </div>
           <v-table class="table-box">
             <thead>
               <tr>
                 <th>제목</th>
                 <td>{{ detaillData.title }}</td>
               </tr>
-              <tr>
+              <tr class="content">
                 <th>내용</th>
-                <td class="content">{{ detaillData.content }}</td>
+                <td>{{ detaillData.content }}</td>
               </tr>
             </thead>
           </v-table>
-          <div>
-            <v-btn color="#eee" @click="edit"> 수정 </v-btn>
-            <v-btn color="#eee" @click="deleteNotice"> 삭제 </v-btn>
-          </div>
           <CommentList />
         </div>
       </div>
@@ -48,12 +51,17 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `hhttp://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/questionDetail?qno=${this.$route.params.no}`,
+          url: `http://localhost:80/questionDetail?qno=${this.$route.params.no}`,
         });
         this.detaillData = res.data.data;
       } catch (error) {
         console.log(error);
       }
+    },
+    editBtn() {
+      this.$router.push({
+        name: "csqnadetailEdit",
+      });
     },
   },
 };
@@ -88,8 +96,16 @@ export default {
     }
   }
 }
+
+.btn-box {
+  display: flex;
+  justify-content: end;
+}
+
 .table-box {
   border-top: 1px solid #343434;
+  border-bottom: 1px solid #343434;
+
   th {
     width: 150px;
   }

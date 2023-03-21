@@ -84,7 +84,8 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/questionPage?page=${page}`,
+          // url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/questionPage?page=${page}`,
+          url: `http://localhost:80/questionPage?page=${page}`,
         });
         console.log(res.data);
         this.qnaList = res.data;
@@ -101,7 +102,8 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/questionCount`,
+          // url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/questionCount`,
+          url: `http://localhost:80/questionCount`,
         });
         this.cnt = res.data;
       } catch (error) {

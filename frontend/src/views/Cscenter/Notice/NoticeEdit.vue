@@ -1,6 +1,6 @@
 <template>
   <div id="root">
-    <div id="mypage-root">
+    <div id="page-root">
       <CsceterNav />
       <div class="container">
         <div>
@@ -11,19 +11,26 @@
             <thead>
               <tr>
                 <th>제목</th>
-                <v-text-field v-model="this.detaillData.title"></v-text-field>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.detaillData.title"
+                  ></v-text-field>
+                </td>
               </tr>
-              <tr>
+              <tr class="content">
                 <th>내용</th>
-                <v-textarea
-                  class="content"
-                  v-model="this.detaillData.content"
-                ></v-textarea>
+                <td>
+                  <v-textarea
+                    variant="plain"
+                    v-model="this.detaillData.content"
+                  ></v-textarea>
+                </td>
               </tr>
             </thead>
           </v-table>
-          <v-btn color="#eee" @click="editNotice"> 수정 </v-btn>
         </div>
+        <v-btn color="#eee" @click="editNotice"> 수정 </v-btn>
       </div>
     </div>
   </div>
@@ -76,8 +83,8 @@ export default {
           data: editData,
         });
         this.$router.push({
-          name: "content",
-          params: { no: this.$route.params.no },
+          name: "cscenter",
+          params: { page: 1 },
         });
         console.log(res);
       } catch (error) {
@@ -95,12 +102,13 @@ export default {
   display: flex;
   justify-content: center;
 }
-#mypage-root {
+#page-root {
   width: 1440px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
+
 .container {
   display: flex;
   flex-direction: column;
@@ -120,18 +128,22 @@ export default {
 
 .table-box {
   border-top: 1px solid #343434;
+  th {
+    width: 150px;
+  }
+  th,
+  td {
+    border-bottom: 1px solid #eee;
+    padding: 10px 10px;
+    text-align: left;
+  }
+}
+.content {
+  height: 500px;
+  /* vertical-align: top; */
 }
 
-th {
-  width: 150px;
-  border-bottom: 1px solid #eee;
-  padding: 10px 10px;
-  text-align: left;
-}
-
-tr {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+button {
+  margin-top: 20px;
 }
 </style>
