@@ -3,7 +3,6 @@ package com.luckv.demo.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckv.demo.dto.Question;
 import com.luckv.demo.dto.Video;
 import com.luckv.demo.mapper.VideoMapper;
 

@@ -31,9 +31,8 @@
         from question q
         left join user u on q.qid = u.mno 
 	  where 1 = 1
-	  	and qno between  #{start} and #{end}
 	   order by no desc
-	    <!-- LIMIT #{start}, #{end} -->
+	     LIMIT #{start}, #{end}
 	</select>
 	
     <!-- QnA  작성 -->

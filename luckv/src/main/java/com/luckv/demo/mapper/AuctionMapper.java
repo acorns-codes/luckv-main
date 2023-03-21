@@ -11,6 +11,10 @@ import com.luckv.demo.dto.Auction;
 @Repository
 public interface AuctionMapper {
 
+	
+		// 경매전체 리스트
+		List<Auction> auctionAll(Auction auction);
+		
 		// 판매리스트 갯수
 		int auctionCount(Auction auction);
 		

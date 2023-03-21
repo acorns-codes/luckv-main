@@ -49,7 +49,7 @@ public class FrequentlyController {
 
 		        // 페이지 설정
 		        int sn = frequently.getPage();   // 현재 페이지
-		        int start = sn * 10 + 1; // 첫 페이지
+		        int start = sn * 10 + 0; // 첫 페이지
 		        int end = (sn + 1) * 10; // 끝 페이지
 
 		        frequently.setStart(start);

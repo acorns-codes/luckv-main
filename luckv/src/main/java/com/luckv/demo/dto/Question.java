@@ -13,12 +13,11 @@ public class Question {
 	private String content; // 내용
 	private Date qCreate; // 등록일
 	private Date qUpdate; // 수정일
-	
+//	private String qpwd; //비밀번호
 	// QnA 페이징처리
 	private int page;   // 페이징을 갱신하기 위해 필요함.
     private int start; // 게시글 시작 번호
     private int end; // 한 페이지당 보여줄 게시글의 갯수
-    
     
     
     // QnA 댓글

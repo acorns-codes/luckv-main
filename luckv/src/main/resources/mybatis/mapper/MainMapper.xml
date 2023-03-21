@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.luckv.demo.mapper.MainMapper">
+
+	<!-- 신규등록 경매 -->
+    <select id="auctionNew"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
+	  select 
+		  		a.ano, /*경매 번호*/
+	        	seller, /*판매자 회원번호*/
+	        	s.mid as sellerNm, /*판매자 아이디*/ 
+	    		title,  /*판매 제목*/
+	    		content, /*판매내용*/
+	    		vcate, /*카테고리*/
+	    		pay_start, /*판매 시작가*/
+	    		start_day, /*판매 시작일*/
+	    		last_day, /*판매 종료일*/
+	    		buyer, /*낙찰자 회원번호*/
+	    		b.mid as buyerNm, /*낙찰자 아이디*/
+	    		pay_max , /*최고가*/
+	    		status /*판매 상태*/
+        from auction a
+		  	left join user s on  a.seller = s.mno
+		  	left join user b on  a.buyer = b.mno
+		  	left join video v on a.ano = v.ano 
+	  where 1 = 1
+		  and status = "판매중"
+	   order by start_day desc
+	   LIMIT 4
+	</select>
+	
+	<!-- 마감임박 경매 -->
+	<select id="auctionDeadline"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
+		select 
+		  		a.ano, /*경매 번호*/
+	        	seller, /*판매자 회원번호*/
+	        	s.mid as sellerNm, /*판매자 아이디*/ 
+	    		title,  /*판매 제목*/
+	    		content, /*판매내용*/
+	    		vcate, /*카테고리*/
+	    		pay_start, /*판매 시작가*/
+	    		start_day, /*판매 시작일*/ 
+	    		last_day, /*판매 종료일*/
+	    		buyer, /*낙찰자 회원번호*/
+	    		b.mid as buyerNm, /*낙찰자 아이디*/
+	    		pay_max , /*최고가*/
+	    		status /*판매 상태*/
+        from auction a
+		  	left join user s on  a.seller = s.mno
+		  	left join user b on  a.buyer = b.mno
+		  	left join video v on a.ano = v.ano 
+	  where 1 = 1
+	  and status = "판매중"
+	   order by last_day asc
+	   LIMIT 4
+	</select>
+</mapper>
