@@ -25,6 +25,7 @@ const routes = [
     name: "subscription",
     component: () => import("@/views/SubscriptionPage"),
   },
+  // 공지사항 목록
   {
     path: "/cscenter/:page",
     name: "cscenter",
@@ -38,11 +39,13 @@ const routes = [
     //   },
     // ],
   },
+  // 공지사항 상세페이지
   {
     path: "/content/:no",
     name: "content",
     component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
   },
+  // 공지사항 수정
   {
     path: "/content/:no/edit",
     name: "contentEdit",
