@@ -1,6 +1,6 @@
 <template>
   <div id="root">
-    <div id="mypage-root">
+    <div id="page-root">
       <CsceterNav />
       <div class="container">
         <div>
@@ -13,59 +13,14 @@
                 <th>제목</th>
                 <td>{{ detaillData.title }}</td>
               </tr>
-              <tr>
+              <tr class="content">
                 <th>내용</th>
-                <td class="content">{{ detaillData.content }}</td>
+                <td>{{ detaillData.content }}</td>
               </tr>
             </thead>
           </v-table>
-          <!-- 관리자만 보이게 설정해야함 -->
+          <!-- 관리자만 보이게 해야함 -->
           <div>
-            <!-- <v-dialog v-model="dialog" persistent width="500">
-              <template v-slot:activator="{ props }">
-                <v-btn color="#eee" v-bind="props"> 수정 </v-btn>
-              </template>
-              <v-card>
-                <h3>공지사항 수정</h3>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field
-                          label="제목"
-                          v-model="this.editData.title"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12">
-                        <v-textarea
-                          label="내용"
-                          v-model="this.editData.content"
-                          required
-                        ></v-textarea>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="blue-darken-1"
-                    variant="text"
-                    @click="dialog = false"
-                  >
-                    Close
-                  </v-btn>
-                  <v-btn
-                    color="blue-darken-1"
-                    variant="text"
-                    @click="[(dialog = false), editNoticeDetail()]"
-                  >
-                    Save
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog> -->
             <v-btn color="#eee" @click="edit"> 수정 </v-btn>
             <v-btn color="#eee" @click="deleteNotice"> 삭제 </v-btn>
           </div>
@@ -150,12 +105,13 @@ export default {
   display: flex;
   justify-content: center;
 }
-#mypage-root {
+#page-root {
   width: 1440px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
+
 .container {
   display: flex;
   flex-direction: column;
@@ -172,6 +128,7 @@ export default {
     }
   }
 }
+
 .table-box {
   border-top: 1px solid #343434;
   th {
@@ -188,7 +145,8 @@ export default {
   height: 500px;
   /* vertical-align: top; */
 }
+
 button {
-  margin: 10px;
+  margin: 20px;
 }
 </style>
