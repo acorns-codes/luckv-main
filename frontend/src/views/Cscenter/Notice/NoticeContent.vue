@@ -124,7 +124,6 @@ export default {
 }
 #mypage-root {
   width: 1440px;
-  height: auto;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -132,10 +131,10 @@ export default {
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
   padding-top: 110px;
+  background-color: antiquewhite;
   & > div {
     width: 100%;
     & > div:nth-child(1) {
@@ -148,6 +147,9 @@ export default {
 }
 .table-box {
   border-top: 1px solid #343434;
+  th {
+    width: 150px;
+  }
   th,
   td {
     border-bottom: 1px solid #eee;
@@ -156,8 +158,9 @@ export default {
   }
 }
 .content {
-  height: 300px;
-  vertical-align: top;
+  height: 500px;
+  /* vertical-align: top; */
+  background-color: aqua;
 }
 button {
   margin: 10px;

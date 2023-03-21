@@ -7,7 +7,6 @@
           <div>
             <h2>공지사항</h2>
           </div>
-
           <v-table>
             <thead>
               <tr style="font-weight: bolder">
@@ -17,7 +16,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in noticeList" :key="item.no">
+              <tr
+                v-for="item in noticeList"
+                :key="item.no"
+                @click="noticeContent(item.no)"
+              >
                 <td>{{ item.no }}</td>
                 <td>{{ item.title }}</td>
                 <td>{{ item.createAt }}</td>
@@ -36,7 +39,9 @@
           </button>
         </div>
         <!-- 관리자만 보일 수 있도록 설정해야함 -->
-        <v-btn color="success" class="mt-2">공지사항 작성</v-btn>
+        <v-btn color="success" class="mt-2" @click="postNotice"
+          >공지사항 작성</v-btn
+        >
       </div>
     </div>
   </div>
@@ -70,22 +75,23 @@ export default {
   },
   // 페이지가 켜질 때 실행
   mounted() {
-    this.getNotice();
+    this.getNotice(this.$route.params.page - 1);
     this.getNoticeCnt();
-    console.log(this.$route.params.page);
   },
   methods: {
     // 공지사항 불러오기
-    async getNotice() {
+    async getNotice(page) {
       console.log("공지사항 불러오기");
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/noticeList`,
+          url: `http://localhost:80/noticePage?page=${page}`,
         });
-        this.noticeList = res.data.data;
+        // console.log(res.data);
+        this.noticeList = res.data;
+        // console.log(this.noticeList);
         this.page = this.cnt;
-        console.log("cnt" + this.totalpage);
+        // console.log("cnt" + this.totalpage);
       } catch (error) {
         console.log(error);
       }
@@ -103,28 +109,46 @@ export default {
         console.log(error);
       }
     },
-    // 이전페이지 기능
-    // movetopreviouspage() {
-    //   if (this.$route.query.page == 1) {
-    //     alert("첫번째 페이지입니다!");
-    //   } else {
-    //     let pp = this.$route.query.page - 1;
-    //     this.$route.query.push({
-    //       path: `/?page=${pp}`,
-    //     });
-    //   }
-    // },
+    //이전페이지 기능
+    movetopreviouspage() {
+      if (this.$route.params.page == 1) {
+        alert("첫번째 페이지입니다!");
+      } else {
+        let pp = parseInt(this.$route.params.page) - 1;
+        this.$router.push({
+          name: "cscenter",
+          params: { page: pp },
+        });
+        this.getNotice(this.$route.params.page - 2);
+      }
+    },
     // 다음페이지 기능
-    // movetonextpage() {
-    //   if (this.$route.query.page == Math.ceil(this.cnt / 10)) {
-    //     alert("마지막 페이지입니다!");
-    //   } else {
-    //     let pp = this.$route.query.page - 1;
-    //     console.log(pp);
-    //   var pp = parseInt(this.$route.query.page) + 1;
-    //   window.location.href = window.location.pathname + "?page=" + pp;
-    // }
-    // },
+    movetonextpage() {
+      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
+        alert("마지막 페이지입니다!");
+      } else {
+        let pp = parseInt(this.$route.params.page) + 1;
+        this.$router.push({
+          name: "cscenter",
+          params: { page: pp },
+        });
+        this.getNotice(this.$route.params.page);
+      }
+    },
+    // 글 작성기능
+    postNotice() {
+      this.$router.push({
+        path: "/postnotice",
+      });
+    },
+    // 상세페이지로 이동
+    noticeContent(no) {
+      console.log(no);
+      this.$router.push({
+        path: "content",
+        params: { no: no },
+      });
+    },
   },
 };
 </script>
