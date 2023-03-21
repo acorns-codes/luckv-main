@@ -22,8 +22,6 @@ export default {
       //   commentObj : data.Comment.filter(item => item.content_id === this.contentId)
     };
   },
-  mounted() {
-    console.log("받은데이터", this.CommentList);
-  },
+
 };
 </script>

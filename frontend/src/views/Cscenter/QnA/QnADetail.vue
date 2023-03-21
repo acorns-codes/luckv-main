@@ -10,7 +10,7 @@
           <!-- 작성자만 보일 수 있도록 설정해야 함 -->
           <div class="btn-box">
             <v-btn size="small" color="#eee" @click="editBtn"> 수정 </v-btn>
-            <v-btn size="small" color="#eee" @click="deleteNotice">
+            <v-btn size="small" color="#eee" @click="deleteBtn">
               삭제
             </v-btn>
           </div>
@@ -63,6 +63,9 @@ export default {
         name: "csqnadetailEdit",
       });
     },
+    deleteBtn(){
+      console.log("QnA삭제")
+    }
   },
 };
 </script>

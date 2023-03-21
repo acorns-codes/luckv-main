@@ -43,7 +43,7 @@ export default {
           url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/qnaAnswerList?qno=${this.$route.params.no}`,
         });
         this.commentList = res.data.data;
-        console.log(this.commentList);
+        // console.log(this.commentList);
       } catch (error) {
         console.log(error);
       }

@@ -148,5 +148,6 @@ export default {
 
 button {
   margin: 20px;
+  
 }
 </style>
