@@ -3,12 +3,47 @@
 
 <mapper namespace="com.luckv.demo.mapper.AuctionMapper">
 
-    
+    <!-- 경매 전체 리스트 -->
+    <select id="auctionAll"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
+	  select 
+		  		a.ano, /*경매 번호*/
+	        	seller, /*판매자 회원번호*/
+	        	s.mid as sellerNm, /*판매자 아이디*/ 
+	    		title,  /*판매 제목*/
+	    		content, /*판매내용*/
+	    		vcate, /*카테고리*/
+	    		pay_start, /*판매 시작가*/
+	    		start_day, /*판매 시작일*/
+	    		last_day, /*판매 종료일*/
+	    		buyer, /*낙찰자 회원번호*/
+	    		b.mid as buyerNm, /*낙찰자 아이디*/
+	    		pay_max , /*최고가*/
+	    		status /*판매 상태*/
+        from auction a
+		  	left join user s on  a.seller = s.mno
+		  	left join user b on  a.buyer = b.mno
+		  	left join video v on a.ano = v.ano 
+	  where 1 = 1
+	  	and status = "판매중"
+	  	<if test="vcate  != null  and vcate  != ''">
+	        and vcate  =  #{vcate} /*카테고리구분*/
+	    </if>
+	   order by a.start_day desc
+	   LIMIT #{start}, #{end}
+	</select>
+	
+	
     <!-- 판매리스트 총 개수 -->
     <select id="auctionCount" parameterType="com.luckv.demo.dto.Auction" resultType="Integer">
     	 select ifnull(count(*), 0) as cnt from auction
   		where 1 = 1
-  		 and seller = #{seller}
+  		<if test="seller != null  and seller != ''">
+	         and seller = #{seller}
+	    </if>
+	    <if test="vcate != null  and vcate  != ''">
+	        and vcate  =  #{vcate} /*카테고리구분*/
+	    </if>
+  		
   		
     </select>
     
@@ -26,8 +61,8 @@
         from auction
 	  where 1 = 1
 	  	and seller = #{seller}
-	  	and ano between  #{start} and #{end}
 	   order by ano desc
+	   LIMIT #{start}, #{end}
 	</select>
 	
     <!-- 판매 작성 -->
@@ -51,9 +86,9 @@
 	        	#{content},
 	        	#{vcate},
 	        	#{payStart},
-	        	now(),	        	
+	        	#{startDay},	        	
 	        	#{lastDay},
-	        	"판매중"	        	
+	        	#{status}	        	
 	        )
     </insert>
     
@@ -70,6 +105,7 @@
 		  and seller = #{seller}
 		</update>
        
+       <!-- 경매상세 -->
         <select id="auctionDetail"  parameterType="Integer" resultType="com.luckv.demo.dto.Auction">
        		 select 
 		  		a.ano, /*경매 번호*/

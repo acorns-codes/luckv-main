@@ -1,7 +1,5 @@
 package com.luckv.demo.dto;
 
-import java.sql.Date;
-
 import lombok.Data;
 
 @Data

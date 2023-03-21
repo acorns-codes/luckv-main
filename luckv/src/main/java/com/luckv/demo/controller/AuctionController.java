@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.Auction;
+import com.luckv.demo.dto.Notice;
 import com.luckv.demo.response.DefaultRes;
 import com.luckv.demo.response.ResponseMessage;
 import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.AuctionService;
-import com.luckv.demo.service.FrequentlyService;
-import com.luckv.demo.service.QuestionService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +28,28 @@ public class AuctionController {
 		private final AuctionService auctionService;
 		
 		
+		
+		// 경매 전체리스트
+		  @GetMapping("/auctionAll")
+		    public ResponseEntity<List<Auction>> auctionAll(Auction auction) {
+
+		        // 페이지 설정
+		        int sn = auction.getPage();   // 현재 페이지
+		        int start = sn * 10 + 0; // 첫 페이지
+		        int end = (sn + 1) * 10; // 끝 페이지
+
+		        auction.setStart(start);
+		        auction.setEnd(end);
+		        
+		        List<Auction> auctions = auctionService.auctionAll(auction);
+				 try {
+					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auctions), HttpStatus.OK);
+					} catch (Exception e) {
+						return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+					}
+		    }
+		  
+		  
 		// 판매 리스트 갯수
 		 @GetMapping("/auctionCount")
 		    public int auctionCount(Auction auction) {
@@ -41,7 +62,7 @@ public class AuctionController {
 
 		        // 페이지 설정
 		        int sn = auction.getPage();   // 현재 페이지
-		        int start = sn * 10 + 1; // 첫 페이지
+		        int start = sn * 10 + 0; // 첫 페이지
 		        int end = (sn + 1) * 10; // 끝 페이지
 
 		        auction.setStart(start);

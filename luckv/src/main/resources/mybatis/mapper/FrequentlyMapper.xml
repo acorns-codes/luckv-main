@@ -36,9 +36,8 @@
 	  <if test="category != null  and category != ''">
 	        and category =  #{category} /*카테고리구분*/
 	    </if>
-	  	and fno between  #{start} and #{end}
 	   order by fno desc
-	    <!-- LIMIT #{start}, #{end} -->
+	    LIMIT #{start}, #{end}
 	</select>
 	
     <!-- FaQ 작성 -->

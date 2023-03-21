@@ -18,6 +18,13 @@ public class AuctionService {
 	
 		private final AuctionMapper auctionMapper;
 		
+		
+		
+		// 경매전체 리스트
+		public List<Auction> auctionAll(Auction auction) {
+	        return auctionMapper.auctionAll(auction);
+		}				
+				
 		// 판매리스트 갯수
 		public int auctionCount(Auction auction) {
 			return auctionMapper.auctionCount(auction);
