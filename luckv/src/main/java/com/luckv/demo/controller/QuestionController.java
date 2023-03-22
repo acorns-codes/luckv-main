@@ -134,7 +134,7 @@ public class QuestionController {
 		    
 		 // QnA 댓글삭제
 		    @GetMapping("/qnaAnswerDelete")
-		    public ResponseEntity<String> qnaAnswerDelete(@RequestBody Question question) {  
+		    public ResponseEntity<String> qnaAnswerDelete(Question question) {  
 		    	boolean b = questionService.qnaAnswerDelete(question);
 				  if(b) {
 			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);

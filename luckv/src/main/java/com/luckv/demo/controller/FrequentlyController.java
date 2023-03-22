@@ -72,11 +72,11 @@ public class FrequentlyController {
 		    }
 		    
 		    // FaQ 상세
-//		    @GetMapping("/frequentlyDetail")
-//		    public Frequently frequentlyDetail(int fno) {
-//		        logger.info("FrequentlycController frequentlyDetail()");
-//		        return frequentlyService.frequentlyDetail(fno);
-//		    }
+		    @GetMapping("/frequentlyDetail")
+		    public Frequently frequentlyDetail(int fno) {
+		        logger.info("FrequentlycController frequentlyDetail()");
+		        return frequentlyService.frequentlyDetail(fno);
+		    }
 		    
 		    // FaQ 수정
 		  @PostMapping("frequentlyUpdate")

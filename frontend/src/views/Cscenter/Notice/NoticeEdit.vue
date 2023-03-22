@@ -50,6 +50,7 @@ export default {
     let pn = this.$route.params.no;
     console.log(pn);
     this.getNoticeDetail();
+    console.log(this.$store.state.sessionStorageData.mno);
   },
   methods: {
     async getNoticeDetail() {
@@ -65,14 +66,14 @@ export default {
     },
 
     async editNotice() {
-      //   console.log("공지수정");
+      console.log("공지수정");
       const editData = {
         no: this.$route.params.no,
         title: this.detaillData.title,
         content: this.detaillData.content,
-        nid: this.$store.state.userData.mno,
+        nid: this.$store.state.sessionStorageData.mno,
       };
-      //   console.log(editData);
+      console.log(editData);
       try {
         const res = await this.$axios({
           headers: {
@@ -82,10 +83,15 @@ export default {
           url: `http://localhost:80/noticeUpdate`,
           data: editData,
         });
-        this.$router.push({
-          name: "cscenter",
-          params: { page: 1 },
-        });
+        if (res.data.data) {
+          alert("게시글 수정이 완료되었습니다!");
+          this.$router.push({
+            name: "cscenter",
+            params: { page: 1 },
+          });
+        } else {
+          alert("게시글 수정을 할 수 없습니다!");
+        }
         console.log(res);
       } catch (error) {
         console.log(error);

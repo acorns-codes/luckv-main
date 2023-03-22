@@ -40,6 +40,19 @@
 	    LIMIT #{start}, #{end}
 	</select>
 	
+	<!-- FaQ 상세 -->
+    <select id="frequentlyDetail"  parameterType="com.luckv.demo.dto.Frequently"  resultType="com.luckv.demo.dto.Frequently">
+	  select 
+        	fno, /*faq 순번*/
+        	f_title as questions, /*faq 질문*/
+        	f_content as asked,  /*faq 답변*/
+        	category /*faq 카테고리*/
+        from frequently
+        where fno = #{fno}
+	</select>
+	
+	
+	
     <!-- FaQ 작성 -->
     <insert id="insertFrequently"  parameterType="com.luckv.demo.dto.Frequently">
         insert into 

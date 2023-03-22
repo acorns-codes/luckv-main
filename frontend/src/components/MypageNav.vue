@@ -9,6 +9,7 @@
     <div v-else>
       <router-link :to="`/mypage/${sessionData.mno}`">회원정보수정</router-link>
       <router-link to="/sellerauction">경매내역</router-link>
+      <router-link to="/postauction">경매등록</router-link>
     </div>
   </div>
 </template>

@@ -1,127 +1,45 @@
 <template>
-  <MypageNav />
-  <div class="container">
-    <div>
-      <div>
-        <h2>경매 판매내역</h2>
-      </div>
-      <v-table fixed-header height="600px">
-        <thead>
-          <tr>
-            <th
-              v-for="(item, index) in headers"
-              :key="index"
-              class="text-center"
-            >
-              {{ item.value }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in desserts" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.content }}</td>
-            <td>{{ item.payMax }}</td>
-            <td>{{ item.bidding }}</td>
-            <td>{{ item.status }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-      <v-row justify="center">
-        <v-dialog v-model="dialog" persistent width="500">
-          <template v-slot:activator="{ props }">
-            <v-btn color="success" v-bind="props"> 경매 내역 추가하기 </v-btn>
-          </template>
-          <v-card>
-            <h3>경매 등록</h3>
+  <div id="root">
+    <div id="page-root">
+      <MypageNav />
+      <div class="mypage">
+        <div>
+          <div>
+            <h2>경매 판매내역</h2>
+          </div>
+          <v-table>
+            <thead>
+              <tr>
+                <th
+                  v-for="(item, index) in headers"
+                  :key="index"
+                  class="text-center"
+                >
+                  {{ item.value }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(item, index) in auctionList"
+                :key="index"
+                class="event"
+                @click="auctionDetail(item.ano)"
+              >
+                <td>{{ index + 1 }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.payStart }}</td>
+                <td>{{ item.payMax }}</td>
+                <td>{{ item.status }}</td>
+              </tr>
+            </tbody>
+          </v-table>
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field
-                      label="제목"
-                      v-model="this.title"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-textarea
-                      label="내용"
-                      v-model="this.content"
-                      required
-                    ></v-textarea>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-file-input
-                      label="동영상 올리기"
-                      prepend-icon="mdi-video"
-                    ></v-file-input>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      label="경매 시작가"
-                      v-model="this.payStart"
-                      suffix="원"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      label="시작 날짜"
-                      v-model="this.startDay"
-                      type="date"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col>
-                    <v-text-field
-                      label="시작 시간"
-                      v-model="this.startTime"
-                      type="time"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      label="마감 날짜"
-                      v-model="this.lastDay"
-                      type="date"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col>
-                    <v-text-field
-                      label="마감 시간"
-                      v-model="this.lastTime"
-                      type="time"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="dialog = false"
-              >
-                Close
-              </v-btn>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="dialog = false"
-              >
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-row>
+          <v-btn color="success" @click="postAuction">
+            경매 내역 추가하기
+          </v-btn>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -132,98 +50,19 @@ export default {
   components: { MypageNav },
   data() {
     return {
+      auctionList: "",
       itemsPerPage: 5,
       headers: [
         { title: "index", value: "번호" },
-        { title: "name", value: "제목" },
-        { title: "content", value: "내용" },
+        { title: "title", value: "제목" },
+        { title: "content", value: "시작가" },
         { title: "payMax", value: "최고가" },
-        { title: "bidding", value: "입찰가" },
         { title: "status", value: "진행사항" },
       ],
-      desserts: [
-        {
-          name: "Frozen Yogurt",
-          content: 159,
-          payMax: 6.0,
-          bidding: 24,
-          status: "1",
-        },
-        {
-          name: "Jelly bean",
-          content: 375,
-          payMax: 0.0,
-          bidding: 94,
-          status: "0",
-        },
-        {
-          name: "KitKat",
-          content: 518,
-          payMax: 26.0,
-          bidding: 65,
-          status: "6",
-        },
-        {
-          name: "Eclair",
-          content: 262,
-          payMax: 16.0,
-          bidding: 23,
-          status: "7",
-        },
-        {
-          name: "Gingerbread",
-          content: 356,
-          payMax: 16.0,
-          bidding: 49,
-          protein: 3.9,
-          status: "16",
-        },
-        {
-          name: "Ice cream sandwich",
-          content: 237,
-          payMax: 9.0,
-          bidding: 37,
-          status: "1",
-        },
-        {
-          name: "Lollipop",
-          content: 392,
-          payMax: 0.2,
-          bidding: 98,
-          status: "2",
-        },
-        {
-          name: "Cupcake",
-          content: 305,
-          payMax: 3.7,
-          bidding: 67,
-          protein: 4.3,
-          status: "8",
-        },
-        {
-          name: "Honeycomb",
-          content: 408,
-          payMax: 3.2,
-          bidding: 87,
-          status: "45",
-        },
-        {
-          name: "Donut",
-          content: 452,
-          payMax: 25.0,
-          bidding: 51,
-          status: "22",
-        },
-      ],
-      dialog: false,
-      title: "",
-      content: "",
-      payStart: "",
-      startDay: "",
-      startTime: "",
-      lastDay: "",
-      lastTime: "",
     };
+  },
+  mounted() {
+    this.getAuction(1);
   },
   methods: {
     registration() {
@@ -244,18 +83,58 @@ export default {
         }
       }
     },
+    async getAuction(page) {
+      console.log("공지사항 불러오기");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/auctionPage?seller=${this.$store.state.sessionStorageData.mno}?page=${page}`,
+        });
+        console.log(res.data);
+        this.auctionList = res.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    postAuction() {
+      this.$router.push({
+        name: "/postauction",
+      });
+    },
+    auctionDetail(ano) {
+      console.log(ano);
+      console.log("상세");
+      this.$router.push({
+        name: "auctionDetail",
+        params: { ano: ano },
+      });
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-.container {
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+#page-root {
+  width: 1440px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.mypage {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 110px;
   & > div {
-    width: 1440px;
-    padding: 90px;
+    width: 100%;
     & > div:nth-child(1) {
       display: flex;
       justify-content: flex-start;
@@ -263,33 +142,14 @@ export default {
     }
   }
 }
-h3 {
-  padding: 20px;
-  font-size: 1.5rem;
-  padding-bottom: 10px;
+
+button {
+  margin: 30px;
 }
-.add-box {
-  /* width: 100%;
-  height: 100%;
-  position: absolute; */
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.496);
-}
-.form-box {
-  width: 500px;
-}
-.btn-box {
-  display: flex;
-  justify-content: flex-end;
-  & > img {
-    width: 10px;
-    cursor: pointer;
-  }
-}
-.h3 {
-  text-align: center;
+
+.event:hover {
+  /* font-weight: bold; */
+  background-color: #eee;
+  cursor: pointer;
 }
 </style>

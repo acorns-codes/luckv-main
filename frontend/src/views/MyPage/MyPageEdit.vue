@@ -80,13 +80,9 @@
 import MypageNav from "@/components/MypageNav.vue";
 
 export default {
-  created() {
+  mounted() {
     this.getuserInfo();
-    console.log("userinfo 받아오기");
-    console.log(`mno: ${this.sessionData.mno}`);
-    console.log(this.$store.state.sessionStorageData.auth);
   },
-  mounted() {},
   components: {
     MypageNav,
   },
@@ -124,7 +120,7 @@ export default {
   methods: {
     //회원정보불러오기
     async getuserInfo() {
-      this.userData = this.$store.state.userData;
+      // this.userData = this.$store.state.userData;
       try {
         const res = await this.$axios({
           headers: {
@@ -135,7 +131,7 @@ export default {
           data: { mno: this.sessionData.mno },
         });
         console.log(res);
-
+        this.userData = res.data.data;
         this.$store.commit("getUserData", res.data.data);
         console.log(this.$store.state.userData);
       } catch (error) {

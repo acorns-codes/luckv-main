@@ -5,7 +5,7 @@
       <div class="container">
         <div>
           <div>
-            <h2>QnA 등록</h2>
+            <h2>FAQ 등록</h2>
           </div>
           <v-table class="table-box">
             <thead>
@@ -17,6 +17,16 @@
                     variant="plain"
                     v-model="title"
                   ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <th>카테고리</th>
+                <td>
+                  <v-select
+                    variant="plain"
+                    :items="categoryList"
+                    v-model="select"
+                  ></v-select>
                 </td>
               </tr>
               <tr class="content">
@@ -49,37 +59,35 @@ export default {
     return {
       title: "",
       content: "",
+      categoryList: ["A", "B", "C", "D", "E", "F"],
+      select: "A",
     };
-  },
-  mounted() {
-    console.log(this.$store.state.sessionStorageData.mno);
   },
   methods: {
     async postQnA() {
-      console.log("qna등록합니당");
-      const qnaData = {
-        title: this.title,
-        content: this.content,
-        qid: this.$store.state.sessionStorageData.mno,
+      console.log("faq등록하기");
+      const postData = {
+        questions: this.title,
+        asked: this.content,
+        fid: this.$store.state.sessionStorageData.mno,
+        category: this.select,
       };
-      console.log(qnaData);
       try {
         const res = await this.$axios({
           headers: {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/insertQuestion`,
-          data: qnaData,
+          url: `http://localhost:80/insertFrequently`,
+          data: postData,
         });
         if (res.data.data) {
-          alert("QnA등록에 성공하였습니다.");
+          alert("새로운 FAQ가 등록되었습니다!");
           this.$router.push({
-            name: "csqna",
-            params: { page: 1 },
+            name: "csfaq",
           });
         } else {
-          alert("QnA등록에 실패하였습니다.");
+          alert("FAQ를 등록할 수 없습니다!");
         }
         console.log(res);
       } catch (error) {

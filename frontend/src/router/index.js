@@ -31,13 +31,6 @@ const routes = [
     name: "cscenter",
     component: () => import("@/views/Cscenter/NoticePage"),
     meta: { auth: true },
-    // children: [
-    //   {
-    //     path: "//content:no",
-    //     name: "content",
-    //     component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
-    //   },
-    // ],
   },
   // 공지사항 상세페이지
   {
@@ -51,6 +44,7 @@ const routes = [
     name: "contentEdit",
     component: () => import("@/views/Cscenter/Notice/NoticeEdit.vue"),
   },
+
   // QnA 상세페이지
   {
     path: "/csqnadetail/:no",
@@ -75,27 +69,65 @@ const routes = [
     name: "postqna",
     component: () => import("@/views/Cscenter/QnA/QnAPost.vue"),
   },
+
+  // FAQ 목록
   {
     path: "/csfaq",
     name: "csfaq",
     component: () => import("@/views/Cscenter/FAQpage.vue"),
   },
+  // FAQ 등록
+  {
+    path: "/postfaq",
+    name: "postfaq",
+    component: () => import("@/views/Cscenter/FAQ/FAQPost.vue"),
+  },
+  // FAQ 수정
+  {
+    path: "/editfaq/:fno",
+    name: "editfaq",
+    component: () => import("@/views/Cscenter/FAQ/FAQEdit.vue"),
+  },
+  // 마이페이지
   {
     path: "/mypage/:mno",
     name: "mypage",
     component: () => import("@/views/MyPage/MyPageEdit.vue"),
     meta: { auth: true },
   },
+  // 마이페이지 - 경매 참여 내역
   {
     path: "/mydetailList",
     name: "/mydetailList",
 
     component: () => import("@/views/MyPage/DetailList.vue"),
   },
+  // 마이페이지(셀러) - 경매 내역
   {
     path: "/sellerauction",
     name: "/sellerauction",
     component: () => import("@/views/SellerPage/AuctionList.vue"),
+    meta: { auth: true },
+  },
+  // 마이페이지(셀러) - 경매 등록
+  {
+    path: "/postauction",
+    name: "/postauction",
+    component: () => import("@/views/SellerPage/Auction/AuctionPost.vue"),
+    meta: { auth: true },
+  },
+  // 마이페이지(셀러) - 경매 상세페이지
+  {
+    path: "/auctiondetail/:ano",
+    name: "auctionDetail",
+    component: () => import("@/views/SellerPage/Auction/AutionDetail.vue"),
+    meta: { auth: true },
+  },
+  // 마이페이지(셀러) - 경매 수정
+  {
+    path: "/editauction/:ano",
+    name: "/editauction",
+    component: () => import("@/views/SellerPage/Auction/AuctionPost.vue"),
     meta: { auth: true },
   },
   {
