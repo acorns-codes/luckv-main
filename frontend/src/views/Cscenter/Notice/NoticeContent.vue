@@ -22,7 +22,6 @@
           <!-- 관리자만 보이게 해야함 -->
           <div>
             <v-btn color="#eee" @click="edit"> 수정 </v-btn>
-            <v-btn color="#eee" @click="deleteNotice"> 삭제 </v-btn>
           </div>
         </div>
       </div>
@@ -148,6 +147,5 @@ export default {
 
 button {
   margin: 20px;
-  
 }
 </style>

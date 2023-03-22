@@ -4,6 +4,7 @@
 <mapper namespace="com.luckv.demo.mapper.VideoMapper">
 
 	<!-- 동영상등록 -->
+
 	<insert id="videoUpload"  parameterType="com.luckv.demo.dto.Auction">
 	<selectKey resultType="Integer" keyProperty="ano" order="BEFORE" >
         select last_insert_id()    

@@ -82,10 +82,13 @@ export default {
           data: editData,
         });
         console.log(res);
-        this.$router.push({
-          name: "csqna",
-          params: { page: 1 },
-        });
+        if (res.data.data) {
+          alert("QnA가 수정되었습니다!");
+          this.$router.push({
+            name: "csqna",
+            params: { page: 1 },
+          });
+        }
       } catch (error) {
         console.log(error);
       }

@@ -10,9 +10,7 @@
           <!-- 작성자만 보일 수 있도록 설정해야 함 -->
           <div class="btn-box">
             <v-btn size="small" color="#eee" @click="editBtn"> 수정 </v-btn>
-            <v-btn size="small" color="#eee" @click="deleteBtn">
-              삭제
-            </v-btn>
+            <v-btn size="small" color="#eee" @click="deleteBtn"> 삭제 </v-btn>
           </div>
           <v-table class="table-box">
             <thead>
@@ -63,9 +61,26 @@ export default {
         name: "csqnadetailEdit",
       });
     },
-    deleteBtn(){
-      console.log("QnA삭제")
-    }
+    async deleteBtn() {
+      console.log("QnA삭제");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/questionDelete?qno=${this.$route.params.no}`,
+        });
+        if (res.data.data) {
+          alert("QnA가 삭제되었습니다!");
+          this.$router.push({
+            name: "csqna",
+            params: { page: 1 },
+          });
+        } else {
+          alert("QnA 삭제에 실패하였습니다");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

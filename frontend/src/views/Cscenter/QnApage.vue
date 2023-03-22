@@ -10,7 +10,7 @@
           <v-table>
             <thead>
               <tr style="font-weight: bolder">
-                <th class="text-center">번호</th>
+                <th class="text-center">글번호</th>
                 <th class="text-center">제목</th>
                 <th class="text-center">작성자</th>
                 <th class="text-center">작성일</th>

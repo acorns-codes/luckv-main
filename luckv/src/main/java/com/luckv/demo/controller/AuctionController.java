@@ -54,7 +54,7 @@ public class AuctionController {
 		 @GetMapping("/auctionCount")
 		    public int auctionCount(Auction auction) {
 		        return auctionService.auctionCount(auction);
-		    }
+		    } 
 		 
 		// 판매 리스트 페이징처리
 		  @GetMapping("/auctionPage")

@@ -10,7 +10,7 @@
           <v-table>
             <thead>
               <tr style="font-weight: bolder">
-                <th class="text-center">번호</th>
+                <th class="text-center">글번호</th>
                 <th class="text-center">제목</th>
                 <th class="text-center">작성일</th>
               </tr>
@@ -41,11 +41,17 @@
             <v-icon> mdi-chevron-right </v-icon>
           </button>
         </div>
-        <!-- 관리자만 보일 수 있도록 설정해야함 -->
+        <!-- 관리자만 공지사항 등록 버튼 보임-->
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent width="500">
             <template v-slot:activator="{ props }">
-              <v-btn color="success" v-bind="props"> 공지사항 등록 </v-btn>
+              <v-btn
+                v-show="this.$store.state.sessionStorageData.auth === 'A'"
+                color="success"
+                v-bind="props"
+              >
+                공지사항 등록
+              </v-btn>
             </template>
             <v-card>
               <h3>공지사항 등록</h3>

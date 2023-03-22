@@ -5,7 +5,7 @@
       <div class="container">
         <div>
           <div>
-            <h2>QnA 등록</h2>
+            <h2>FAQ 수정</h2>
           </div>
           <v-table class="table-box">
             <thead>
@@ -13,10 +13,19 @@
                 <th>제목</th>
                 <td>
                   <v-text-field
-                    placeholder="제목을 입력하세요"
                     variant="plain"
-                    v-model="title"
+                    v-model="this.FAQList.questions"
                   ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <th>카테고리</th>
+                <td>
+                  <v-select
+                    variant="plain"
+                    :items="categoryList"
+                    v-model="this.FAQList.category"
+                  ></v-select>
                 </td>
               </tr>
               <tr class="content">
@@ -24,16 +33,15 @@
                 <td>
                   <v-textarea
                     rows="20"
-                    placeholder="내용을 입력하세요"
                     variant="plain"
-                    v-model="content"
+                    v-model="this.FAQList.asked"
                   ></v-textarea>
                 </td>
               </tr>
             </thead>
           </v-table>
         </div>
-        <v-btn @click="postQnA">등록</v-btn>
+        <v-btn @click="editQnA">수정</v-btn>
       </div>
     </div>
   </div>
@@ -47,39 +55,51 @@ export default {
   },
   data() {
     return {
-      title: "",
-      content: "",
+      FAQList: "",
+      categoryList: ["A", "B", "C", "D", "E", "F"],
     };
   },
-  mounted() {
-    console.log(this.$store.state.sessionStorageData.mno);
+  created() {
+    this.getFAQ();
   },
   methods: {
-    async postQnA() {
-      console.log("qna등록합니당");
-      const qnaData = {
-        title: this.title,
-        content: this.content,
-        qid: this.$store.state.sessionStorageData.mno,
+    async getFAQ() {
+      console.log("faq불러오기");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://localhost:80/frequentlyDetail?fno=${this.$route.params.fno}`,
+        });
+        this.FAQList = res.data;
+        // console.log(this.FAQList);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async editQnA() {
+      console.log("faq수정하기");
+      const editData = {
+        questions: this.FAQList.questions,
+        asked: this.FAQList.asked,
+        fno: this.$route.params.fno,
+        category: this.FAQList.category,
       };
-      console.log(qnaData);
       try {
         const res = await this.$axios({
           headers: {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/insertQuestion`,
-          data: qnaData,
+          url: `http://localhost:80/frequentlyUpdate`,
+          data: editData,
         });
         if (res.data.data) {
-          alert("QnA등록에 성공하였습니다.");
+          alert("FAQ가 수정되었습니다!");
           this.$router.push({
-            name: "csqna",
-            params: { page: 1 },
+            name: "csfaq",
           });
         } else {
-          alert("QnA등록에 실패하였습니다.");
+          alert("FAQ를 수정할 수 없습니다!");
         }
         console.log(res);
       } catch (error) {
