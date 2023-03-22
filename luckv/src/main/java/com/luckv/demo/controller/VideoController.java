@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.luckv.demo.dto.Auction;
 import com.luckv.demo.dto.Video;
 import com.luckv.demo.response.DefaultRes;
 import com.luckv.demo.response.ResponseMessage;
@@ -69,6 +70,8 @@ public class VideoController {
         savedFileName = uuid.toString() + "_" + originalFileName;
         
         video.setVideoFile(savedFileName);
+        
+        
         
         if(!file.isEmpty()){
             String fullPath = fileDir + savedFileName; // 파일생성

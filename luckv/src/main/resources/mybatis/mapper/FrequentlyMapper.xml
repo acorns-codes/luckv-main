@@ -49,8 +49,9 @@
         	category /*faq 카테고리*/
         from frequently
         where fno = #{fno}
-	</select>
-	
+
+	</select>	
+
 	
 	
     <!-- FaQ 작성 -->
