@@ -20,7 +20,7 @@ import com.luckv.demo.mapper.FrequentlyMapper;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@ServerEndpoint(value="/auctionDetail")
+//@ServerEndpoint(value="/auctionDetail")
 public class AttendService {
 	private static  AttendMapper  attendMapper;
 	private static Set<Session> clients = 
