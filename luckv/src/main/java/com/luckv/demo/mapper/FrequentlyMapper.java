@@ -26,7 +26,7 @@ public interface FrequentlyMapper {
 	int insertFrequently(Frequently frequently);
 	
 	// FaQ 상세보기
-//	Frequently frequentlyDetail(int fno);
+	Frequently frequentlyDetail(int fno);
 	
 	// FaQ 수정
 	int frequentlyUpdate(Frequently frequently);
