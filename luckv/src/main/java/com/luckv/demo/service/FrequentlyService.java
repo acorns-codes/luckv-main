@@ -40,9 +40,9 @@ private final FrequentlyMapper frequentlyMapper;;
 	}
 		
 	// FaQ 상세
-//	public Frequently frequentlyDetail(int fno) {
-//		return frequentlyMapper.frequentlyDetail(fno);
-//	}
+	public Frequently frequentlyDetail(int fno) {
+		return frequentlyMapper.frequentlyDetail(fno);
+	}
 	
 	// FaQ 수정
 	public boolean frequentlyUpdate(Frequently frequently) {
