@@ -67,7 +67,7 @@
 	
     <!-- 판매 작성 -->
     <insert id="insertAuction"  parameterType="com.luckv.demo.dto.Auction">
-    <selectKey resultType="Integer" keyProperty="ano" order="AFTER">
+    <selectKey resultType="Integer" keyProperty="ano" order="AFTER" >
         select last_insert_id()    
     </selectKey>   
         insert into 
