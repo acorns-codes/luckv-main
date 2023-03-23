@@ -13,7 +13,6 @@
               <v-text-field
                 label="아이디"
                 v-model="this.userData.mid"
-                :disabled="true"
                 readonly
               ></v-text-field>
               <v-text-field
@@ -50,14 +49,13 @@
               <!-- 판매자 선택시에만 나올 수 있도록 -->
               <template v-if="`${this.userData.auth}` === 'S'">
                 <v-select
-                  v-model="bank"
+                  v-model="this.accountInfo[0]"
                   :items="bankList"
                   label="은행"
                 ></v-select>
                 <v-text-field
-                  v-model="account"
+                  v-model="this.accountInfo[1]"
                   label="계좌번호"
-                  model-value="12345678"
                 ></v-text-field>
               </template>
               <v-btn
@@ -89,6 +87,7 @@ export default {
   data() {
     return {
       sessionData: this.$store.state.sessionStorageData,
+      accountInfo: "",
       userData: "",
       valid: false,
       bankList: ["국민", "농협", "기업", "카카오", "신한"],
@@ -120,18 +119,18 @@ export default {
   methods: {
     //회원정보불러오기
     async getuserInfo() {
-      // this.userData = this.$store.state.userData;
       try {
         const res = await this.$axios({
           headers: {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/infoMember?mno=${this.sessionData.mno}`,
+          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/infoMember?mno=${this.sessionData.mno}`,
           data: { mno: this.sessionData.mno },
         });
         console.log(res);
         this.userData = res.data.data;
+        this.accountInfo = this.userData.acccount.split(":");
         this.$store.commit("getUserData", res.data.data);
         console.log(this.$store.state.userData);
       } catch (error) {

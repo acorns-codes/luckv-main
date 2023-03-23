@@ -88,7 +88,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/auctionPage?seller=${this.$store.state.sessionStorageData.mno}?page=${page}`,
+          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/auctionPage?seller=${this.$store.state.sessionStorageData.mno}?page=${page}`,
         });
         console.log(res.data);
         this.auctionList = res.data;

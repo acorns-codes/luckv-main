@@ -11,6 +11,17 @@ import AppLayoutHome from "./Layouts/AppLayoutHome.vue";
 export default {
   name: "App",
   components: { AppLayoutHome },
+  mounted() {
+    this.sesstionCheck();
+  },
+  methods: {
+    sesstionCheck() {
+      let data = sessionStorage.getItem("login");
+      if (!data) {
+        this.$store.state.sessionStorageData = "";
+      }
+    },
+  },
 };
 </script>
 

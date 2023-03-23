@@ -45,6 +45,7 @@ export default {
       sessionData: this.$store.state.sessionStorageData,
     };
   },
+
   computed: {
     isUserLogin() {
       return this.$store.getters.isLogin;
@@ -58,6 +59,7 @@ export default {
     logoutUser() {
       console.log("로그아웃유저");
       this.$store.commit("clearUser");
+      this.$store.state.sessionStorageData = "";
       window.location.reload();
     },
   },
