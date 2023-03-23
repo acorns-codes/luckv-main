@@ -75,6 +75,9 @@
 
 <script>
 import MypageNav from "@/components/MypageNav.vue";
+// import Stomp from "webstomp-client";
+// import SockJS from "sockjs-client";
+
 export default {
   components: { MypageNav },
   data() {
@@ -82,14 +85,92 @@ export default {
       auctionData: "",
       startDay: "",
       lastDay: "",
+      // 웹소켓을 이용해서 받은 데이터를 담을 곳
+      recvList: "",
+      wepsocket: "",
     };
   },
 
-  created() {},
+  created() {
+    this.connect();
+    this.socket();
+    this.test();
+  },
   mounted() {
     this.getAuction();
   },
   methods: {
+    //소켓연결
+    socket() {
+      // this.wepsocket = new WebSocket(
+      //   `ws//localhost:80/auctionDetail?ano=${this.$route.params.ano}`
+      // );
+      const ws = new WebSocket(
+        `ws//localhost:80/auctionDetail?ano=${this.$route.params.ano}`
+      );
+      // console.log(this.wepsocket);
+      ws.onerror = (error) => console.log(error);
+      ws.onclose = (event) => console.log(event);
+
+      //   console.log(this.ws);
+      //   ws.onmessage = function() {
+      //     const data = JSON.parse(msg.data);
+      //     let css;
+
+      //     if (data.mid === mid.value) {
+      //         css = 'class=me';
+      //     } else {
+      //         css = 'class=other';
+      //     }
+
+      //     const item = `<div ${css} >
+      //                 <span><b>${data.mid}</b></span> [ ${data.date} ]<br/>
+      //                   <span>${data.msg}</span>
+      // 				</div>`;
+
+      //     talk.innerHTML += item;
+
+      //     // 2022.10.26[프뚜]: 스크롤바 하단으로 이동
+      //     talk.scrollTop=talk.scrollHeight;
+      // }
+    },
+    test() {
+      this.wepsocket.send("프론트에서 보냅니당");
+    },
+    // `ws//localhost:8888/auctiondetail/1`
+
+    // 소켓 연결
+    connect() {
+      // console.log("소켓연결");
+      // const serverURL = `http://localhost:80`;
+      // let socket = new SockJS(serverURL);
+      // this.stompClient = Stomp.over(socket);
+      // console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      // this.stompClient.connect(
+      //   {},
+      //   (frame) => {
+      //     // 소켓 연결 성공
+      //     this.connected = true;
+      //     console.log("소켓 연결 성공", frame);
+      //     // 서버의 메시지 전송 endpoint를 구독합니다.
+      //     // 이런형태를 pub sub 구조라고 합니다.
+      //     this.stompClient.subscribe(
+      //       `/auctionDetail?ano=${this.$route.params.ano}`,
+      //       (res) => {
+      //         console.log("구독으로 받은 메시지 입니다.", res.body);
+      //         // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+      //         this.recvList.push(JSON.parse(res.body));
+      //       }
+      //     );
+      //   },
+      //   (error) => {
+      //     // 소켓 연결 실패
+      //     console.log("소켓 연결 실패", error);
+      //     this.connected = false;
+      //   }
+      // );
+    },
+    // 각 경매의 상세페이지 받아오기
     async getAuction() {
       console.log("경매조회");
       try {
