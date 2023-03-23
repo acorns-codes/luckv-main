@@ -1,8 +1,10 @@
 package com.luckv.demo.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Attend {
 	
 	private int ano; //  경매 생성번호

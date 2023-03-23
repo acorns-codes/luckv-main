@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FrequentlyService {
 
-private final FrequentlyMapper frequentlyMapper;;
+private final FrequentlyMapper frequentlyMapper;
 	
 	// FaQ 목록
 	public List<Frequently> frequentlyList(Frequently frequently) {
