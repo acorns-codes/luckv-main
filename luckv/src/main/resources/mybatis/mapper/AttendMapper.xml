@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.luckv.demo.mapper.AttendMapper">
-	<insert id="insertAttend"  parameterType="String">
+	<insert id="insertAttend"   parameterType="com.luckv.demo.dto.Attend">
         insert into 
         	attend (
         		ano, /*경매 번호*/

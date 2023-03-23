@@ -11,6 +11,6 @@ import com.luckv.demo.dto.Frequently;
 public interface AttendMapper {
 
 		// 입찰등록
-		Attend insertAttend(String message);
+		Attend insertAttend(Attend Attend);
 		
 }
