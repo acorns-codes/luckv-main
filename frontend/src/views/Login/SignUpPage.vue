@@ -164,7 +164,6 @@ export default {
         };
 
         console.log(userData);
-
         if (!this.valid) {
           console.log(this.valid);
           alert("가입 형식을 지켜주세요!");
