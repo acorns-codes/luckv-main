@@ -142,10 +142,10 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.auth) {
-    console.log("인증이 필요합니다");
-  }
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.auth) {
+//     console.log("인증이 필요합니다");
+//   }
+//   next();
+// });
 export default router;

@@ -76,6 +76,7 @@
               class="mt-2"
               >경매 등록</v-btn
             >
+            <v-btn @click="click">확인</v-btn>
           </v-form>
         </div>
       </div>
@@ -91,6 +92,7 @@ export default {
     return {
       valid: false,
       title: "",
+      status: "",
       titleRules: [
         (v) => !!v || "제목은 필수 입력사항입니다.",
         // (v) =>
@@ -143,17 +145,35 @@ export default {
       lastTimetRules: [(v) => !!v || "마감 시간는 필수 입력 사항입니다."],
     };
   },
-  computed() {
-    let today = new Date();
+
+  mounted() {
+    const today = new Date().getTime();
     console.log(today);
   },
-  mounted() {
-    console.log(Date());
-  },
   methods: {
+    // click() {
+    //   const today = new Date().getTime();
+    //   console.log(today);
+    //   let day = `${this.startDay} ${this.startTime}:00`;
+    //   let daytime = new Date(day).getTime();
+    //   console.log(daytime);
+    //   if (today < daytime) {
+    //     return "경매전";
+    //   } else {
+    //     return "경매중";
+    //   }
+    // },
     async postAuction() {
       console.log("경매등록");
       console.log(this.startDay);
+      let today = new Date().getTime();
+      let startday = `${this.startDay} ${this.startTime}:00`;
+      let daytime = new Date(startday).getTime();
+      if (today < daytime) {
+        this.status = "경매전";
+      } else {
+        this.status = "경매중";
+      }
       try {
         const postData = {
           seller: this.$store.state.sessionStorageData.mno,
@@ -163,14 +183,16 @@ export default {
           payStart: this.payStart,
           startDay: `${this.startDay} ${this.startTime}:00`,
           lastDay: `${this.lastDay} ${this.lastTime}:00`,
+          status: this.status,
         };
         console.log(postData);
         if (!this.valid) {
           console.log(this.valid);
-          alert("가입 형식을 지켜주세요!");
+          alert("등록 형식을 지켜주세요!");
           return;
         } else {
-          // 회원가입
+          // 경매 등록
+          console.log("동영상 업로드");
           const res = await this.$axios({
             headers: {
               "Content-type": "application/json",
@@ -184,12 +206,21 @@ export default {
       } catch (error) {
         console.log(error);
       }
-      //   try {
-      //     const resVideo = await this.$axios({});
-      //     console.log(resVideo);
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
+      try {
+        console.log("동영상 업로드");
+        const upload = { file: this.video };
+        const resVideo = await this.$axios({
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+          method: "POST",
+          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoUpload",
+          data: upload,
+        });
+        console.log(resVideo);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

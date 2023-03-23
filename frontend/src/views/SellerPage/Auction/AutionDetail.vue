@@ -52,6 +52,17 @@
               readonly
               type="time"
             ></v-text-field>
+            <!-- 
+                경매전 : 경매 시작가, 
+                경매중 : 경매 시작가, 최고가, 
+                경매완료 : 경매 시작가, 최고가, 낙찰자아이디(뒤에 두자리별표)
+            -->
+            <v-text-field
+              label="마감 시간"
+              v-model="this.lastDay[1]"
+              readonly
+              type="time"
+            ></v-text-field>
             <v-btn block color="success" variant="elevated" class="mt-2"
               >경매 수정</v-btn
             >
@@ -84,7 +95,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/auctionDetail?ano=${this.$route.params.ano}`,
+          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/auctionDetail?ano=${this.$route.params.ano}`,
         });
         console.log(res);
         this.auctionData = res.data.data;

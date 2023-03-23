@@ -22,6 +22,7 @@ export default {
   data() {
     return {};
   },
+
   methods: {
     LoginFormOpen() {
       this.isClicked = !this.isClicked;
