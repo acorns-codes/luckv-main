@@ -20,40 +20,44 @@ import com.luckv.demo.mapper.FrequentlyMapper;
 import lombok.RequiredArgsConstructor;
 
 @Service
-//@ServerEndpoint(value="/auctionDetail")
+@ServerEndpoint(value="/auctionDetail")
 public class AttendService {
+	
 	private static  AttendMapper  attendMapper;
-	private static Set<Session> clients = 
-			Collections.synchronizedSet(new HashSet<Session>());
+	
+	private static Set<Session> CLIENTS = Collections.synchronizedSet(new HashSet<>());
 
-	
 	@OnOpen
-	public void onOpen(Session s) {
-		System.out.println("open session : " + s.toString());
-		if(!clients.contains(s)) {
-			clients.add(s);
-			System.out.println("session open : " + s);
-		}else {
-			System.out.println("이미 연결된 session 임!!!");
-		}
-	}
+    public void onOpen(Session session) {
+        System.out.println(session.toString());
+
+        if (CLIENTS.contains(session)) {
+            System.out.println("이미 연결된 세션입니다. > " + session);
+        } else {
+            CLIENTS.add(session);
+            System.out.println("새로운 세션입니다. > " + session);
+        }
+    }
+
+    @OnClose
+    public void onClose(Session session) throws Exception {
+        CLIENTS.remove(session);
+        System.out.println("세션을 닫습니다. : " + session);
+    }
+
+    @OnMessage
+    public void onMessage(String message, Session session) throws Exception {
+        System.out.println("입력된 메세지입니다. > " + message);
+        
+        attendMapper.insertAttend(message);
+
+        for (Session client : CLIENTS) {
+            System.out.println(" 메세지를 전달합니다. > " + message);
+            client.getBasicRemote().sendText(message);
+        }
+    }
+
+    
 	
 	
-	@OnMessage
-	public void onMessage(Attend attend, Session session) throws Exception{
-		System.out.println("receive message : " + attend);
-		for(Session s : clients) {
-			System.out.println("send data : " + attend);
-			attendMapper.insertAttend(attend);
-			s.getBasicRemote().sendObject(attend);
-			
-		}
-		
-	}
-	
-	@OnClose
-	public void onClose(Session s) {
-		System.out.println("session close : " + s);
-		clients.remove(s);
-	}
 }
