@@ -1,0 +1,347 @@
+<template>
+  <div id="root">
+    <div id="page-root">
+      <MypageNav />
+      <div class="container">
+        <div>
+          <div>
+            <h2>경매 상세 페이지</h2>
+          </div>
+          <div>
+            <v-table class="table-box">
+              <thead>
+                <tr>
+                  <th>제목</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="this.auctionData.title"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr class="content">
+                  <th>내용</th>
+                  <td>
+                    <v-textarea
+                      rows="10"
+                      variant="plain"
+                      v-model="this.auctionData.content"
+                    ></v-textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <th>카테고리</th>
+                  <td>
+                    <v-select
+                      :items="categorys"
+                      item-title="title"
+                      item-value="value"
+                      variant="plain"
+                      v-model="this.auctionData.vcate"
+                    ></v-select>
+                  </td>
+                </tr>
+                <tr>
+                  <th>동영상 업로드</th>
+                  <td>
+                    <v-file-input
+                      prepend-icon="mdi-video"
+                      variant="plain"
+                      v-model="video"
+                    ></v-file-input>
+                  </td>
+                </tr>
+                <tr>
+                  <th>경매 시작가</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="this.auctionData.payStart"
+                      suffix="원"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr>
+                  <th>경매 시작 날짜</th>
+                  <td>
+                    <v-text-field
+                      v-model="this.startDay[0]"
+                      variant="plain"
+                      type="date"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr>
+                  <th>경매 시작 시간</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="this.startDay[1]"
+                      type="time"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr>
+                  <th>경매 마감 날짜</th>
+                  <td>
+                    <v-text-field
+                      v-model="this.lastDay[0]"
+                      variant="plain"
+                      type="date"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr>
+                  <th>경매 마감 시간</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="this.lastDay[1]"
+                      type="time"
+                    ></v-text-field>
+                  </td>
+                </tr>
+              </thead>
+            </v-table>
+
+            <h2>경매 세부 내역</h2>
+            <v-table class="table-box">
+              <thead>
+                <tr>
+                  <th>현재 상태</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="status"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr>
+                  <th>낙찰자</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="this.auctionData.buyerNm"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr>
+                  <th>최고가</th>
+                  <td>
+                    <v-text-field
+                      suffix="원"
+                      variant="plain"
+                      v-model="pay"
+                    ></v-text-field>
+                  </td>
+                </tr>
+              </thead>
+            </v-table>
+          </div>
+        </div>
+        <v-btn @click="sendMessage">소켓으로 보내기</v-btn>
+        <div v-for="(item, idx) in recvList" :key="idx">
+          <h3>유저이름: {{ item.bidding }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import MypageNav from "@/components/MypageNav.vue";
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
+export default {
+  components: { MypageNav },
+  data() {
+    return {
+      auctionData: "",
+      pay: "",
+      category: "",
+      startDay: "",
+      lastDay: "",
+      buyer: "",
+      recvList: [],
+      wepsocket: "",
+      categorys: [
+        {
+          title: "동물",
+          value: "animal",
+        },
+        {
+          title: "인물",
+          value: "character",
+        },
+        {
+          title: "건물",
+          value: "building",
+        },
+        {
+          title: "식물",
+          value: "plant",
+        },
+        {
+          title: "기타",
+          value: "etc",
+        },
+      ],
+    };
+  },
+
+  created() {
+    // 소켓 연결 시도
+    this.connect();
+  },
+  mounted() {
+    // 상세 내역 불러오기
+    this.getAuction();
+  },
+  methods: {
+    // 소켓 연결
+    connect() {
+      console.log("소켓연결");
+      const serverURL = `http://localhost:80`;
+      let socket = new SockJS(serverURL);
+      this.stompClient = Stomp.over(socket);
+      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      this.stompClient.connect(
+        {},
+        (frame) => {
+          // 소켓 연결 성공
+          this.connected = true;
+          console.log("소켓 연결 성공", frame);
+          // 서버의 메시지 전송 endpoint를 구독합니다.
+          // 이런형태를 pub sub 구조라고 합니다.
+          this.stompClient.subscribe(
+            "/send",
+            // `auctionDetail?ano=${this.$route.params.an}`,
+            (res) => {
+              console.log("구독으로 받은 메시지 입니다.", res.body);
+              // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+              this.recvList.push(JSON.parse(res.body));
+            }
+          );
+          console.log(this.recvList, "받아온데이터어어엉어어어");
+        },
+        (error) => {
+          // 소켓 연결 실패
+          console.log("소켓 연결 실패", error);
+          this.connected = false;
+        }
+      );
+    },
+    // 소켓으로 데이터 보내기
+
+    sendMessage() {
+      console.log("버튼");
+      this.send();
+      this.pay;
+      console.log(this.recvList, "받아온데이터어어엉어어어2");
+    },
+
+    send() {
+      try {
+        const res = this.$axios({
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: `http://localhost:80/insertAttend/`,
+          data: {
+            ano: this.$route.params.ano,
+            buyer: this.$store.state.sessionStorageData.mno,
+            bidding: this.pay,
+          },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
+      console.log("Send message:" + this.message);
+      if (this.stompClient && this.stompClient.connected) {
+        const msg = {
+          ano: this.$route.params.ano,
+          buyer: 1,
+          buyerNm: this.buyer,
+          bidding: this.pay,
+        };
+        this.stompClient.send("/attend", JSON.stringify(msg), {});
+      }
+      console.log(this.recvList, "받아온데이터어어엉어어어3");
+    },
+    // 각 경매의 상세페이지 받아오기
+    async getAuction() {
+      console.log("경매조회");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/auctionDetail?ano=${this.$route.params.ano}`,
+        });
+        console.log(res);
+        this.auctionData = res.data.data;
+        this.startDay = this.auctionData.startDay.split(" ");
+        this.lastDay = this.auctionData.lastDay.split(" ");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+#page-root {
+  width: 1440px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-top: 110px;
+  & > div {
+    width: 100%;
+
+    & > div:nth-child(1) {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      padding-bottom: 10px;
+    }
+  }
+}
+.table-box {
+  width: 100%;
+  margin: 10px;
+  border-top: 1px solid #343434;
+  th {
+    width: 150px;
+  }
+  th,
+  td {
+    border-bottom: 1px solid #eee;
+    padding: 10px 10px;
+    text-align: left;
+  }
+}
+.content {
+  height: 200px;
+  /* vertical-align: top; */
+}
+
+button {
+  margin-top: 20px;
+}
+</style>

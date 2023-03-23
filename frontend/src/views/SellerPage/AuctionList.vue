@@ -65,6 +65,7 @@ export default {
     this.getAuction(1);
   },
   methods: {
+
     registration() {
       console.log("상품등록");
       const validate = this.$refs.form.validate();
