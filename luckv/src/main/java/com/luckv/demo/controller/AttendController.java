@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,13 +23,13 @@ import com.luckv.demo.service.AuctionService;
 
 import lombok.RequiredArgsConstructor;
 
-//@RestController
-//@RequiredArgsConstructor
+@RestController
+@RequiredArgsConstructor
 @Controller
 public class AttendController {
 
 	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
-//	private final AuctionService auctionService;
+	private final AttendService  attendService;
 //
 //	@RequestMapping("/insertAttend")	
 //	public ResponseEntity insertAttend(int ano) {
@@ -39,7 +41,7 @@ public class AttendController {
 //		:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 //	}
 	// /receive를 메시지를 받을 endpoint로 설정합니다.
-    @MessageMapping("/auction")
+    @MessageMapping("/attend")
     
     // /send로 메시지를 반환합니다.
     @SendTo("/send")   
@@ -58,5 +60,18 @@ public class AttendController {
         // 반환
         return result;
     }
+    
+    	// 판매 등록
+	  @PostMapping("/insertAttend")
+	    public ResponseEntity insertAuction(@RequestBody Attend attend) {
+	        
+	        boolean b = attendService.insertAttend(attend);
+	        
+	        if(b) {
+	            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+	        }
+	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
+	    }
+	    
 	
 }
