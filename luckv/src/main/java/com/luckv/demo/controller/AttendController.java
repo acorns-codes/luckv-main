@@ -39,7 +39,7 @@ public class AttendController {
 //		:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 //	}
 	// /receive를 메시지를 받을 endpoint로 설정합니다.
-    @MessageMapping("/auctionDetail")
+    @MessageMapping("/auction")
     
     // /send로 메시지를 반환합니다.
     @SendTo("/send")   
