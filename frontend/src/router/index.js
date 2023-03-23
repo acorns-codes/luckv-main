@@ -120,7 +120,7 @@ const routes = [
   {
     path: "/auctiondetail/:ano",
     name: "auctionDetail",
-    component: () => import("@/views/SellerPage/Auction/AutionDetail.vue"),
+    component: () => import("@/views/SellerPage/Auction/AuctionDetail.vue"),
     meta: { auth: true },
   },
   // 마이페이지(셀러) - 경매 수정
@@ -134,6 +134,11 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: () => import("@/views/Login/SignUpPage"),
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: () => import("@/views/Test.vue"),
   },
 ];
 
