@@ -51,4 +51,12 @@ public class AuctionService {
 			int n = auctionMapper.auctionUpdate(auction);
 	        return n > 0;
 		}
+		
+		public int statusIngUpdate() {
+			return auctionMapper.statusIngUpdate();
+		}
+		
+		public int statusEndUpdate() {
+			return auctionMapper.statusEndUpdate();
+		}
 }
