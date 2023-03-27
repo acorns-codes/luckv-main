@@ -175,11 +175,12 @@ export default {
               "Content-type": "application/json",
             },
             method: "POST",
-            url: "http://localhost:80/addMember",
+            url: `${process.env.VUE_APP_API_URL}/addMember`,
             data: userData,
           });
           console.log(res);
           console.log("회원가입완료");
+
           this.$router.push({
             path: "/",
           });
@@ -193,7 +194,7 @@ export default {
     async idCheck() {
       const res = await this.$axios({
         method: "POST",
-        url: "http://localhost:80/getId",
+        url: "çgetId",
         data: { mid: this.id },
       });
       console.log(res);

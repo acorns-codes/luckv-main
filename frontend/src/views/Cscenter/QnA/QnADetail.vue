@@ -49,7 +49,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/questionDetail?qno=${this.$route.params.no}`,
+          url: `${process.env.VUE_APP_API_URL}/questionDetail?qno=${this.$route.params.no}`,
         });
         this.detaillData = res.data.data;
       } catch (error) {
@@ -66,7 +66,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/questionDelete?qno=${this.$route.params.no}`,
+          url: `${process.env.VUE_APP_API_URL}/questionDelete?qno=${this.$route.params.no}`,
         });
         if (res.data.data) {
           alert("QnA가 삭제되었습니다!");

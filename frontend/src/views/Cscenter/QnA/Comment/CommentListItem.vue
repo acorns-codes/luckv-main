@@ -80,7 +80,7 @@ export default {
               "Content-Type": "application/json",
             },
             method: "POST",
-            url: `http://localhost:80/qnaAnswerUpdate`,
+            url: `${process.env.VUE_APP_API_URL}/qnaAnswerUpdate`,
             data: editData,
           });
           if (res.data.data) {
@@ -103,7 +103,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/qnaAnswerList?qno=${this.$route.params.no}`,
+          url: `${process.env.VUE_APP_API_URL}/qnaAnswerList?qno=${this.$route.params.no}`,
         });
         this.commentList = res.data.data;
         console.log(res.data.data);
@@ -126,7 +126,7 @@ export default {
             "Content-Type": "application/json",
           },
           method: "GET",
-          url: `http://localhost:80/qnaAnswerDelete`,
+          url: `${process.env.VUE_APP_API_URL}/qnaAnswerDelete`,
           params: deleteData,
         });
         console.log(res);

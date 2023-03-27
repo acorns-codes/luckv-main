@@ -35,7 +35,7 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/qnaAnswer`,
+          url: `${process.env.VUE_APP_API_URL}/qnaAnswer`,
           data: commnetData,
         });
         console.log(res);

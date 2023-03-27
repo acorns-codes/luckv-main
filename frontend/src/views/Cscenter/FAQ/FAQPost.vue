@@ -78,7 +78,7 @@ export default {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/insertFrequently`,
+          url: `${process.env.VUE_APP_API_URL}/insertFrequently`,
           data: postData,
         });
         if (res.data.data) {

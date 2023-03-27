@@ -4,26 +4,45 @@
       <h2>마감이 임박한 동영상입니다.</h2>
       <p>마감이 얼마 남지 않은 동영상입니다.</p>
       <p>합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!</p>
-      <div class="deadlineData" v-for="(item, index) in data" :key="index">
+      <div class="container">
         <div>
-          <h2>{{ item.title }}</h2>
-          <p>{{ item.content }}</p>
-          <p><span>마감일자 </span> {{ item.end }}</p>
+          <h2>{{ deadlineData.title }}</h2>
+          <p>{{ deadlineData.content }}</p>
+          <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
           <div>
             <p>시작가</p>
-            <p>{{ item.startprice }}</p>
-            <p>{{ item.seller_id }}</p>
+            <p>{{ deadlineData.payStart }} 원</p>
           </div>
           <div>
             <p>최고가</p>
-            <p>{{ item.topprice }}</p>
-            <p>{{ item.user_id }}</p>
+            <p>{{ deadlineData.payMax }} 원</p>
           </div>
-
-          <v-btn variant="flat" color="#FF9414"> 입찰 </v-btn>
+          <div class="dday-box">
+            <div>
+              <span>01</span>
+              <span>DAY</span>
+            </div>
+            <div>
+              <span>23</span>
+              <span>HOURS</span>
+            </div>
+            <div>
+              <span>50</span>
+              <span>MINS</span>
+            </div>
+            <div>
+              <span>30</span>
+              <span>SECS</span>
+            </div>
+          </div>
+          <v-btn variant="flat" color="#FF9414" @click="goVideo"> 입찰 </v-btn>
         </div>
-        <div>
-          <img :src="item.thumbnail" />
+        <div class="video-box">
+          <video
+            :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
+            @mouseover="playVideo"
+            @mouseleave="stopVideo"
+          ></video>
         </div>
       </div>
     </div>
@@ -31,24 +50,119 @@
 </template>
 
 <script>
+// import priceToString from "@/plugins/function/funciton.js";
+
 export default {
   data() {
     return {
-      data: [
-        {
-          thumbnail:
-            "https://img.freepik.com/free-photo/rear-view-excited-fans-having-fun-music-festival-taking-pictures-stage-with-their-smart-phones-copy-space_637285-607.jpg?w=900&t=st=1678263326~exp=1678263926~hmac=acca962073b1fd2598a218c9d18d688541746b56d4bd525b92a9f521ec5a6bbe",
-          title: "호응하는 사람들",
-          content: `콘서트가 시작되기 전에 모든 관람객들이 환호하고 있는 동영상입니다.`,
-
-          end: "2023.04.01 토요일 12:00",
-          startprice: "12,345원",
-          seller_id: "yeonju05**",
-          topprice: "34,567원",
-          user_id: "kuro**",
-        },
-      ],
+      deadlineData: "",
+      ddayList: "",
+      current: 0,
+      previous: 0,
     };
+  },
+
+  created() {
+    this.getVideo();
+  },
+  mounted() {
+    this.videoSrc = process.env.VUE_APP_API_URL;
+    this.dday = this.deadlineData.lastDay;
+    console.log(this.deadlineData);
+    console.log(this.dday);
+    setInterval(this.getRemainingTime(this.dday), 1000);
+    console.log(this.ddayList);
+  },
+  methods: {
+    // day 구하기
+    getRemainingTime(lastday) {
+      // 마감날짜
+      const lastDayMs = new Date(lastday).getTime();
+      console.log(lastDayMs);
+      // 오늘 날짜
+      const today = new Date().getTime();
+      console.log(today);
+      // console.log(lastDayMs, today);
+
+      // dday 산출 값
+      const time = lastDayMs - today;
+      // console.log(time, "dday의 ms");
+
+      // dday 산출을 위해 필요한 값
+      const oneDay = 24 * 60 * 60 * 1000;
+      const oneHour = 60 * 60 * 1000;
+      const oneMinute = 60 * 1000;
+      let days = time / oneDay;
+      days = Math.floor(days);
+      let hours = Math.floor((time % oneDay) / oneHour);
+      let minutes = Math.floor((time % oneHour) / oneMinute);
+      let seconds = Math.floor((time % oneMinute) / 1000);
+
+      const values = [days, hours, minutes, seconds];
+      // console.log(values);
+      // this.ddayList = values;
+      // console.log(values);
+      console.log(values);
+      return values;
+    },
+    // 동영상 불러오기
+    async getVideo() {
+      console.log("비디오");
+      try {
+        const res = await this.$axios({
+          methods: "GET",
+          url: `${process.env.VUE_APP_API_URL}/auctionAll`,
+        });
+
+        this.deadlineData = res.data.data[0];
+        this.dday = res.data.data[0].lastDay;
+        console.log(this.dday);
+      } catch (e) {
+        console.log(e);
+      }
+      try {
+        setInterval(this.getRemainingTime(this.dday), 1000);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    // getRemainingTime() {
+    //   // 마감날짜
+    //   const lastDayMs = new Date(this.dday).getTime();
+    //   // 오늘 날짜
+    //   const today = new Date().getTime();
+
+    //   // console.log(lastDayMs, today);
+
+    //   // dday 산출 값
+    //   const time = lastDayMs - today;
+    //   // console.log(time, "dday의 ms");
+
+    //   // dday 산출을 위해 필요한 값
+    //   const oneDay = 24 * 60 * 60 * 1000;
+    //   const oneHour = 60 * 60 * 1000;
+    //   const oneMinute = 60 * 1000;
+    //   let days = time / oneDay;
+    //   days = Math.floor(days);
+    //   let hours = Math.floor((time % oneDay) / oneHour);
+    //   let minutes = Math.floor((time % oneHour) / oneMinute);
+    //   let seconds = Math.floor((time % oneMinute) / 1000);
+
+    //   const values = [days, hours, minutes, seconds];
+    //   // console.log(values);
+    //   this.ddayList = values;
+    //   console.log(values);
+    // },
+    // let countdown = setInterval(getRemainingTime, 1000);
+    // getRemainingTime();
+    // console.log(countdown);
+
+    goVideo() {
+      this.$router.push({
+        path: `/video/${this.data[0].vcate}`,
+      });
+    },
   },
 };
 </script>
@@ -70,11 +184,10 @@ section {
     }
   }
 }
-.deadlineData {
+
+.container {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
-
   & > div:nth-child(1) {
     width: 725px;
     display: flex;
@@ -111,14 +224,44 @@ section {
       }
     }
   }
-  & > div:nth-child(2) {
-    width: 485px;
+}
 
-    & > img {
-      width: 360px;
-      height: 350px;
-      object-fit: cover;
+.dday-box {
+  & > div {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 -4px 0.75rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    & > span:nth-child(1) {
+      width: 48px;
+      height: 60px;
+      margin: 0 1px;
+      background-color: bisque;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
     }
+    & > span:last-child {
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.video-box {
+  width: 420px;
+  height: 360px;
+  & > video {
+    width: inherit;
+    height: inherit;
+    object-fit: cover;
   }
 }
 button {

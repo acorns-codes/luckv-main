@@ -54,7 +54,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/noticeDetail?nno=${this.$route.params.no}`,
+          url: `${process.env.VUE_APP_API_URL}/noticeDetail?nno=${this.$route.params.no}`,
         });
         this.detaillData = res.data.data;
       } catch (error) {
@@ -84,7 +84,7 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/noticeUpdate",
+          url: `${process.env.VUE_APP_API_URL}/noticeUpdate`,
           data: noticeData,
         });
         console.log(res);

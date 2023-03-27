@@ -69,7 +69,7 @@ export default {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/insertQuestion`,
+          url: `${process.env.VUE_APP_API_URL}/insertQuestion`,
           data: qnaData,
         });
         if (res.data.data) {

@@ -4,8 +4,8 @@
     <div id="header">
       <router-link to="/">linkV</router-link>
       <div v-if="!isUserLogin">
-        <router-link to="/" @click="onClicked">로그인</router-link>
-        <router-link to="/signup">회원가입</router-link>
+        <router-link to="/" @click="onClicked">Login</router-link>
+        <router-link to="/signup">Signup</router-link>
       </div>
       <div v-else>
         <router-link
@@ -13,22 +13,22 @@
             name: 'mypage',
             params: { mno: this.sessionData.mno },
           }"
-          >마이페이지</router-link
+          >Mypage</router-link
         >
-        <a href="/" @click="logoutUser">로그아웃</a>
+        <a href="/" @click="logoutUser">Logout</a>
       </div>
     </div>
     <div id="nav">
-      <router-link to="/">홈</router-link>
-      <router-link to="/video">동영상</router-link>
-      <router-link to="/freevideo">무료</router-link>
-      <router-link to="/subscription">구독</router-link>
+      <router-link to="/">Home</router-link>
+      <router-link to="/video/all">Auction</router-link>
+      <router-link to="/freevideo">Free</router-link>
+      <router-link to="/subscription">Subscription</router-link>
       <router-link
         :to="{
           name: 'cscenter',
           params: { page: 1 },
         }"
-        >고객센터</router-link
+        >CScenter</router-link
       >
     </div>
   </div>

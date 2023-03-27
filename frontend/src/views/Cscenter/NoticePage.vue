@@ -141,7 +141,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/noticePage?page=${page}`,
+          url: `${process.env.VUE_APP_API_URL}/noticePage?page=${page}`,
         });
         // console.log(res.data);
         this.noticeList = res.data;
@@ -158,7 +158,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/noticeCount`,
+          url: `${process.env.VUE_APP_API_URL}/noticeCount`,
         });
         this.cnt = res.data;
       } catch (error) {
@@ -214,7 +214,7 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/insertNotice",
+          url: "${process.env.VUE_APP_API_URL}/insertNotice",
           data: noticeData,
         });
         console.log(res);
