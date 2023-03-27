@@ -76,7 +76,6 @@
               class="mt-2"
               >경매 등록</v-btn
             >
-            <v-btn @click="click">확인</v-btn>
           </v-form>
         </div>
       </div>
@@ -108,7 +107,7 @@ export default {
       ],
       video: "",
       videoRules: [(v) => !!v || "비디오 등록은 필수 사항입니다."],
-      category: "동물",
+      category: "",
       categoryList: ["동물", "인물", "건물", "식물", "기타"],
       categorys: [
         {
@@ -146,23 +145,22 @@ export default {
     };
   },
 
-  mounted() {
-    const today = new Date().getTime();
-    console.log(today);
-  },
+  mounted() {},
   methods: {
-    // click() {
-    //   const today = new Date().getTime();
-    //   console.log(today);
-    //   let day = `${this.startDay} ${this.startTime}:00`;
-    //   let daytime = new Date(day).getTime();
-    //   console.log(daytime);
-    //   if (today < daytime) {
-    //     return "경매전";
-    //   } else {
-    //     return "경매중";
-    //   }
-    // },
+    getStatus() {
+      const today = new Date().getTime();
+      console.log(today);
+      let day = `${this.startDay} ${this.startTime}:00`;
+      // console.log(day);
+      let daytime = new Date(day).getTime();
+      // console.log(daytime);
+      if (today < daytime) {
+        return "경매전";
+      } else {
+        return "경매중";
+      }
+    },
+
     async postAuction() {
       console.log("경매등록");
       console.log(this.startDay);
@@ -172,7 +170,7 @@ export default {
       if (today < daytime) {
         this.status = "경매전";
       } else {
-        this.status = "경매중";
+        this.status = "판매중";
       }
       try {
         const postData = {
@@ -183,7 +181,7 @@ export default {
           payStart: this.payStart,
           startDay: `${this.startDay} ${this.startTime}:00`,
           lastDay: `${this.lastDay} ${this.lastTime}:00`,
-          status: this.status,
+          status: this.getStatus(),
         };
         console.log(postData);
         if (!this.valid) {
@@ -198,26 +196,35 @@ export default {
               "Content-type": "application/json",
             },
             method: "POST",
-            url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/insertAuction",
+            url: `${process.env.VUE_APP_API_URL}/insertAuction`,
             data: postData,
           });
           console.log(res);
+          // alert("리스트 업로드");
+          console.log(this.video);
         }
       } catch (error) {
         console.log(error);
       }
       try {
         console.log("동영상 업로드");
-        const upload = { file: this.video };
+        console.log(this.video);
+        const formdata = new FormData();
+        // console.log(formdata, "확인1");
+        formdata.append("file", this.video[0]);
+        // console.log("확인2", formdata);
         const resVideo = await this.$axios({
           headers: {
-            "Content-type": "multipart/form-data",
+            "Content-Type": "multipart/form-data",
           },
           method: "POST",
-          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoUpload",
-          data: upload,
+          url: `${process.env.VUE_APP_API_URL}/videoUpload`,
+          data: formdata,
         });
         console.log(resVideo);
+        if (resVideo.data.data) {
+          alert("새로운 경매가 등록되었습니다!");
+        }
       } catch (error) {
         console.log(error);
       }

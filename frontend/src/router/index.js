@@ -9,17 +9,47 @@ const routes = [
     // 메타 필드
     // $route.matched를 반복하여 라우터 레코드의 메타필드를 검사한다.
   },
+  // 비디오 전체 목록
   {
-    path: "/video",
-    name: "video",
+    path: "/video/all",
+    name: "all",
     component: () => import("@/views/VideoPage"),
   },
+  // 비디오 - 동물
+  {
+    path: "/video/animal",
+    name: "animal",
+    component: () => import("@/views/videoPage/VideoAnimal.vue"),
+  },
+  // 비디오 - 인물
+  {
+    path: "/video/character",
+    name: "character",
+    component: () => import("@/views/videoPage/VideoCharacter.vue"),
+  }, // 비디오 - 건물
+  {
+    path: "/video/building",
+    name: "building",
+    component: () => import("@/views/videoPage/VideoBuilding.vue"),
+  }, // 비디오 - 식물
+  {
+    path: "/video/plant",
+    name: "plant",
+    component: () => import("@/views/videoPage/VideoPlant.vue"),
+  },
+  // 비디오 - 기타
+  {
+    path: "/video/etc",
+    name: "etc",
+    component: () => import("@/views/videoPage/VideoEtc.vue"),
+  },
+  // 무료 동영상 페이지
   {
     path: "/freevideo",
     name: "freevideo",
     component: () => import("@/views/FreeVideoPage"),
   },
-
+  // 구독 페이지
   {
     path: "/subscription",
     name: "subscription",
@@ -126,19 +156,15 @@ const routes = [
   // 마이페이지(셀러) - 경매 수정
   {
     path: "/editauction/:ano",
-    name: "/editauction",
-    component: () => import("@/views/SellerPage/Auction/AuctionPost.vue"),
+    name: "editauction",
+    component: () => import("@/views/SellerPage/Auction/AuctionEdit.vue"),
     meta: { auth: true },
   },
+  // 회원가입 페이지
   {
     path: "/signup",
     name: "signup",
     component: () => import("@/views/Login/SignUpPage"),
-  },
-  {
-    path: "/test",
-    name: "test",
-    component: () => import("@/views/Test.vue"),
   },
 ];
 

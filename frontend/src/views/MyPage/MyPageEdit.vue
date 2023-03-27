@@ -125,7 +125,7 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/infoMember?mno=${this.sessionData.mno}`,
+          url: `${process.env.VUE_APP_API_URL}/infoMember?mno=${this.sessionData.mno}`,
           data: { mno: this.sessionData.mno },
         });
         console.log(res);
@@ -146,7 +146,7 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/updateMember/`,
+          url: `${process.env.VUE_APP_API_URL}/updateMember/`,
           data: {
             mno: this.userData.mno,
             ph: this.userData.ph,

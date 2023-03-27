@@ -2,12 +2,14 @@
   <FirstSection />
   <SecondSection />
   <ThirdSection />
+  <ForthSection />
 </template>
 
 <script>
 import FirstSection from "./MainPage/FirstSection.vue";
 import SecondSection from "./MainPage/SecondSection.vue";
 import ThirdSection from "./MainPage/ThirdSection.vue";
+import ForthSection from "./MainPage/ForthSection.vue";
 
 // import SignUpForm from "./Login/SignUpForm.vue";
 export default {
@@ -15,9 +17,8 @@ export default {
   components: {
     FirstSection,
     SecondSection,
-
     ThirdSection,
-    // SignUpForm,
+    ForthSection,
   },
   data() {
     return {};

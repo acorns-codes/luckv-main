@@ -1,115 +1,145 @@
 <template>
-  <div class="video">
-    <h1>비디오페이지</h1>
-    <div v-for="item in videoData" :key="item">
-      <video
-        src="http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoplay?ano=2"
-        controls
-      ></video>
-      <v-card class="mx-auto" max-width="344">
-        <div class="video-box">
-          <video
-            src="http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoplay?ano=1"
-            controls
-          ></video>
-        </div>
-        <!-- <v-img
-          src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-          height="200px"
-          cover
-        ></v-img> -->
-        <v-card-title> {{ item.title }} </v-card-title>
-        <v-card-text> {{ item.content }} </v-card-text>
-        <v-card-subtitle>
-          <span>시작일자</span> {{ item.startDay }}
-          {{ item.startTime }}
-        </v-card-subtitle>
-        <v-card-subtitle>
-          <span>마감일자</span> {{ item.lastDay }}
-          {{ item.lastTime }}
-        </v-card-subtitle>
-        <div class="pay-box">
-          <p>시작가</p>
-          <p>{{ item.payStart }}</p>
-          <p>yeonju05**</p>
-        </div>
-        <div class="pay-box">
-          <p>최고가</p>
-          <p>{{ item.payMax }}</p>
-          <p>diswn1**</p>
-        </div>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn variant="outlined" @click="show = !show"> 입찰 </v-btn>
-        </v-card-actions>
+  <div id="root">
+    <div id="page-root">
+      <VideoCategory />
+      <div>
+        <div class="card-box">
+          <v-card
+            class="mx-auto"
+            max-width="344"
+            v-for="item in videoList"
+            :key="item"
+          >
+            <div class="video-box">
+              <video
+                @mouseover="evnetAdd"
+                :src="`${videoSrc}/videoplay?ano=${item.ano}`"
+                controls
+              ></video>
+            </div>
+            <!-- <v-img
+              src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+              height="200px"
+              cover
+            ></v-img> -->
 
-        <v-expand-transition>
-          <div v-show="show">
-            <v-divider></v-divider>
-            <v-card-text>
-              <form class="form-container">
-                <v-row>
-                  <v-col cols="6">
-                    <v-list-subheader>경매 참여 금액</v-list-subheader>
-                  </v-col>
-
-                  <v-col cols="10">
-                    <v-text-field suffix="원"></v-text-field>
-                  </v-col>
-                  <v-btn color="success"> 입찰하기 </v-btn>
-                </v-row>
-              </form>
-            </v-card-text>
-          </div>
-        </v-expand-transition>
-      </v-card>
+            <v-card-title> {{ item.title }}</v-card-title>
+            <v-card-text>{{ item.content }}</v-card-text>
+            <v-card-subtitle>
+              <span>시작일자</span> {{ item.startDay }}
+            </v-card-subtitle>
+            <v-card-subtitle>
+              <span>마감일자</span>{{ item.lastDay }}
+            </v-card-subtitle>
+            <div class="pay-box">
+              <p>시작가</p>
+              <p>{{ item.payStart }} 원</p>
+              <p>yeonju05**</p>
+            </div>
+            <div class="pay-box">
+              <p>최고가</p>
+              <p>{{ item.payMax }} 원</p>
+              <p>diswn1**</p>
+            </div>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn variant="outlined" @click="showbox(item.ano)">
+                입찰
+              </v-btn>
+            </v-card-actions>
+            <template v-if="show && item.ano == this.num">
+              <v-expand-transition>
+                <div>
+                  <v-divider></v-divider>
+                  <v-card-text>
+                    <form class="form-container">
+                      <v-row>
+                        <v-col cols="6">
+                          <v-list-subheader>경매 참여 금액</v-list-subheader>
+                        </v-col>
+                        <v-col cols="10">
+                          <v-text-field
+                            variant="underlined"
+                            suffix="원"
+                          ></v-text-field>
+                        </v-col>
+                        <v-btn color="success"> 입찰하기 </v-btn>
+                      </v-row>
+                    </form>
+                  </v-card-text>
+                </div>
+              </v-expand-transition>
+            </template>
+          </v-card>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import VideoCategory from "@/components/VideoCategory.vue";
 export default {
+  components: { VideoCategory },
+
   data() {
     return {
       src: "",
+      // videosrc: `${process.env.VUE_APP_API_URL}/videoplay?ano=${this.videoList.ano}`,
       show: false,
-      videoData: [
-        {
-          title: "노을이 지는 영상",
-          content: "붉은 노을이 지고 있는 영상입니다.",
-          startDay: "2023-03-03",
-          startTime: "12:00",
-          lastDay: "2023-03-31",
-          lastTime: "18:00",
-          payStart: "20000원",
-          payMax: "28000원",
-        },
-      ],
+      mouseover: false,
+      videoList: "",
+      num: "",
+      videoSrc: "",
     };
   },
 
   mounted() {
     this.video();
+    this.videoSrc = process.env.VUE_APP_API_URL;
   },
   methods: {
+    // 비디오 리스트 받아오기
     async video() {
       console.log("비디오");
       try {
         const res = await this.$axios({
           methods: "GET",
-          url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/videoplay?ano=1",
+          url: `${process.env.VUE_APP_API_URL}/auctionAll`,
         });
-        console.log(res.data);
-        this.src = res.data;
+        this.videoList = res.data.data;
+        console.log(this.videoList);
       } catch (e) {
         console.log(e);
       }
+    },
+    // evnetAdd() {
+    //   this.mouseover = !this.mouseover;
+    // },
+    showbox(ano) {
+      console.log(this.num);
+      this.num = ano;
+      this.show = !this.show;
+      console.log(ano);
+      console.log(this.num);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+#page-root {
+  width: 1440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 span {
   color: #ff5e5e;
   font-weight: bolder;
@@ -131,12 +161,20 @@ span {
 }
 
 .video-box {
-  width: 300px;
-  height: auto;
+  width: 344px;
+  height: 200px;
 }
 video {
-  width: 300px;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.card-box {
+  width: 960px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px;
+  margin: 30px;
 }
 </style>

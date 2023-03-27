@@ -2,79 +2,140 @@
   <div id="root">
     <div id="page-root">
       <MypageNav />
-      <div class="mypage">
-        <h2>경매 등록</h2>
-        <div class="form-box">
-          <v-form v-model="valid" @submit.prevent="postAuction">
-            <v-text-field
-              label="제목"
-              v-model="title"
-              :rules="titleRules"
-              required
-            ></v-text-field>
-            <v-textarea
-              label="내용"
-              v-model="content"
-              :rules="contentRules"
-              required
-            ></v-textarea>
-            <v-select
-              required
-              label="카테고리"
-              :items="categoryList"
-              v-model="category"
-            ></v-select>
-            <v-file-input
-              label="동영상 올리기"
-              prepend-icon="mdi-video"
-              v-model="video"
-              :rules="videoRules"
-              required
-            ></v-file-input>
-            <v-text-field
-              label="경매 시작가"
-              v-model="payStart"
-              suffix="원"
-              :rules="payStartRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="시작 날짜"
-              v-model="startDay"
-              type="date"
-              :rules="StartDaytRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="시작 시간"
-              v-model="startTime"
-              type="time"
-              :rules="startTimetRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="마감 날짜"
-              v-model="lastDay"
-              type="date"
-              :rules="lastDaytRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="마감 시간"
-              v-model="lastTime"
-              type="time"
-              :rules="lastTimetRules"
-              required
-            ></v-text-field>
-            <v-btn
-              type="submit"
-              block
-              color="success"
-              variant="elevated"
-              class="mt-2"
-              >경매 등록</v-btn
-            >
-          </v-form>
+      <div class="container">
+        <h2>경매 수정</h2>
+        <div>
+          <div class="page-box">
+            <v-form v-model="valid" @submit.prevent="editAuction">
+              <v-table class="table-box">
+                <thead>
+                  <tr>
+                    <th>제목</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        v-model="this.auctionData.title"
+                        :rules="titleRules"
+                        required
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr class="content">
+                    <th>내용</th>
+                    <td>
+                      <v-textarea
+                        rows="10"
+                        variant="plain"
+                        v-model="this.auctionData.content"
+                        :rules="contentRules"
+                        required
+                      ></v-textarea>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>카테고리</th>
+                    <td>
+                      <v-select
+                        variant="plain"
+                        required
+                        :items="categorys"
+                        v-model="this.auctionData.vcate"
+                        item-title="title"
+                        item-value="value"
+                      ></v-select>
+                    </td>
+                  </tr>
+                  <!-- <tr>
+                    <th>동영상</th>
+                    <td>
+                      <v-file-input
+                        variant="plain"
+                        prepend-icon="mdi-video"
+                        v-model="video"
+                        :rules="videoRules"
+                        required
+                      ></v-file-input>
+                    </td>
+                  </tr> -->
+
+                  <tr>
+                    <th>경매 시작가</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        v-model="this.auctionData.payStart"
+                        suffix="원"
+                        :rules="payStartRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 시작 날짜</th>
+                    <td>
+                      <v-text-field
+                        v-model="this.startDay[0]"
+                        variant="plain"
+                        type="date"
+                        :rules="StartDaytRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 시작 시간</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        v-model="this.startDay[1]"
+                        type="time"
+                        :rules="startTimetRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 마감 날짜</th>
+                    <td>
+                      <v-text-field
+                        v-model="this.lastDay[0]"
+                        variant="plain"
+                        type="date"
+                        :rules="lastDaytRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 마감 시간</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        v-model="this.lastDay[1]"
+                        type="time"
+                        :rules="lastTimetRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                </thead>
+              </v-table>
+
+              <v-btn
+                type="submit"
+                block
+                color="success"
+                variant="elevated"
+                class="mt-2"
+                >수정</v-btn
+              >
+            </v-form>
+          </div>
         </div>
       </div>
     </div>
@@ -83,81 +144,102 @@
 
 <script>
 import MypageNav from "@/components/MypageNav.vue";
+
 export default {
   components: { MypageNav },
   data() {
     return {
       valid: false,
-      title: "",
+      auctionData: "",
+      startDay: "",
+      lastDay: "",
       titleRules: [
         (v) => !!v || "제목은 필수 입력사항입니다.",
         // (v) =>
         //   /^[A-Za-z0-9]{2,20}$/g.test(v) ||
         //   "제목은 2자 이상 20자 이하로 작성해주세요.",
       ],
-      content: "",
       contentRules: [
         (v) => !!v || "내용은 필수 입력사항입니다.",
         // (v) =>
         //   /^[a-z0-9@.]{2,150}$/g.test(v) ||
         //   "내용은 2자 이상 150자 이하로 작성해주세요.",
       ],
-      video: "",
       videoRules: [(v) => !!v || "비디오 등록은 필수 사항입니다."],
-      category: "동물",
-      categoryList: ["동물", "인물", "건물", "식물", "기타"],
-      payStart: "",
       payStartRules: [(v) => !!v || "경매 시작가는 필수 입력 사항입니다."],
-      startDay: "",
       StartDaytRules: [(v) => !!v || "시작 날짜는 필수 입력 사항입니다."],
-      startTime: "",
       startTimetRules: [(v) => !!v || "시작 시간는 필수 입력 사항입니다."],
-      lastDay: "",
       lastDaytRules: [(v) => !!v || "마감 날짜는 필수 입력 사항입니다."],
-      lastTime: "",
       lastTimetRules: [(v) => !!v || "마감 시간는 필수 입력 사항입니다."],
+      categorys: [
+        {
+          title: "동물",
+          value: "animal",
+        },
+        {
+          title: "인물",
+          value: "character",
+        },
+        {
+          title: "건물",
+          value: "building",
+        },
+        {
+          title: "식물",
+          value: "plant",
+        },
+        {
+          title: "기타",
+          value: "etc",
+        },
+      ],
     };
   },
-  computed() {},
+
+  mounted() {
+    // 상세 내역 불러오기
+    this.getAuction();
+  },
   methods: {
-    async postAuction() {
-      console.log("경매등록");
+    // 각 경매의 상세페이지 받아오기
+    async getAuction() {
+      console.log("경매조회");
       try {
-        const postData = {
-          seller: this.$store.state.sessionStorageData.mno,
-          title: this.title,
-          content: this.content,
-          vcate: this.category,
-          payStart: this.payStart,
-          startDay: `${this.startDay} ${this.startTime}:00`,
-          lastDay: `${this.lastDay} ${this.lastTime}:00`,
-        };
-        console.log(postData);
-        if (!this.valid) {
-          console.log(this.valid);
-          alert("가입 형식을 지켜주세요!");
-          return;
-        } else {
-          // 회원가입
-          const res = await this.$axios({
-            headers: {
-              "Content-type": "application/json",
-            },
-            method: "POST",
-            url: "http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/insertAuction",
-            data: postData,
-          });
-          console.log(res);
-        }
+        const res = await this.$axios({
+          method: "GET",
+          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${this.$route.params.ano}`,
+        });
+        console.log(res);
+        this.auctionData = res.data.data;
+        this.startDay = this.auctionData.startDay.split(" ");
+        this.lastDay = this.auctionData.lastDay.split(" ");
       } catch (error) {
         console.log(error);
       }
-      //   try {
-      //     const resVideo = await this.$axios({});
-      //     console.log(resVideo);
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
+    },
+    async editAuction() {
+      console.log("경매내역 수정");
+      try {
+        const res = await this.$axios({
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: `${process.env.VUE_APP_API_URL}/auctionUpdate`,
+          data: {
+            title: this.auctionData.title,
+            content: this.auctionData.content,
+            vcate: this.auctionData.vcate,
+            seller: this.$store.state.sessionData.mno,
+            ano: this.$route.params.ano,
+          },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
@@ -172,22 +254,53 @@ export default {
 }
 #page-root {
   width: 1440px;
-  height: auto;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
-.mypage {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding-top: 110px;
-  h2 {
-    margin-bottom: 20px;
+  & > div {
+    width: 100%;
+    /* flex-direction: column; */
+    display: flex;
+    /* align-items: center; */
+
+    padding-bottom: 10px;
   }
 }
-.form-box {
-  width: 500px;
+.table-box {
+  width: 700px;
+  margin: 10px;
+  border-top: 1px solid #343434;
+  th {
+    width: 150px;
+  }
+  th,
+  td {
+    border-bottom: 1px solid #eee;
+    padding: 10px 10px;
+    text-align: left;
+  }
+}
+.content {
+  height: 200px;
+  /* vertical-align: top; */
+}
+
+.video-box {
+  width: 400px;
+  height: 300px;
+  background-color: antiquewhite;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+
+button {
+  margin-top: 20px;
 }
 </style>

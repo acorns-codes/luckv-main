@@ -3,11 +3,9 @@
     <div id="page-root">
       <MypageNav />
       <div class="container">
+        <h2>경매 상세 페이지</h2>
         <div>
-          <div>
-            <h2>경매 상세 페이지</h2>
-          </div>
-          <div>
+          <div class="page-box">
             <v-table class="table-box">
               <thead>
                 <tr>
@@ -16,6 +14,7 @@
                     <v-text-field
                       variant="plain"
                       v-model="this.auctionData.title"
+                      readonly
                     ></v-text-field>
                   </td>
                 </tr>
@@ -25,6 +24,7 @@
                     <v-textarea
                       rows="10"
                       variant="plain"
+                      readonly
                       v-model="this.auctionData.content"
                     ></v-textarea>
                   </td>
@@ -32,30 +32,20 @@
                 <tr>
                   <th>카테고리</th>
                   <td>
-                    <v-select
-                      :items="categorys"
-                      item-title="title"
-                      item-value="value"
+                    <v-text-field
                       variant="plain"
+                      readonly
                       v-model="this.auctionData.vcate"
-                    ></v-select>
+                    ></v-text-field>
                   </td>
                 </tr>
-                <tr>
-                  <th>동영상 업로드</th>
-                  <td>
-                    <v-file-input
-                      prepend-icon="mdi-video"
-                      variant="plain"
-                      v-model="video"
-                    ></v-file-input>
-                  </td>
-                </tr>
+
                 <tr>
                   <th>경매 시작가</th>
                   <td>
                     <v-text-field
                       variant="plain"
+                      readonly
                       v-model="this.auctionData.payStart"
                       suffix="원"
                     ></v-text-field>
@@ -67,6 +57,7 @@
                     <v-text-field
                       v-model="this.startDay[0]"
                       variant="plain"
+                      readonly
                       type="date"
                     ></v-text-field>
                   </td>
@@ -78,6 +69,7 @@
                       variant="plain"
                       v-model="this.startDay[1]"
                       type="time"
+                      readonly
                     ></v-text-field>
                   </td>
                 </tr>
@@ -87,6 +79,7 @@
                     <v-text-field
                       v-model="this.lastDay[0]"
                       variant="plain"
+                      readonly
                       type="date"
                     ></v-text-field>
                   </td>
@@ -98,52 +91,57 @@
                       variant="plain"
                       v-model="this.lastDay[1]"
                       type="time"
+                      readonly
                     ></v-text-field>
                   </td>
                 </tr>
               </thead>
             </v-table>
-
-            <h2>경매 세부 내역</h2>
-            <v-table class="table-box">
-              <thead>
-                <tr>
-                  <th>현재 상태</th>
-                  <td>
-                    <v-text-field
-                      variant="plain"
-                      v-model="status"
-                    ></v-text-field>
-                  </td>
-                </tr>
-                <tr>
-                  <th>낙찰자</th>
-                  <td>
-                    <v-text-field
-                      variant="plain"
-                      v-model="this.auctionData.buyerNm"
-                    ></v-text-field>
-                  </td>
-                </tr>
-                <tr>
-                  <th>최고가</th>
-                  <td>
-                    <v-text-field
-                      suffix="원"
-                      variant="plain"
-                      v-model="pay"
-                    ></v-text-field>
-                  </td>
-                </tr>
-              </thead>
-            </v-table>
+            <div>
+              <v-table class="table-box">
+                <thead>
+                  <tr>
+                    <th>현재 상태</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        readonly
+                        v-model="this.auctionData.status"
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>낙찰자</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        readonly
+                        v-model="this.auctionData.buyerNm"
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>최고가</th>
+                    <td>
+                      <v-text-field
+                        suffix="원"
+                        readonly
+                        variant="plain"
+                        v-model="pay"
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                </thead>
+              </v-table>
+            </div>
           </div>
-        </div>
-        <v-btn @click="sendMessage">소켓으로 보내기</v-btn>
-        <div v-for="(item, idx) in recvList" :key="idx">
-          <h3>유저이름: {{ item.bidding }}</h3>
+          <v-btn @click="editAuction">수정</v-btn>
         </div>
       </div>
+      <!-- <v-btn @click="sendMessage">소켓으로 보내기</v-btn>
+      <div v-for="(item, idx) in recvList" :key="idx">
+        <h3>유저이름: {{ item.bidding }}</h3>
+      </div> -->
     </div>
   </div>
 </template>
@@ -247,7 +245,7 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/insertAttend/`,
+          url: `${process.env.VUE_APP_API_URL}/insertAttend/`,
           data: {
             ano: this.$route.params.ano,
             buyer: this.$store.state.sessionStorageData.mno,
@@ -278,7 +276,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://ec2-3-36-88-52.ap-northeast-2.compute.amazonaws.com:80/auctionDetail?ano=${this.$route.params.ano}`,
+          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${this.$route.params.ano}`,
         });
         console.log(res);
         this.auctionData = res.data.data;
@@ -287,6 +285,12 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    editAuction() {
+      this.$router.push({
+        name: "editauction",
+        params: { ano: this.$route.params.ano },
+      });
     },
   },
 };
@@ -305,25 +309,23 @@ export default {
   align-items: flex-start;
   justify-content: space-between;
 }
+
+.page-box {
+  /* width: 100%; */
+  flex-direction: column;
+  display: flex;
+  /* align-items: center; */
+  padding-bottom: 10px;
+}
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   width: 100%;
   padding-top: 110px;
-  & > div {
-    width: 100%;
-
-    & > div:nth-child(1) {
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      padding-bottom: 10px;
-    }
-  }
 }
 .table-box {
-  width: 100%;
+  width: 700px;
   margin: 10px;
   border-top: 1px solid #343434;
   th {
@@ -341,7 +343,15 @@ export default {
   /* vertical-align: top; */
 }
 
+.video-box {
+  width: 400px;
+  height: 300px;
+  background-color: antiquewhite;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+
 button {
-  margin-top: 20px;
+  margin: 20px;
 }
 </style>

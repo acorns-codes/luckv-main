@@ -79,7 +79,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/frequentlyList`,
+          url: `${process.env.VUE_APP_API_URL}/frequentlyList`,
         });
         console.log(res);
         this.FAQList = res.data.data;
@@ -102,7 +102,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/frequentlyDelete?fno=${fno}`,
+          url: `${process.env.VUE_APP_API_URL}/frequentlyDelete?fno=${fno}`,
         });
         if (res.data.data) {
           alert("FAQ가 삭제되었습니다.");

@@ -68,7 +68,7 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `http://localhost:80/frequentlyDetail?fno=${this.$route.params.fno}`,
+          url: `${process.env.VUE_APP_API_URL}/frequentlyDetail?fno=${this.$route.params.fno}`,
         });
         this.FAQList = res.data;
         // console.log(this.FAQList);
@@ -90,7 +90,7 @@ export default {
             "Content-Type": "application/json",
           },
           method: "POST",
-          url: `http://localhost:80/frequentlyUpdate`,
+          url: `${process.env.VUE_APP_API_URL}/frequentlyUpdate`,
           data: editData,
         });
         if (res.data.data) {
