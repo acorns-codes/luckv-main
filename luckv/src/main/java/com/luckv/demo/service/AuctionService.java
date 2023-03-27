@@ -36,7 +36,18 @@ public class AuctionService {
 		}
 		
 		// 판매 등록
-		public boolean insertAuction(Auction auction) {
+		public boolean insertAuction(Auction auction) {	
+//			System.out.println("전================="+auction.getStartDay());
+//			if(auction.getStartDay() != null) {
+//				String startDay =  auction.getStartDay().replaceAll("T", " ");
+//				auction.setStartDay(startDay);
+//			}
+//			if(auction. getLastDay() != null) {
+//				String lastDay =  auction.getLastDay().replaceAll("T", " ");
+//				auction.setLastDay(lastDay);
+//			}
+//			
+//			System.out.println("후==================="+auction.getStartDay());
 			int n = auctionMapper.insertAuction(auction);
 	        return n > 0;
 		}
@@ -50,5 +61,13 @@ public class AuctionService {
 		public boolean auctionUpdate(Auction auction) {
 			int n = auctionMapper.auctionUpdate(auction);
 	        return n > 0;
+		}
+		
+		public int statusIngUpdate() {
+			return auctionMapper.statusIngUpdate();
+		}
+		
+		public int statusEndUpdate() {
+			return auctionMapper.statusEndUpdate();
 		}
 }

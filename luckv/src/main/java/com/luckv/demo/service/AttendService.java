@@ -2,6 +2,7 @@ package com.luckv.demo.service;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.websocket.OnClose;
@@ -33,4 +34,8 @@ public class AttendService {
         
 	}
 	
+	// 구매 목록
+	public List<Auction> attendList(Auction auction) {
+        return attendMapper.attendList(auction);
+	}
 }

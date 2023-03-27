@@ -5,7 +5,7 @@
 
 	<!-- 신규등록 경매 -->
     <select id="auctionNew"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
-	  select 
+		  select 
 		  		a.ano, /*경매 번호*/
 	        	seller, /*판매자 회원번호*/
 	        	s.mid as sellerNm, /*판매자 아이디*/ 
@@ -15,14 +15,17 @@
 	    		pay_start, /*판매 시작가*/
 	    		start_day, /*판매 시작일*/
 	    		last_day, /*판매 종료일*/
-	    		buyer, /*낙찰자 회원번호*/
+	    		att.bidding as pay_max, /*최고가*/
+	    		att.buyer as buyer, /*낙찰자 회원번호*/
 	    		b.mid as buyerNm, /*낙찰자 아이디*/
-	    		pay_max , /*최고가*/
 	    		status /*판매 상태*/
         from auction a
 		  	left join user s on  a.seller = s.mno
-		  	left join user b on  a.buyer = b.mno
 		  	left join video v on a.ano = v.ano 
+		  	left join (SELECT ano, MAX(bidding) as bidding
+           FROM attend  GROUP BY ano) a1 on a1.ano = a.ano         
+            left JOIN attend  att ON att.bidding = a1.bidding
+		  	left join user b on att.buyer = b.mno  
 	  where 1 = 1
 		  and status = "판매중"
 	   order by start_day desc
@@ -41,14 +44,17 @@
 	    		pay_start, /*판매 시작가*/
 	    		start_day, /*판매 시작일*/ 
 	    		last_day, /*판매 종료일*/
-	    		buyer, /*낙찰자 회원번호*/
+	    		att.bidding as pay_max, /*최고가*/
+	    		att.buyer as buyer, /*낙찰자 회원번호*/
 	    		b.mid as buyerNm, /*낙찰자 아이디*/
-	    		pay_max , /*최고가*/
 	    		status /*판매 상태*/
         from auction a
 		  	left join user s on  a.seller = s.mno
-		  	left join user b on  a.buyer = b.mno
 		  	left join video v on a.ano = v.ano 
+		  	left join (SELECT ano, MAX(bidding) as bidding
+           FROM attend  GROUP BY ano) a1 on a1.ano = a.ano         
+            left JOIN attend  att ON att.bidding = a1.bidding
+		  	left join user b on att.buyer = b.mno  
 	  where 1 = 1
 	  and status = "판매중"
 	   order by last_day asc
