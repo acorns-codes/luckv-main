@@ -86,8 +86,8 @@
 	        	#{content},
 	        	#{vcate},
 	        	#{payStart},
-	        	#{startDay},	        	
-	        	#{lastDay},
+	        	date_format(#{startDay}, '%Y-%m-%d %H:%i:%s'),	        	
+	        	date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'),
 	        	#{status}	        	
 	        )
     </insert>
@@ -126,8 +126,8 @@
 		  	left join video v on a.ano = v.ano
 		  	left join (SELECT ano, MAX(bidding) as bidding
            FROM attend  GROUP BY ano) a1 on a1.ano = a.ano         
-            inner JOIN attend  att ON att.bidding = a1.bidding
-		  	inner join user b on att.buyer = b.mno   	   
+            left JOIN attend  att ON att.bidding = a1.bidding
+		  	left join user b on att.buyer = b.mno   	   
    	   where a.ano = #{ano}
 	
        </select>
