@@ -1,5 +1,7 @@
 package com.luckv.demo.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,4 +77,20 @@ public class AttendController {
 	    }
 	    
 	
+		// 구매목록
+	  @GetMapping("/attendList")
+	    public List<Auction> attendList(Auction auction) {
+
+	        // 페이지 설정
+	        int sn = auction.getPage();   // 현재 페이지
+	        int start = sn * 10 + 0; // 첫 페이지
+	        int end = (sn + 1) * 10; // 끝 페이지
+
+	        auction.setStart(start);
+	        auction.setEnd(end);
+
+	        return attendService.attendList(auction);
+	    }
+	  
+	  
 }
