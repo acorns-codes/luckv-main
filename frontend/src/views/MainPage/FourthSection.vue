@@ -37,17 +37,13 @@ export default {
   methods: {
     // 마우스오버시, 영상재생
     playVideo(e) {
-      console.log(e);
       e.target.play();
-      e.tartget.style.backgroundColor = "black";
-      // this.view = !this.view;
     },
     // 마우스리브시, 영상 일시정지
     stopVideo(e) {
       console.log("마우스리브");
       e.target.pause();
       e.target.currentTime = 0;
-      // this.view = !this.view;
     },
     // 동영상 불러오기
     async getVideo() {
@@ -57,7 +53,6 @@ export default {
           methods: "GET",
           url: `${process.env.VUE_APP_API_URL}/auctionNew`,
         });
-
         this.videoData = res.data.data;
         // console.log(this.videoData);
       } catch (e) {
@@ -67,13 +62,9 @@ export default {
     // 상세페이지로 이동
     gotodetail(ano) {
       var nWidth = "1300";
-
       var nHeight = "800";
-
       var xPos = document.body.clientWidth / 2 - nWidth / 2;
-
       xPos += window.screenLeft; //듀얼 모니터
-
       var yPos = screen.availHeight / 2 - nHeight / 2;
       let url = `/videodetail/${ano}`;
       // window.open(url, 500, 300);

@@ -39,9 +39,12 @@
         </div>
         <div class="video-box">
           <video
-            :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
+            ref="video"
+            muted
+            loop
             @mouseover="playVideo"
             @mouseleave="stopVideo"
+            :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
           ></video>
         </div>
       </div>
@@ -59,6 +62,7 @@ export default {
       ddayList: "",
       current: 0,
       previous: 0,
+      play: false,
     };
   },
 
@@ -67,13 +71,25 @@ export default {
   },
   mounted() {
     this.videoSrc = process.env.VUE_APP_API_URL;
-    this.dday = this.deadlineData.lastDay;
-    console.log(this.deadlineData);
-    console.log(this.dday);
+    // this.dday = this.deadlineData.lastDay;
+    // console.log(this.deadlineData);
+    // console.log(this.dday);
     setInterval(this.getRemainingTime(this.dday), 1000);
-    console.log(this.ddayList);
+    // console.log(this.ddayList);
+    console.log(this.$refs.video);
   },
   methods: {
+    // 마우스오버시, 영상재생
+    playVideo(e) {
+      // console.log("마우스오버");
+      e.target.play();
+    },
+    // 마우스리브시, 영상 일시정지
+    stopVideo(e) {
+      console.log("마우스리브");
+      e.target.pause();
+      e.target.currentTime = 0;
+    },
     // day 구하기
     getRemainingTime(lastday) {
       // 마감날짜
@@ -157,11 +173,31 @@ export default {
     // let countdown = setInterval(getRemainingTime, 1000);
     // getRemainingTime();
     // console.log(countdown);
-
     goVideo() {
-      this.$router.push({
-        path: `/video/${this.data[0].vcate}`,
-      });
+      var nWidth = "1300";
+
+      var nHeight = "800";
+
+      var xPos = document.body.clientWidth / 2 - nWidth / 2;
+
+      xPos += window.screenLeft; //듀얼 모니터
+
+      var yPos = screen.availHeight / 2 - nHeight / 2;
+      let url = `/videodetail/${this.deadlineData.ano}`;
+      // window.open(url, 500, 300);
+      window.open(
+        url,
+        "popOpen",
+        "width=" +
+          nWidth +
+          ",height=" +
+          nHeight +
+          ", left=" +
+          xPos +
+          ", top=" +
+          yPos +
+          ", toolbars=no, resizable=no, scrollbars=no"
+      );
     },
   },
 };
