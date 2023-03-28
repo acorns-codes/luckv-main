@@ -43,6 +43,12 @@ const routes = [
     name: "etc",
     component: () => import("@/views/videoPage/VideoEtc.vue"),
   },
+  // 비디오 상세페이지
+  {
+    path: "/videodetail/:ano",
+    name: "videodetail",
+    component: () => import("@/components/VideoDetail.vue"),
+  },
   // 무료 동영상 페이지
   {
     path: "/freevideo",
