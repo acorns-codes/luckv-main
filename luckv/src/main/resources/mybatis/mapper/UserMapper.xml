@@ -20,7 +20,8 @@
         		ph, 
         		birth_date, 
         		auth, 
-        		acccount
+        		acccount,
+        		sub_yn
         	) values (
         		#{mid}, 
         		#{pwd}, 
@@ -28,7 +29,8 @@
         		#{ph}, 
         		#{birthDate}, 
         		#{auth}, 
-        		#{acccount}
+        		#{acccount},
+        		'N'
         	)
     </insert>
 
@@ -55,4 +57,35 @@
         from user
         where mno = #{mno} 
     </select>
+    
+    
+    <!-- 동영상 구독등록 -->
+	<update id="videoSubYn"  parameterType="com.luckv.demo.dto.user">
+		update 
+			user 
+		set 
+			sub_yn = 'Y',
+			sub_day = date_add(now(), interval +1 month)
+		where mno = #{mno}
+	</update>
+    
+    <!-- 동영상 구독해지 -->
+       <update id="videoSubNot"  parameterType="com.luckv.demo.dto.user">
+		update 
+			user 
+		set 
+			sub_yn = 'N',
+			sub_day = null
+		where mno = #{mno}
+	</update>
+	
+	<update id="videoSubAuto">
+		update 
+			user 
+		set 
+			sub_yn = 'N',
+			sub_day = null
+		where timestampdiff(second, now(), sub_day) <![CDATA[<=]]> 0
+		</update>
+    
 </mapper>

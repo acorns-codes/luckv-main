@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.luckv.demo.service.AuctionService;
+import com.luckv.demo.service.UserService;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -15,6 +16,9 @@ public class luckvScheduler {
 	@Autowired 
 	AuctionService auctionService;
 	
+	@Autowired 
+	UserService userService;
+	
 	@Scheduled(fixedDelay=5000)
 	public void statusIngUpdate() {
 		int row = auctionService.statusIngUpdate();
@@ -23,5 +27,10 @@ public class luckvScheduler {
 	@Scheduled(fixedDelay=5000)
 	public void statusEndUpdate() {
 		int row = auctionService.statusEndUpdate();
+	}
+	
+	@Scheduled(fixedDelay=5000)
+	public void videoSubAuto() {
+		int row = userService.videoSubAuto();
 	}
 }

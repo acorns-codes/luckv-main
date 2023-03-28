@@ -13,7 +13,9 @@ public class Question {
 	private String content; // 내용
 	private Date qCreate; // 등록일
 	private Date qUpdate; // 수정일
-//	private String qpwd; //비밀번호
+	private int reply; // 댓글갯수
+	private String qpwd; // 게시글 비밀번호
+	
 	// QnA 페이징처리
 	private int page;   // 페이징을 갱신하기 위해 필요함.
     private int start; // 게시글 시작 번호

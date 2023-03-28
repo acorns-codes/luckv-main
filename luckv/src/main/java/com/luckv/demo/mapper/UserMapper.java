@@ -24,4 +24,13 @@ public interface UserMapper {
     // 회원정보수정
 	int  updateMember(user user);
     
+	
+	// 구독신청
+	int videoSubYn(user user);
+	
+	// 구독해지
+	int videoSubNot(user user);
+	
+	// 구독해지 자동변경
+	int videoSubAuto();
 }
