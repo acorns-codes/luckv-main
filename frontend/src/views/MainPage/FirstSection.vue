@@ -2,6 +2,9 @@
 <!-- 광고 배너 부분 -->
 <template>
   <section>
+    <div></div>
+  </section>
+  <section>
     <div>
       <h1>저작권을 판매하고 수익을 얻으세요</h1>
       <p>
