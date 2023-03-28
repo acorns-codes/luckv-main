@@ -42,6 +42,23 @@ public class UserService {
 		int n = userMapper.updateMember(user);
         return n > 0;
 	}
+	
+	// 동영상 구독 신청
+	public boolean videoSubYn(user user) {
+		int n = userMapper.videoSubYn(user);
+        return n > 0;        
+	}
+	
+	// 동영상 구독 신청
+	public boolean videoSubNot(user user) {
+		int n = userMapper.videoSubNot(user);
+        return n > 0;	        
+	}
+	
+	public int videoSubAuto() {
+		return userMapper.videoSubAuto();
+	}
+		
 
 	
 }

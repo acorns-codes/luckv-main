@@ -63,10 +63,11 @@ public class AuctionService {
 	        return n > 0;
 		}
 		
+		// 판매상태변경
 		public int statusIngUpdate() {
 			return auctionMapper.statusIngUpdate();
 		}
-		
+		// 판매상태변경
 		public int statusEndUpdate() {
 			return auctionMapper.statusEndUpdate();
 		}

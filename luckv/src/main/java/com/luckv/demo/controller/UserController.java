@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,6 +74,29 @@ public class UserController {
 	            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_USER, b), HttpStatus.OK);
 	        }
 	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_USER, b), HttpStatus.OK);
+	    }
+	    
+	    
+	  	// 동영상 구독 신청
+	  	@PostMapping("/videoSubYn")
+	    public ResponseEntity videoSubYn(@RequestBody user user) {
+	        
+	        boolean b = service.videoSubYn(user);
+	        
+	        if(b) {
+	            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_SUB, b), HttpStatus.OK);
+	        }
+	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_SUB, b), HttpStatus.OK);
+	    }
+	  	
+	 // 동영상 구독 해지
+	  	@GetMapping("videoSubNot")
+	    public ResponseEntity videoSubNot(@RequestBody user user) {  	        
+	        boolean b = service.videoSubNot(user);
+			  if(b) {
+		            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_SUB, b), HttpStatus.OK);
+		        }
+		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_SUB, b), HttpStatus.OK);
 	    }
 	    
 }

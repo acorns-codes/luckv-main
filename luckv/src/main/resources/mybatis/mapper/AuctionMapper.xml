@@ -3,7 +3,7 @@
 
 <mapper namespace="com.luckv.demo.mapper.AuctionMapper">
 
-    <!-- 경매 전체 리스트 -->
+    <!-- 동영상 전체 리스트 -->
     <select id="auctionAll"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
 	  select 
 		  		a.ano, /*경매 번호*/
@@ -18,7 +18,8 @@
 	    		att.bidding as pay_max, /*최고가*/
 	    		att.buyer as buyer, /*낙찰자 회원번호*/
 	    		b.mid as buyerNm, /*낙찰자 아이디*/
-	    		status /*판매 상태*/
+	    		status, /*판매 상태*/
+	    		kind /*동영상 판매 형태*/
         from auction a
 		  	left join user s on  a.seller = s.mno
 		  	left join video v on a.ano = v.ano 
@@ -26,8 +27,13 @@
            	FROM attend  GROUP BY ano) a1 on a1.ano = a.ano         
             left JOIN attend  att ON att.bidding = a1.bidding
 		  	left join user b on att.buyer = b.mno   	   
-	  where 1 = 1
-	  	and status = "판매중"
+	  where 1 = 1  	
+	  	<if test="kind  != null  and kind  != ''">
+	        and kind = #{kind} /*동영상 판매 형태*/
+	    </if>
+	  	<if test="kind  = '겅매'">
+	        and status = "판매중"
+	    </if>
 	  	<if test="vcate  != null  and vcate  != ''">
 	        and vcate = #{vcate} /*카테고리구분*/
 	    </if>
@@ -36,12 +42,15 @@
 	</select>
 	
 	
-    <!-- 판매리스트 총 개수 -->
+    <!-- 동영상리스트 총 개수 -->
     <select id="auctionCount" parameterType="com.luckv.demo.dto.Auction" resultType="Integer">
     	 select ifnull(count(*), 0) as cnt from auction
   		where 1 = 1
   		<if test="seller != null  and seller != ''">
 	         and seller = #{seller}
+	    </if>
+	    <if test="kind  != null  and kind  != ''">
+	        and kind = #{kind} /*동영상 판매 형태*/
 	    </if>
 	    <if test="vcate != null  and vcate  != ''">
 	        and vcate  =  #{vcate} /*카테고리구분*/
@@ -50,7 +59,7 @@
   		
     </select>
     
-    <!-- 판매리스트 페이징처리 -->
+    <!-- 내 등록 동영상리스트 페이징처리 -->
     <select id="auctionPage"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
 	  select 
 	  		ano, /*경매 번호*/
@@ -60,15 +69,19 @@
     		pay_start, /*판매 시작가*/
     		start_day, /*판매 시작일*/
     		last_day, /*판매 종료일*/
-    		status /*판매 상태*/
+    		status, /*판매 상태*/
+    		kind /*동영상 판매종류*/
         from auction
 	  where 1 = 1
 	  	and seller = #{seller}
+	  	<if test="kind  != null  and kind  != ''">
+	        and kind = #{kind} /*동영상 판매 형태*/
+	    </if>
 	   order by ano desc
 	   LIMIT #{start}, #{end}
 	</select>
 	
-    <!-- 판매 작성 -->
+    <!-- 동영상 작성 -->
     <insert id="insertAuction"  parameterType="com.luckv.demo.dto.Auction">
     <selectKey resultType="Integer" keyProperty="ano" order="AFTER" >
         select last_insert_id()    
@@ -82,21 +95,28 @@
         		pay_start, /*판매 시작가*/
         		start_day, /*판매 시작일*/
         		last_day, /*판매 종료일*/
-        		status /*판매 상태*/
+        		status, /*판매 상태*/
+        		kind /*동영상 판매종류*/
 	        ) values (
 	        	#{seller},
 	        	#{title},
 	        	#{content},
 	        	#{vcate},
 	        	#{payStart},
-	        	date_format(#{startDay}, '%Y-%m-%d %H:%i:%s'),	        	
+	        	<if test="kind  == '경매'">
+	        		date_format(#{startDay}, '%Y-%m-%d %H:%i:%s'),
+	    		</if>
+	        	<if test="kind  == '구독'">
+	        		now(),
+	    		</if>	        	
 	        	date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'),
-	        	#{status}	        	
+	        	#{status},
+	        	#{kind}	        	
 	        )
     </insert>
     
 
-      <!-- 판매 수정 -->
+      <!-- 동영상 수정 -->
 		<update id="auctionUpdate" parameterType="com.luckv.demo.dto.Auction">
 		  update 
 		  	auction
@@ -108,7 +128,7 @@
 		  and seller = #{seller}
 		</update>
        
-       <!-- 경매상세 -->
+       <!-- 동영상상세 -->
         <select id="auctionDetail"  parameterType="Integer" resultType="com.luckv.demo.dto.Auction">
        		select 
 		  		a.ano, /*경매 번호*/
@@ -123,7 +143,8 @@
 	    		att.bidding as pay_max, /*최고가*/
 	    		att.buyer as buyer, /*낙찰자 회원번호*/
 	    		b.mid as buyerNm, /*낙찰자 아이디*/
-	    		status /*판매 상태*/
+	    		status, /*판매 상태*/
+	    		kind /*동영상 판매종류*/
         from auction a
 		  	left join user s on  a.seller = s.mno
 		  	left join video v on a.ano = v.ano
@@ -141,6 +162,7 @@
 		set 
 			status = '판매중'
 		where Timestampdiff(second, now(), start_day) <![CDATA[<=]]> 0
+			and kind = '경매'
 			and status != '판매종료' 
 			and status != '판매중'
 		</update>
@@ -151,6 +173,7 @@
 		set 
 			status = '판매종료'
 		where timestampdiff(second, now(), last_day) <![CDATA[<=]]> 0
+		and kind = '경메'
 		and status != '판매종료'
 		</update>
 		

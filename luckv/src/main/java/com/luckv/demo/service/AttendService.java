@@ -30,12 +30,14 @@ public class AttendService {
 	
 	// 입찰 등록
 	public boolean insertAttend(Attend attend) {
-		return attendMapper.insertAttend(attend);
+		return attendMapper.insertAttend(attend);	
         
 	}
+	
 	
 	// 구매 목록
 	public List<Auction> attendList(Auction auction) {
         return attendMapper.attendList(auction);
 	}
+	
 }

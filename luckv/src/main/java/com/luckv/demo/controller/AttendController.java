@@ -64,7 +64,7 @@ public class AttendController {
         return result;
     }
     
-    	// 판매 등록
+    	// 입찰 등록
 	  @PostMapping("/insertAttend")
 	    public ResponseEntity insertAuction(@RequestBody Attend attend) {
 	        
