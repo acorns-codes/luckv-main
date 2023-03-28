@@ -17,6 +17,7 @@ import com.luckv.demo.response.DefaultRes;
 import com.luckv.demo.response.ResponseMessage;
 import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.AuctionService;
+import com.luckv.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +27,7 @@ public class AuctionController {
 	
 		public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 		private final AuctionService auctionService;
-		
+		private final UserService userService;
 		
 		
 		// 경매 전체리스트
@@ -39,8 +40,8 @@ public class AuctionController {
 		        int end = (sn + 1) * 10; // 끝 페이지
 
 		        auction.setStart(start);
-		        auction.setEnd(end);
-		        
+		        auction.setEnd(end);		    	
+
 		        List<Auction> auctions = auctionService.auctionAll(auction);
 				 try {
 					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auctions), HttpStatus.OK);
@@ -88,7 +89,7 @@ public class AuctionController {
 		    @GetMapping("/auctionDetail")
 		    public ResponseEntity auctionDetail(int ano) {
 		    	Auction auction = auctionService.auctionDetail(ano);
-		    	
+		    	userService.videoSubAuto();
 		    	return auction != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auction), HttpStatus.OK)
 				:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 		    }

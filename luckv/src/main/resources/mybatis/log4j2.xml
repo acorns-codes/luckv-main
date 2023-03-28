@@ -1,56 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
 
-    <!-- 해당 설정파일에서 사용하는 프로퍼티-->
+<Configuration status="INFO">
     <Properties>
-        <property name="LOGS_PATH">D:\test_logs</property>
+        <Property name="LOG_PATTERN">%d{HH:mm:ss.SSS} [%p] --- [%10.50t] %-1.50c{1.}.%-1.20M:%L: %m%n%ex</Property>
     </Properties>
 
     <Appenders>
-        <!-- 콘솔 -->
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level %logger{35} - %msg%n" />
+        <Console name="Console_Appender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-
-        <!-- 파일 -->
-        <RollingFile name ="RollingFile">
-            <FileName>${LOGS_PATH}/log4j2.log</FileName>
-            <FilePattern>${LOGS_PATH}/log4j2.%d{yyyy-MM-dd}.%i.log.gz</FilePattern>
-            <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %5p [%c] %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="100MB"/>
-                <TimeBasedTriggeringPolicy interval = "1" modulate = "true"/>
-            </Policies>
-        </RollingFile>
     </Appenders>
 
     <Loggers>
-        <!-- Application Loggers -->
-        <!-- Root 보다 우선 순위가 높습니다. -->
-        <logger name="com.test.api.controller" level="INFO" additivity="false">
-            <AppenderRef ref="console" />
-            <AppenderRef ref="RollingFile" />
-        </logger>
-
-        <logger name="com.test.api.service" level="INFO" additivity="false">
-            <AppenderRef ref="console" />
-            <AppenderRef ref="RollingFile" />
-        </logger>
-
-        <!-- FATAL, ERROR, WARN, INFO, DEBUG, TRACE -->
-        <Root level="INFO">
-            <AppenderRef ref="console" />
-            <AppenderRef ref="RollingFile" />
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="Console_Appender"/>
         </Root>
-         <!-- jdbc.sql Loggers -->
-        <Logger name="jdbc.connection"      level="OFF" additivity="false"><AppenderRef ref="console" /></Logger>
-        <Logger name="jdbc.audit"           level="WARN" additivity="false"><AppenderRef ref="console" /></Logger>
-        <Logger name="jdbc.sqlonly"         level="OFF" additivity="false"><AppenderRef ref="console" /></Logger>
-        <Logger name="jdbc.sqltiming"       level="DEBUG" additivity="false"><AppenderRef ref="console" /></Logger>
-        <Logger name="jdbc.resultset"       level="OFF" additivity="false"><AppenderRef ref="console" /></Logger>
-        <Logger name="jdbc.resultsettable"  level="DEBUG" additivity="false"><AppenderRef ref="console" /></Logger>
 
+        <Logger name="org.springframework" level="ERROR" additivity="false">
+            <AppenderRef ref="Console_Appender" />
+        </Logger>
+
+        <Logger name="com.filmsus.myapp" level="INFO" additivity="false">
+            <AppenderRef ref="Console_Appender" />
+        </Logger>
+
+        <logger name="log4jdbc.log4j2" level="ERROR" additivity="false">
+            <MarkerFilter marker="LOG4JDBC_OTHER" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <appender-ref ref="Console_Appender"/>
+        </logger>
     </Loggers>
+
 </Configuration>

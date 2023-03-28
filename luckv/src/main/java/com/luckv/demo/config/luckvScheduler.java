@@ -19,18 +19,9 @@ public class luckvScheduler {
 	@Autowired 
 	UserService userService;
 	
-	@Scheduled(fixedDelay=5000)
+	@Scheduled(fixedRate=1000)
 	public void statusIngUpdate() {
 		int row = auctionService.statusIngUpdate();
 	}
 	
-	@Scheduled(fixedDelay=5000)
-	public void statusEndUpdate() {
-		int row = auctionService.statusEndUpdate();
-	}
-	
-	@Scheduled(fixedDelay=5000)
-	public void videoSubAuto() {
-		int row = userService.videoSubAuto();
-	}
 }

@@ -31,8 +31,8 @@
 	  	<if test="kind  != null  and kind  != ''">
 	        and kind = #{kind} /*동영상 판매 형태*/
 	    </if>
-	  	<if test="kind  = '겅매'">
-	        and status = "판매중"
+	  	<if test="kind  = '경매'">
+	        and status = '판매중'
 	    </if>
 	  	<if test="vcate  != null  and vcate  != ''">
 	        and vcate = #{vcate} /*카테고리구분*/
@@ -170,21 +170,16 @@
 		 update 
 		 	auction 
 		set 
-			status = '판매중'
-		where Timestampdiff(second, now(), start_day) <![CDATA[<=]]> 0
-			and kind = '경매'
-			and status != '판매종료' 
-			and status != '판매중'
+			status =
+      case 
+	      when  timestampdiff(second, now(), last_day) <![CDATA[<=]]> 0
+		  then '판매종료'
+		  when Timestampdiff(second, now(), start_day) <![CDATA[<=]]> 0
+		  then '판매중'
+		  when kind = '무료'
+		  then null	  
+		end;
 		</update>
 		
-		<update id="statusEndUpdate">
-		update 
-			auction 
-		set 
-			status = '판매종료'
-		where timestampdiff(second, now(), last_day) <![CDATA[<=]]> 0
-		and kind = '경메'
-		and status != '판매종료'
-		</update>
-		
+
 </mapper>

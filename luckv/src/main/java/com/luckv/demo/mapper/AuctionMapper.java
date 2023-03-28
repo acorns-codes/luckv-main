@@ -34,5 +34,5 @@ public interface AuctionMapper {
 		
 		// status 변경
 		int statusIngUpdate();
-		int statusEndUpdate();
+//		int statusEndUpdate();
 }

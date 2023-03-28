@@ -68,9 +68,9 @@ public class AuctionService {
 			return auctionMapper.statusIngUpdate();
 		}
 		// 판매상태변경
-		public int statusEndUpdate() {
-			return auctionMapper.statusEndUpdate();
-		}
+//		public int statusEndUpdate() {
+//			return auctionMapper.statusEndUpdate();
+//		}
 		
 		// 동영상 삭제
 		public boolean auctionDelete(int qno) {
