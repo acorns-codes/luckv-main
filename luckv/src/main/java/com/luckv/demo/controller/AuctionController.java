@@ -103,6 +103,16 @@ public class AuctionController {
 			        }
 			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
 		    }
+		    
+		    // 동영상 삭제
+		    @GetMapping("auctionDelete")
+		    public ResponseEntity<String> auctionDelete(int qno) {  	        
+		        boolean b = auctionService.auctionDelete(qno);
+				  if(b) {
+			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
+			        }
+			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);
+		    }
 
 
 }
