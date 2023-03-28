@@ -166,6 +166,7 @@
        
        
        
+       <!-- 상태변경 -->
        <update id="statusIngUpdate">
 		 update 
 		 	auction 

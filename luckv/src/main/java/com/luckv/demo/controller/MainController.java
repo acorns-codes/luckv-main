@@ -45,4 +45,26 @@ public class MainController {
 				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 				}
 	    }
+	 
+	 // 구독동영상
+	 @GetMapping("/auctionSubs")
+	    public ResponseEntity auctionSubs(Auction auction) {
+		 List<Auction> subs = mainservice.auctionSubs(auction);
+		 try {
+				return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, subs), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+				}
+	    }
+	 
+	 // 무료동영상
+	 @GetMapping("/auctionFree")
+	    public ResponseEntity auctionFree(Auction auction) {
+		 List<Auction> free = mainservice.auctionFree(auction);
+		 try {
+				return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, free), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+				}
+	    }
 }
