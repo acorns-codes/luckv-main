@@ -71,4 +71,10 @@ public class AuctionService {
 		public int statusEndUpdate() {
 			return auctionMapper.statusEndUpdate();
 		}
+		
+		// 동영상 삭제
+		public boolean auctionDelete(int qno) {
+			int n = auctionMapper.auctionDelete(qno);
+	        return n > 0;
+	    }
 }

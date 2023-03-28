@@ -30,6 +30,8 @@ public interface AuctionMapper {
 		// 경매 수정
 		int auctionUpdate(Auction auction);
 		
+		int auctionDelete(int qno);
+		
 		// status 변경
 		int statusIngUpdate();
 		int statusEndUpdate();
