@@ -2,14 +2,16 @@
   <FirstSection />
   <SecondSection />
   <ThirdSection />
-  <ForthSection />
+  <FourthSection />
+  <FifthSection />
 </template>
 
 <script>
 import FirstSection from "./MainPage/FirstSection.vue";
 import SecondSection from "./MainPage/SecondSection.vue";
 import ThirdSection from "./MainPage/ThirdSection.vue";
-import ForthSection from "./MainPage/ForthSection.vue";
+import FourthSection from "./MainPage/FourthSection.vue";
+import FifthSection from "./MainPage/FifthSection.vue";
 
 // import SignUpForm from "./Login/SignUpForm.vue";
 export default {
@@ -18,7 +20,8 @@ export default {
     FirstSection,
     SecondSection,
     ThirdSection,
-    ForthSection,
+    FourthSection,
+    FifthSection,
   },
   data() {
     return {};
