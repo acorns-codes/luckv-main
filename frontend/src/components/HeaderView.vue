@@ -20,9 +20,27 @@
     </div>
     <div id="nav">
       <router-link to="/">Home</router-link>
-      <router-link to="/video">Auction</router-link>
-      <router-link to="/freevideo">Free</router-link>
-      <router-link to="/subscription">Subscription</router-link>
+      <router-link
+        :to="{
+          name: 'all',
+          params: { page: 1 },
+        }"
+        >Auction</router-link
+      >
+      <router-link
+        :to="{
+          name: 'freevideo',
+          params: { page: 1 },
+        }"
+        >Free</router-link
+      >
+      <router-link
+        :to="{
+          name: 'subscription',
+          params: { page: 1 },
+        }"
+        >Subscription</router-link
+      >
       <router-link
         :to="{
           name: 'cscenter',

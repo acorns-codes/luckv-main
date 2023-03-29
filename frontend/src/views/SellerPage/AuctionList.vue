@@ -5,7 +5,12 @@
       <div class="mypage">
         <div>
           <div>
-            <h2>경매 판매내역</h2>
+            <h2>동영상 목록</h2>
+          </div>
+          <div>
+            <v-btn>경매</v-btn>
+            <v-btn>무료</v-btn>
+            <v-btn>구독</v-btn>
           </div>
           <v-table>
             <thead>
@@ -65,7 +70,6 @@ export default {
     this.getAuction(1);
   },
   methods: {
-
     registration() {
       console.log("상품등록");
       const validate = this.$refs.form.validate();

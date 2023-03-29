@@ -11,53 +11,19 @@ const routes = [
   },
   // 비디오 전체 목록
   {
-    path: "/video",
+    path: "/video/:page",
     name: "all",
     component: () => import("@/views/VideoPage"),
   },
-  // 비디오 - 동물
-  {
-    path: "/video/animal",
-    name: "animal",
-    component: () => import("@/views/videoPage/VideoAnimal.vue"),
-  },
-  // 비디오 - 인물
-  {
-    path: "/video/character",
-    name: "character",
-    component: () => import("@/views/videoPage/VideoCharacter.vue"),
-  }, // 비디오 - 건물
-  {
-    path: "/video/building",
-    name: "building",
-    component: () => import("@/views/videoPage/VideoBuilding.vue"),
-  }, // 비디오 - 식물
-  {
-    path: "/video/plant",
-    name: "plant",
-    component: () => import("@/views/videoPage/VideoPlant.vue"),
-  },
-  // 비디오 - 기타
-  {
-    path: "/video/etc",
-    name: "etc",
-    component: () => import("@/views/videoPage/VideoEtc.vue"),
-  },
-  // 비디오 상세페이지
-  {
-    path: "/videodetail/:ano",
-    name: "videodetail",
-    component: () => import("@/components/VideoDetail.vue"),
-  },
   // 무료 동영상 페이지
   {
-    path: "/freevideo",
+    path: "/freevideo/:page",
     name: "freevideo",
     component: () => import("@/views/FreeVideoPage"),
   },
   // 구독 페이지
   {
-    path: "/subscription",
+    path: "/subscription/:page",
     name: "subscription",
     component: () => import("@/views/SubscriptionPage"),
   },
