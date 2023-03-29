@@ -26,6 +26,6 @@ export default function getRemainingTime(lastday) {
   // console.log(values);
   // this.ddayList = values;
 
-  // console.log(values);
+  console.log(values);
   return values;
 }

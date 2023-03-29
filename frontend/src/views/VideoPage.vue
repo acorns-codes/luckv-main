@@ -1,86 +1,26 @@
 <template>
   <div id="root">
     <div id="page-root">
-      <VideoCategory />
-      <div>
-        <div class="card-box">
-          <v-card
-            class="mx-auto"
-            max-width="344"
-            v-for="item in videoList"
-            :key="item"
-          >
-            <div class="video-box">
-              <video
-                @mouseover="evnetAdd"
-                :src="`${videoSrc}/videoplay?ano=${item.ano}`"
-                controls
-              ></video>
-            </div>
-            <!-- <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-              height="200px"
-              cover
-            ></v-img> -->
-
-            <v-card-title> {{ item.title }}</v-card-title>
-            <v-card-text>{{ item.content }}</v-card-text>
-            <v-card-subtitle>
-              <span>시작일자</span> {{ item.startDay }}
-            </v-card-subtitle>
-            <v-card-subtitle>
-              <span>마감일자</span>{{ item.lastDay }}
-            </v-card-subtitle>
-            <div class="pay-box">
-              <p>시작가</p>
-              <p>{{ item.payStart }} 원</p>
-              <p>yeonju05**</p>
-            </div>
-            <div class="pay-box">
-              <p>최고가</p>
-              <p>{{ item.payMax }} 원</p>
-              <p>diswn1**</p>
-            </div>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn variant="outlined" @click="showbox(item.ano)">
-                입찰
-              </v-btn>
-            </v-card-actions>
-            <template v-if="show && item.ano == this.num">
-              <v-expand-transition>
-                <div>
-                  <v-divider></v-divider>
-                  <v-card-text>
-                    <form class="form-container">
-                      <v-row>
-                        <v-col cols="6">
-                          <v-list-subheader>경매 참여 금액</v-list-subheader>
-                        </v-col>
-                        <v-col cols="10">
-                          <v-text-field
-                            variant="underlined"
-                            suffix="원"
-                          ></v-text-field>
-                        </v-col>
-                        <v-btn color="success"> 입찰하기 </v-btn>
-                      </v-row>
-                    </form>
-                  </v-card-text>
-                </div>
-              </v-expand-transition>
-            </template>
-          </v-card>
-        </div>
+      <div class="button-box">
+        <button
+          v-for="(item, index) in categorys"
+          :key="index"
+          @click="this.video(item.url)"
+        >
+          {{ item.title }}
+        </button>
       </div>
+      <!-- <VideoCategory /> -->
+      <VideoList :videoList="this.videoList" />
     </div>
   </div>
 </template>
 
 <script>
-import VideoCategory from "@/components/VideoCategory.vue";
+// import VideoCategory from "@/components/VideoCategory.vue";
+import VideoList from "@/views/videoPage/VideoList.vue";
 export default {
-  components: { VideoCategory },
+  components: { VideoList },
 
   data() {
     return {
@@ -91,21 +31,56 @@ export default {
       videoList: "",
       num: "",
       videoSrc: "",
+      categorys: [
+        { title: "ALL", value: "", url: "auctionAll" },
+        {
+          title: "동물",
+          value: "animal",
+          url: "auctionAll?vcate=animal",
+        },
+        {
+          title: "인물",
+          value: "character",
+          url: "auctionAll?vcate=character",
+        },
+        {
+          title: "건물",
+          value: "building",
+          url: "auctionAll?vcate=building",
+        },
+        {
+          title: "식물",
+          value: "plant",
+          url: "auctionAll?vcate=plant",
+        },
+        {
+          title: "기타",
+          value: "etc",
+          url: "auctionAll?vcate=etc",
+        },
+      ],
     };
   },
 
   mounted() {
-    this.video();
+    this.video("auctionAll");
     this.videoSrc = process.env.VUE_APP_API_URL;
   },
   methods: {
+    clickCategory(category) {
+      console.log(category);
+      // this.$router.push({
+      //   name: category,
+      // });
+      //   console.log(this.$route.name);
+    },
     // 비디오 리스트 받아오기
-    async video() {
+    async video(category) {
       console.log("비디오");
       try {
         const res = await this.$axios({
           methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionAll`,
+          url: `${process.env.VUE_APP_API_URL}/${category}`,
         });
         this.videoList = res.data.data;
         console.log(this.videoList);
@@ -176,5 +151,19 @@ video {
   flex-wrap: wrap;
   padding: 30px;
   margin: 30px;
+}
+
+.button-box {
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > button {
+    color: #343434;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    padding: 2px 10px 2px 10px;
+  }
 }
 </style>
