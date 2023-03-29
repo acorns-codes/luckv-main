@@ -127,6 +127,20 @@
 		  where ano = #{ano}
 		  and seller = #{seller}
 		</update>
+		
+		
+		<!-- 경매->구독으로 변경 -->
+		<update id="auctionChange" parameterType="com.luckv.demo.dto.Auction">
+		  update 
+		  	auction
+		  set 
+		 	start_day = now(), /*구독 시작일*/
+        	last_day = date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'), /*구독중지기간*/
+			kind = '구독', /*판매 제목*/
+		  where ano = #{ano}
+		  and seller = #{seller}
+		  and kind = '경매'
+		</update>
        
        <!-- 동영상상세 -->
         <select id="auctionDetail"  parameterType="Integer" resultType="com.luckv.demo.dto.Auction">

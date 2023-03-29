@@ -27,9 +27,13 @@ public interface AuctionMapper {
 		// 경매 상세보기
 		Auction auctionDetail(int ano);
 		
+		// 경매->구독으로 변경 
+		int auctionChange(Auction auction);
+		
 		// 경매 수정
 		int auctionUpdate(Auction auction);
-		
+				
+		// .무료 동영상 삭제		
 		int auctionDelete(Auction auction);
 		
 		// status 변경

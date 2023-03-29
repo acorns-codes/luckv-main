@@ -32,7 +32,9 @@ public class ResponseMessage {
     public static final String DOWNLOAD_VIDEO = "동영상다운로드 성공";
     public static final String NOT_DOWNLOAD_VIDEO = "동영상다운로드 실패";
 
-
+    public static final String CHANGE_AUCTION= "경매 -> 구독으로 변경 성공";
+    public static final String NOT_CHANGE_AUCTION = "경매 -> 구독으로 변경 실패";
+    
     public static final String CREATED_SUB = "동영상 구독 성공";
     public static final String NOT_CREATED_SUB = "동영상 구독 실패";
     public static final String DELETE_SUB = "동영상 구독해지 성공";
