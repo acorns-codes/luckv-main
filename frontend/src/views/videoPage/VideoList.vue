@@ -76,7 +76,7 @@ span {
 }
 
 .video-box {
-  width: 1240px;
+  width: 1040px;
   display: flex;
   flex-flow: wrap;
   flex-wrap: wrap;

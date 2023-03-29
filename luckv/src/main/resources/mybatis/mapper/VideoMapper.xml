@@ -7,7 +7,7 @@
 
 	<insert id="videoUpload"  parameterType="com.luckv.demo.dto.Auction">
 	<selectKey resultType="Integer" keyProperty="ano" order="BEFORE" >
-        select last_insert_id()    
+        select ano from auction order by ano desc limit 1
     </selectKey> 
         insert into 
         	video (
