@@ -83,9 +83,6 @@
 	
     <!-- 동영상 작성 -->
     <insert id="insertAuction"  parameterType="com.luckv.demo.dto.Auction">
-    <selectKey resultType="Integer" keyProperty="ano" order="AFTER" >
-        select last_insert_id()    
-    </selectKey>   
         insert into 
         	auction (
         		seller, /*판매자 회원번호*/
