@@ -63,6 +63,13 @@ public class AuctionService {
 	        return n > 0;
 		}
 		
+		// 경매->구독으로 변경 
+		public boolean auctionChange(Auction auction) {
+			int n = auctionMapper.auctionChange(auction);
+	        return n > 0;
+		}
+				
+		
 		// 동영상 삭제
 		public boolean auctionDelete(Auction auction) {
 			int n = auctionMapper.auctionDelete(auction);

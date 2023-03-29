@@ -105,7 +105,19 @@ public class AuctionController {
 			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
 		    }
 		    
-		    // 동영상 삭제
+		    // 경매->구독으로 변경 
+		    @PostMapping("auctionChange")
+		    public ResponseEntity auctionChange(@RequestBody Auction auction) {  
+		    	boolean b = auctionService.auctionChange(auction);
+
+				  if(b) {
+			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CHANGE_AUCTION, b), HttpStatus.OK);
+			        }
+			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CHANGE_AUCTION, b), HttpStatus.OK);
+		    }
+		    
+		    
+		    // 무료 동영상 삭제
 		    @GetMapping("auctionDelete")
 		    public ResponseEntity<String> auctionDelete(Auction auction) {  	        
 		        boolean b = auctionService.auctionDelete(auction);
