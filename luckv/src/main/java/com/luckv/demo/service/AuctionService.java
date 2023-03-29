@@ -63,18 +63,16 @@ public class AuctionService {
 	        return n > 0;
 		}
 		
+		// 동영상 삭제
+		public boolean auctionDelete(Auction auction) {
+			int n = auctionMapper.auctionDelete(auction);
+	        return n > 0;
+	    }
+		
 		// 판매상태변경
 		public int statusIngUpdate() {
 			return auctionMapper.statusIngUpdate();
 		}
-		// 판매상태변경
-//		public int statusEndUpdate() {
-//			return auctionMapper.statusEndUpdate();
-//		}
-		
-		// 동영상 삭제
-		public boolean auctionDelete(int qno) {
-			int n = auctionMapper.auctionDelete(qno);
-	        return n > 0;
-	    }
+
+	
 }

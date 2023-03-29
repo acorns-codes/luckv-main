@@ -107,8 +107,8 @@ public class AuctionController {
 		    
 		    // 동영상 삭제
 		    @GetMapping("auctionDelete")
-		    public ResponseEntity<String> auctionDelete(int qno) {  	        
-		        boolean b = auctionService.auctionDelete(qno);
+		    public ResponseEntity<String> auctionDelete(Auction auction) {  	        
+		        boolean b = auctionService.auctionDelete(auction);
 				  if(b) {
 			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
 			        }

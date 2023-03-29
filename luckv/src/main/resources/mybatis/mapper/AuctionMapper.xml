@@ -160,7 +160,7 @@
        <delete id="auctionDelete" parameterType="com.luckv.demo.dto.Auction">
 	       delete from 
 	       	auction
-	       where qno = #{fno}
+	       where ano = #{ano}
 	       and kind = '무료'
        </delete>
        
