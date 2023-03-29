@@ -20,7 +20,7 @@
     </div>
     <div id="nav">
       <router-link to="/">Home</router-link>
-      <router-link to="/video/all">Auction</router-link>
+      <router-link to="/video">Auction</router-link>
       <router-link to="/freevideo">Free</router-link>
       <router-link to="/subscription">Subscription</router-link>
       <router-link

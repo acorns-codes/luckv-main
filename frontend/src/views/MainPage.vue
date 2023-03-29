@@ -1,7 +1,7 @@
 <template>
   <FirstSection />
   <SecondSection />
-  <ThirdSection />
+  <!-- <ThirdSection /> -->
   <FourthSection />
   <FifthSection />
 </template>
@@ -9,7 +9,7 @@
 <script>
 import FirstSection from "./MainPage/FirstSection.vue";
 import SecondSection from "./MainPage/SecondSection.vue";
-import ThirdSection from "./MainPage/ThirdSection.vue";
+// import ThirdSection from "./MainPage/ThirdSection.vue";
 import FourthSection from "./MainPage/FourthSection.vue";
 import FifthSection from "./MainPage/FifthSection.vue";
 
@@ -19,7 +19,7 @@ export default {
   components: {
     FirstSection,
     SecondSection,
-    ThirdSection,
+    // ThirdSection,
     FourthSection,
     FifthSection,
   },

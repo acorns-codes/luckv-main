@@ -14,24 +14,24 @@
             <p>{{ deadlineData.payStart }} 원</p>
           </div>
           <div>
-            <p>최고가</p>
+            <p style="background-color: red">최고가</p>
             <p>{{ deadlineData.payMax }} 원</p>
           </div>
           <div class="dday-box">
             <div>
-              <span>01</span>
+              <span>{{ this.days }}</span>
               <span>DAY</span>
             </div>
             <div>
-              <span>23</span>
+              <span>{{ this.hours }}</span>
               <span>HOURS</span>
             </div>
             <div>
-              <span>50</span>
+              <span>{{ this.minutes }}</span>
               <span>MINS</span>
             </div>
             <div>
-              <span>30</span>
+              <span>{{ this.seconds }}</span>
               <span>SECS</span>
             </div>
           </div>
@@ -63,6 +63,10 @@ export default {
       current: 0,
       previous: 0,
       play: false,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
     };
   },
 
@@ -71,12 +75,7 @@ export default {
   },
   mounted() {
     this.videoSrc = process.env.VUE_APP_API_URL;
-    // this.dday = this.deadlineData.lastDay;
-    // console.log(this.deadlineData);
-    // console.log(this.dday);
-    setInterval(this.getRemainingTime(this.dday), 1000);
-    // console.log(this.ddayList);
-    console.log(this.$refs.video);
+    this.getRemainingTime();
   },
   methods: {
     // 마우스오버시, 영상재생
@@ -90,37 +89,7 @@ export default {
       e.target.pause();
       e.target.currentTime = 0;
     },
-    // day 구하기
-    getRemainingTime(lastday) {
-      // 마감날짜
-      const lastDayMs = new Date(lastday).getTime();
-      console.log(lastDayMs);
-      // 오늘 날짜
-      const today = new Date().getTime();
-      console.log(today);
-      // console.log(lastDayMs, today);
 
-      // dday 산출 값
-      const time = lastDayMs - today;
-      // console.log(time, "dday의 ms");
-
-      // dday 산출을 위해 필요한 값
-      const oneDay = 24 * 60 * 60 * 1000;
-      const oneHour = 60 * 60 * 1000;
-      const oneMinute = 60 * 1000;
-      let days = time / oneDay;
-      days = Math.floor(days);
-      let hours = Math.floor((time % oneDay) / oneHour);
-      let minutes = Math.floor((time % oneHour) / oneMinute);
-      let seconds = Math.floor((time % oneMinute) / 1000);
-
-      const values = [days, hours, minutes, seconds];
-      // console.log(values);
-      // this.ddayList = values;
-      // console.log(values);
-      console.log(values);
-      return values;
-    },
     // 동영상 불러오기
     async getVideo() {
       console.log("비디오");
@@ -136,43 +105,45 @@ export default {
       } catch (e) {
         console.log(e);
       }
-      try {
-        setInterval(this.getRemainingTime(this.dday), 1000);
-      } catch (e) {
-        console.log(e);
-      }
     },
 
-    // getRemainingTime() {
-    //   // 마감날짜
-    //   const lastDayMs = new Date(this.dday).getTime();
-    //   // 오늘 날짜
-    //   const today = new Date().getTime();
+    getRemainingTime() {
+      // 0 이하면, 숫자 앞에 0을 붙이는 함수
+      function format(item) {
+        if (item < 10) {
+          return (item = `0${item}`);
+        }
+        return item;
+      }
 
-    //   // console.log(lastDayMs, today);
+      let x = setInterval(() => {
+        const lastDayMs = new Date(this.dday).getTime();
+        // console.log(lastDayMs);
+        // 오늘 날짜
+        const today = new Date().getTime();
+        // console.log(today);
+        // console.log(lastDayMs, today);
 
-    //   // dday 산출 값
-    //   const time = lastDayMs - today;
-    //   // console.log(time, "dday의 ms");
+        // dday 산출 값
+        const time = lastDayMs - today;
+        // console.log(time, "dday의 ms");
 
-    //   // dday 산출을 위해 필요한 값
-    //   const oneDay = 24 * 60 * 60 * 1000;
-    //   const oneHour = 60 * 60 * 1000;
-    //   const oneMinute = 60 * 1000;
-    //   let days = time / oneDay;
-    //   days = Math.floor(days);
-    //   let hours = Math.floor((time % oneDay) / oneHour);
-    //   let minutes = Math.floor((time % oneHour) / oneMinute);
-    //   let seconds = Math.floor((time % oneMinute) / 1000);
-
-    //   const values = [days, hours, minutes, seconds];
-    //   // console.log(values);
-    //   this.ddayList = values;
-    //   console.log(values);
-    // },
-    // let countdown = setInterval(getRemainingTime, 1000);
-    // getRemainingTime();
-    // console.log(countdown);
+        // dday 산출을 위해 필요한 값
+        const oneDay = 24 * 60 * 60 * 1000;
+        const oneHour = 60 * 60 * 1000;
+        const oneMinute = 60 * 1000;
+        let days = time / oneDay;
+        days = Math.floor(days);
+        let hours = Math.floor((time % oneDay) / oneHour);
+        let minutes = Math.floor((time % oneHour) / oneMinute);
+        let seconds = Math.floor((time % oneMinute) / 1000);
+        this.days = format(days);
+        this.hours = format(hours);
+        this.minutes = format(minutes);
+        this.seconds = format(seconds);
+      }, 1000);
+      console.log(x);
+    },
     goVideo() {
       var nWidth = "1300";
 
