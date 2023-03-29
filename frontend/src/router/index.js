@@ -11,7 +11,7 @@ const routes = [
   },
   // 비디오 전체 목록
   {
-    path: "/video/all",
+    path: "/video",
     name: "all",
     component: () => import("@/views/VideoPage"),
   },

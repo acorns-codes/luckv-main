@@ -5,6 +5,7 @@
         <div class="video-box">
           <video
             :src="`${videoSrc}/videoplay?ano=${this.videoData.ano}`"
+            controls
           ></video>
         </div>
       </seciton>
@@ -28,22 +29,115 @@
           <p>{{ this.videoData.startDay }} ~ {{ this.videoData.lastDay }}</p>
         </div>
         <hr />
-        <div>
+        <div class="last-box">
           <p>남은시간</p>
-          <p>00일00시00분00초</p>
-          <p>{{ this.seconds }}</p>
+          <p>
+            {{ this.days }}일 {{ this.hours }}시 {{ this.minutes }}분
+            {{ this.seconds }}초
+          </p>
         </div>
-        <v-btn variant="elevated" color="#FF9414" size="large">입찰하기</v-btn>
+
+        <v-dialog v-model="dialog" persistent width="1024">
+          <template v-slot:activator="{ props }">
+            <v-btn color="#FF9414" size="x-large" v-bind="props">
+              입찰하기
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">User Profile</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      label="Legal first name*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      label="Legal middle name"
+                      hint="example of helper text only on focus"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      label="Legal last name*"
+                      hint="example of persistent helper text"
+                      persistent-hint
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field label="Email*" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      label="Password*"
+                      type="password"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-select
+                      :items="['0-17', '18-29', '30-54', '54+']"
+                      label="Age*"
+                      required
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-autocomplete
+                      :items="[
+                        'Skiing',
+                        'Ice hockey',
+                        'Soccer',
+                        'Basketball',
+                        'Hockey',
+                        'Reading',
+                        'Writing',
+                        'Coding',
+                        'Basejump',
+                      ]"
+                      label="Interests"
+                      multiple
+                    ></v-autocomplete>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <small>*indicates required field</small>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="dialog = false"
+              >
+                Close
+              </v-btn>
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="dialog = false"
+              >
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </seciton>
     </div>
   </div>
 </template>
 
 <script>
-import getRemainingTime from "@/plugins/function/functions.js";
+// import getRemainingTime from "@/plugins/function/functions.js";
 export default {
   data() {
     return {
+      dialog: false,
       videoData: "",
       dday: "",
       ddayData: "",
@@ -60,26 +154,34 @@ export default {
     this.videoSrc = process.env.VUE_APP_API_URL;
   },
   mounted() {
-    // console.log(this.dday);
+    console.log(this.dday);
     // setInterval(() => getRemainingTime(this.dday, 2000));
-    setInterval(() => getRemainingTime("2023-04-01 16:00", 1000));
+    // setInterval(() => getRemainingTime("2023-04-01 16:00", 1000));
     this.getRemainingTime();
   },
   methods: {
     /// 날짜 ////
     getRemainingTime() {
-      // 마감날짜
-      const lastDayMs = new Date(this.dday).getTime();
-      // console.log(lastDayMs);
-      // 오늘 날짜
-      const today = new Date().getTime();
-      // console.log(today);
-      // console.log(lastDayMs, today);
+      // 0 이하면, 숫자 앞에 0을 붙이는 함수
+      function format(item) {
+        if (item < 10) {
+          return (item = `0${item}`);
+        }
+        return item;
+      }
 
-      // dday 산출 값
-      const time = lastDayMs - today;
-      // console.log(time, "dday의 ms");
       let x = setInterval(() => {
+        const lastDayMs = new Date(this.dday).getTime();
+        // console.log(lastDayMs);
+        // 오늘 날짜
+        const today = new Date().getTime();
+        // console.log(today);
+        // console.log(lastDayMs, today);
+
+        // dday 산출 값
+        const time = lastDayMs - today;
+        // console.log(time, "dday의 ms");
+
         // dday 산출을 위해 필요한 값
         const oneDay = 24 * 60 * 60 * 1000;
         const oneHour = 60 * 60 * 1000;
@@ -89,18 +191,10 @@ export default {
         let hours = Math.floor((time % oneDay) / oneHour);
         let minutes = Math.floor((time % oneHour) / oneMinute);
         let seconds = Math.floor((time % oneMinute) / 1000);
-
-        // console.log(seconds);
-        this.days = days;
-        this.hours = hours;
-        this.minutes = minutes;
-        this.seconds = seconds;
-        // const values = [days, hours, minutes, seconds];
-        // console.log(values);
-        // this.ddayList = values;
-
-        // console.log(values);
-        // return values;
+        this.days = format(days);
+        this.hours = format(hours);
+        this.minutes = format(minutes);
+        this.seconds = format(seconds);
       }, 1000);
       console.log(x);
     },
@@ -169,9 +263,11 @@ export default {
 
 .info-box {
   width: 500px;
+  height: 320px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
 
   & > div:nth-child(1) {
     display: flex;
@@ -186,9 +282,16 @@ export default {
     }
   }
 }
+.last-box {
+  display: flex;
+  flex-direction: column;
+}
 hr {
   width: inherit;
   border: 0.5px solid #eee;
   margin: 10px 0;
+}
+button {
+  margin-top: 10px;
 }
 </style>
