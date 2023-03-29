@@ -1,9 +1,14 @@
 package com.luckv.demo.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckv.demo.dto.Auction;
-import com.luckv.demo.dto.Notice;
+import com.luckv.demo.dto.Video;
+import com.luckv.demo.mapper.VideoMapper;
 import com.luckv.demo.response.DefaultRes;
 import com.luckv.demo.response.ResponseMessage;
 import com.luckv.demo.response.StatusCode;
@@ -28,12 +34,15 @@ public class AuctionController {
 		public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 		private final AuctionService auctionService;
 		private final UserService userService;
+		private final VideoMapper videoMapper;
 		
+		@Value("${file.dir}") //application.properties에 있는 속성 그대로 가져오기
+	    private String fileDir;
 		
 		// 경매 전체리스트
 		  @GetMapping("/auctionAll")
 		    public ResponseEntity<List<Auction>> auctionAll(Auction auction) {
-
+	
 		        // 페이지 설정
 		        int sn = auction.getPage();   // 현재 페이지
 		        int start = sn * 10 + 0; // 첫 페이지
@@ -119,13 +128,26 @@ public class AuctionController {
 		    
 		    // 무료 동영상 삭제
 		    @GetMapping("auctionDelete")
-		    public ResponseEntity<String> auctionDelete(Auction auction) {  	        
+		    public ResponseEntity<String> auctionDelete(Auction auction, HttpServletRequest request) throws IOException {  	        
+		        
+		        int  ano = auction.getAno();
+		        Video video = videoMapper.videoPlay(ano);
+		        System.out.println("video=================" + video);
+		        String videoName = video.getVideoFile();
+		        File file = new File(fileDir, videoName);
+		 
+		        if ( file.exists()&& file.isFile())
+		        {
+		        	file.delete();       // 파일 삭제
+		        }
 		        boolean b = auctionService.auctionDelete(auction);
+
 				  if(b) {
 			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
 			        }
 			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);
 		    }
 
-
+		    
+		    
 }

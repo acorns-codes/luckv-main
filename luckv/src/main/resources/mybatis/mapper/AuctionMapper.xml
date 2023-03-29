@@ -108,7 +108,10 @@
 	    		</if>
 	        	<if test="kind  == '구독'">
 	        		now(),
-	    		</if>	        	
+	    		</if>
+	    		<if test="kind  == '무료'">
+	        		null,
+	    		</if>		        	
 	        	date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'),
 	        	#{status},
 	        	#{kind}	        	
