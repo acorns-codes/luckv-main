@@ -1,43 +1,48 @@
 <template>
   <div id="root">
     <div id="container">
-      <seciton>
+      <section>
         <div class="video-box">
           <video
             :src="`${videoSrc}/videoplay?ano=${this.videoData.ano}`"
             controls
           ></video>
         </div>
-      </seciton>
-
-      <seciton class="info-box">
+      </section>
+      <section class="info-box">
         <div>
           <h2>{{ this.videoData.title }}</h2>
           <p>{{ this.videoData.content }}</p>
         </div>
         <hr />
-        <div>
-          <p>시작가</p>
-          <p>{{ this.videoData.payStart }} 원</p>
-        </div>
-        <div>
-          <p>최고가</p>
-          <p>{{ this.videoData.payMax }} 원</p>
-        </div>
-        <div>
-          <p>경매기간</p>
-          <p>{{ this.videoData.startDay }} ~ {{ this.videoData.lastDay }}</p>
-        </div>
-        <hr />
-        <div class="last-box">
-          <p>남은시간</p>
-          <p>
-            {{ this.days }}일 {{ this.hours }}시 {{ this.minutes }}분
-            {{ this.seconds }}초
-          </p>
-        </div>
+        <template v-if="this.videoData.kind === '경매'">
+          <div>
+            <p>시작가</p>
+            <p>{{ this.videoData.payStart }} 원</p>
+          </div>
+          <div>
+            <p>최고가</p>
+            <p style="color: red; font-weight: bo">
+              {{ this.videoData.payMax }} 원
+            </p>
+          </div>
+          <div>
+            <p>경매기간</p>
+            <p>{{ this.videoData.startDay }} ~ {{ this.videoData.lastDay }}</p>
+          </div>
+          <hr />
+          <div class="last-box">
+            <p>남은시간</p>
+            <p>
+              {{ this.days }}일 {{ this.hours }}시 {{ this.minutes }}분
+              {{ this.seconds }}초
+            </p>
+          </div>
 
-        <v-dialog v-model="dialog" persistent width="1024">
+          <div></div>
+        </template>
+
+        <v-dialog v-model="dialog" persistent width="500">
           <template v-slot:activator="{ props }">
             <v-btn color="#FF9414" size="x-large" v-bind="props">
               입찰하기
@@ -45,89 +50,41 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="text-h5">User Profile</span>
+              <span class="text-h5">입찰하기</span>
             </v-card-title>
             <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      label="Legal first name*"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      label="Legal middle name"
-                      hint="example of helper text only on focus"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      label="Legal last name*"
-                      hint="example of persistent helper text"
-                      persistent-hint
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field label="Email*" required></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Password*"
-                      type="password"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-select
-                      :items="['0-17', '18-29', '30-54', '54+']"
-                      label="Age*"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-autocomplete
-                      :items="[
-                        'Skiing',
-                        'Ice hockey',
-                        'Soccer',
-                        'Basketball',
-                        'Hockey',
-                        'Reading',
-                        'Writing',
-                        'Coding',
-                        'Basejump',
-                      ]"
-                      label="Interests"
-                      multiple
-                    ></v-autocomplete>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <small>*indicates required field</small>
+              <v-form v-model="valid" @submit.prevent="bidding">
+                <p>경매 입찰 금액</p>
+                <v-text-field
+                  suffix="원"
+                  required
+                  :rules="priceRule"
+                  v-model="price"
+                ></v-text-field>
+                <small>*현재 최고가보다 높게 입찰하여야 합니다</small>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="blue-darken-1"
+                    variant="text"
+                    @click="dialog = false"
+                  >
+                    닫기
+                  </v-btn>
+                  <v-btn
+                    type="submit"
+                    color="blue-darken-1"
+                    variant="text"
+                    @click="dialog = false"
+                  >
+                    입찰
+                  </v-btn>
+                </v-card-actions>
+              </v-form>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="dialog = false"
-              >
-                Close
-              </v-btn>
-              <v-btn
-                color="blue-darken-1"
-                variant="text"
-                @click="dialog = false"
-              >
-                Save
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-dialog>
-      </seciton>
+      </section>
     </div>
   </div>
 </template>
@@ -135,31 +92,85 @@
 <script>
 // import getRemainingTime from "@/plugins/function/functions.js";
 export default {
+  props: ["videoData"],
   data() {
     return {
+      state: "ins",
       dialog: false,
-      videoData: "",
+      valid: false,
+      price: "",
+      // videoData: "",
       dday: "",
       ddayData: "",
       days: 0,
       hours: 0,
       minutes: 0,
       seconds: 0,
+      priceRule: [
+        (v) => /^[0-9]+/g.test(v) || "숫자만 입력해주세요",
+        (v) =>
+          this.state === "ins" ? !!v || "금액은 필수 입력사항입니다." : true,
+        (v) =>
+          this.state === "ins"
+            ? this.videoData.payStart < v ||
+              "시작가보다 높게 입찰금액을 입력하셔야합니다."
+            : true,
+        (v) =>
+          this.state === "ins"
+            ? this.videoData.payMax < v ||
+              "최고가보다 높게 입찰금액을 입력하셔야합니다."
+            : true,
+      ],
     };
   },
-
-  computed() {},
   created() {
-    this.getInfo();
     this.videoSrc = process.env.VUE_APP_API_URL;
   },
   mounted() {
-    console.log(this.dday);
-    // setInterval(() => getRemainingTime(this.dday, 2000));
-    // setInterval(() => getRemainingTime("2023-04-01 16:00", 1000));
     this.getRemainingTime();
   },
   methods: {
+    // 입찰하기
+    async bidding() {
+      try {
+        const actionData = {
+          ano: this.videoData.ano,
+          buyer: this.$store.state.sessionStorageData.mno,
+          bidding: this.price,
+        };
+
+        console.log(actionData);
+        if (!this.valid) {
+          console.log(this.valid);
+          alert("입찰 금액을 확인해주세요!");
+          return;
+        } else {
+          // 입찰 데이터 보내기
+          const res = await this.$axios({
+            headers: {
+              "Content-type": "application/json",
+            },
+            method: "POST",
+            url: `${process.env.VUE_APP_API_URL}/insertAttend`,
+            data: actionData,
+          });
+          if (res.data.data) {
+            alert("성공적으로 입찰이 등록되었습니다!");
+            window.location.reload();
+          } else {
+            alert("입찰에 실패하였습니다!");
+          }
+
+          // this.$router.push({
+          //   path: "/",
+          // });
+        }
+        // console.log(this.valid);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     /// 날짜 ////
     getRemainingTime() {
       // 0 이하면, 숫자 앞에 0을 붙이는 함수
@@ -171,7 +182,7 @@ export default {
       }
 
       let x = setInterval(() => {
-        const lastDayMs = new Date(this.dday).getTime();
+        const lastDayMs = new Date(this.videoData.lastDay).getTime();
         // console.log(lastDayMs);
         // 오늘 날짜
         const today = new Date().getTime();
@@ -198,24 +209,6 @@ export default {
       }, 1000);
       console.log(x);
     },
-
-    ////
-    // 동영상정보 불러오기
-    async getInfo() {
-      console.log("비디오");
-      try {
-        const res = await this.$axios({
-          methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${this.$route.params.ano}`,
-        });
-        this.videoData = res.data.data;
-        console.log(this.videoData);
-        this.dday = res.data.data.lastDay;
-        console.log(this.dday);
-      } catch (e) {
-        console.log(e);
-      }
-    },
   },
 };
 </script>
@@ -230,21 +223,6 @@ export default {
   padding: 30px;
   display: flex;
   justify-content: space-between;
-}
-
-.table-box {
-  width: 700px;
-  margin: 10px;
-  border-top: 1px solid #343434;
-  th {
-    width: 70px;
-  }
-  th,
-  td {
-    border-bottom: 1px solid #eee;
-    padding: 10px 10px;
-    text-align: left;
-  }
 }
 
 .video-box {

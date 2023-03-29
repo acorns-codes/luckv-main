@@ -15,7 +15,7 @@
           </div>
           <div>
             <p style="background-color: red">최고가</p>
-            <p>{{ deadlineData.payMax }} 원</p>
+            <p style="color: red">{{ deadlineData.payMax }} 원</p>
           </div>
           <div class="dday-box">
             <div>
@@ -35,11 +35,16 @@
               <span>SECS</span>
             </div>
           </div>
-          <v-btn variant="flat" color="#FF9414" @click="goVideo"> 입찰 </v-btn>
+          <v-btn
+            variant="flat"
+            color="#FF9414"
+            @click="modal = true && getInfo(deadlineData.ano)"
+          >
+            입찰
+          </v-btn>
         </div>
         <div class="video-box">
           <video
-            ref="video"
             muted
             loop
             @mouseover="playVideo"
@@ -49,15 +54,27 @@
         </div>
       </div>
     </div>
+    <v-dialog v-model="modal" width="auto">
+      <v-card>
+        <VideoDetail :videoData="videoData" />
+        <v-card-actions>
+          <v-btn block @click="modal = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </section>
 </template>
 
 <script>
 // import priceToString from "@/plugins/function/funciton.js";
-
+import VideoDetail from "@/components/VideoDetail.vue";
 export default {
+  components: {
+    VideoDetail,
+  },
   data() {
     return {
+      videoData: "",
       deadlineData: "",
       ddayList: "",
       current: 0,
@@ -67,6 +84,7 @@ export default {
       hours: 0,
       minutes: 0,
       seconds: 0,
+      modal: false,
     };
   },
 
@@ -78,6 +96,20 @@ export default {
     this.getRemainingTime();
   },
   methods: {
+    // 각 동영상 상세 정보 불러오기
+    async getInfo(ano) {
+      console.log("비디오");
+      try {
+        const res = await this.$axios({
+          methods: "GET",
+          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${ano}`,
+        });
+        this.videoData = res.data.data;
+        console.log(this.videoData);
+      } catch (e) {
+        console.log(e);
+      }
+    },
     // 마우스오버시, 영상재생
     playVideo(e) {
       // console.log("마우스오버");
@@ -85,7 +117,7 @@ export default {
     },
     // 마우스리브시, 영상 일시정지
     stopVideo(e) {
-      console.log("마우스리브");
+      // console.log("마우스리브");
       e.target.pause();
       e.target.currentTime = 0;
     },
@@ -96,12 +128,12 @@ export default {
       try {
         const res = await this.$axios({
           methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionAll`,
+          url: `${process.env.VUE_APP_API_URL}/auctionDeadline`,
         });
-
         this.deadlineData = res.data.data[0];
+        console.log(res.data);
         this.dday = res.data.data[0].lastDay;
-        console.log(this.dday);
+        // console.log(this.dday);
       } catch (e) {
         console.log(e);
       }
@@ -143,32 +175,6 @@ export default {
         this.seconds = format(seconds);
       }, 1000);
       console.log(x);
-    },
-    goVideo() {
-      var nWidth = "1300";
-
-      var nHeight = "800";
-
-      var xPos = document.body.clientWidth / 2 - nWidth / 2;
-
-      xPos += window.screenLeft; //듀얼 모니터
-
-      var yPos = screen.availHeight / 2 - nHeight / 2;
-      let url = `/videodetail/${this.deadlineData.ano}`;
-      // window.open(url, 500, 300);
-      window.open(
-        url,
-        "popOpen",
-        "width=" +
-          nWidth +
-          ",height=" +
-          nHeight +
-          ", left=" +
-          xPos +
-          ", top=" +
-          yPos +
-          ", toolbars=no, resizable=no, scrollbars=no"
-      );
     },
   },
 };
