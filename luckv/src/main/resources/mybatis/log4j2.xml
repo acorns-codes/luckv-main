@@ -12,7 +12,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="INFO" additivity="false">
+    	<Root level="INFO" additivity="false">
             <AppenderRef ref="Console_Appender"/>
         </Root>
 

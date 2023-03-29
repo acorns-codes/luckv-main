@@ -31,7 +31,7 @@
 	  	<if test="kind  != null  and kind  != ''">
 	        and kind = #{kind} /*동영상 판매 형태*/
 	    </if>
-	  	<if test="kind  = '경매'">
+	  	<if test="kind  != '무료'">
 	        and status = '판매중'
 	    </if>
 	  	<if test="vcate  != null  and vcate  != ''">
@@ -132,7 +132,7 @@
 		</update>
 		
 		
-		<!-- 경매->구독으로 변경 -->
+		<!-- 경매에서구독으로 변경 -->
 		<update id="auctionChange" parameterType="com.luckv.demo.dto.Auction">
 		  update 
 		  	auction
