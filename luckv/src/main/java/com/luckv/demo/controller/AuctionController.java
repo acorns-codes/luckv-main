@@ -132,7 +132,6 @@ public class AuctionController {
 		        
 		        int  ano = auction.getAno();
 		        Video video = videoMapper.videoPlay(ano);
-		        System.out.println("video=================" + video);
 		        String videoName = video.getVideoFile();
 		        File file = new File(fileDir, videoName);
 		 
