@@ -5,12 +5,22 @@
         <button
           v-for="(item, index) in categorys"
           :key="index"
-          @click="this.video(item.url)"
+          @click="this.video(item.url, this.$route.params.page - 1)"
         >
           {{ item.title }}
         </button>
       </div>
       <VideoList :videoList="this.videoList" />
+      <div class="page-box">
+        <button @click="movetopreviouspage">
+          <v-icon> mdi-chevron-left </v-icon>
+        </button>
+        <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
+        <button @click="movetonextpage">
+          <!-- 다음페이지로 이동 -->
+          <v-icon> mdi-chevron-right </v-icon>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -22,53 +32,110 @@ export default {
   data() {
     return {
       videoList: "",
+      cnt: "",
+      defaultCnt: 10,
+      page: "",
       categorys: [
-        { title: "ALL", value: "", url: "auctionAll" },
+        { title: "ALL", value: "", url: "" },
         {
           title: "동물",
           value: "animal",
-          url: "auctionAll?vcate=animal",
+          url: "vcate=animal",
         },
         {
           title: "인물",
           value: "character",
-          url: "auctionAll?vcate=character",
+          url: "vcate=character",
         },
         {
           title: "건물",
           value: "building",
-          url: "auctionAll?vcate=building",
+          url: "vcate=building",
         },
         {
           title: "식물",
           value: "plant",
-          url: "auctionAll?vcate=plant",
+          url: "vcate=plant",
         },
         {
           title: "기타",
           value: "etc",
-          url: "auctionAll?vcate=etc",
+          url: "vcate=etc",
         },
       ],
     };
   },
-
+  // 계산 목적으로
+  computed: {
+    // 총 페이지 수 계산
+    totalpage() {
+      if (this.cnt == 0) {
+        // 현재 게시판 글 갯수가 0개일때 총 페이지가 0이 되는거 방지
+        return 1;
+      } else {
+        return Math.ceil(this.cnt / 10);
+        // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
+      }
+    },
+  },
   mounted() {
-    this.video("auctionAll");
+    this.video("", this.$route.params.page - 1);
+    this.getCnt();
+    console.log(this.$route.params.page);
   },
   methods: {
     // 비디오 리스트 받아오기
-    async video(category) {
+    async video(category, page) {
       console.log("비디오");
       try {
         const res = await this.$axios({
           methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/${category}`,
+          url: `${process.env.VUE_APP_API_URL}/auctionAll?${category}&page=${page}&kind=경매`,
         });
         this.videoList = res.data.data;
+        this.page = this.cnt;
         console.log(this.videoList);
       } catch (e) {
         console.log(e);
+      }
+    },
+    // 글 개수 가져오기
+    async getCnt() {
+      console.log("글 개수 가져오기");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `${process.env.VUE_APP_API_URL}/auctionCount?kind=경매`,
+        });
+        this.cnt = res.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    //이전페이지 기능
+    movetopreviouspage() {
+      if (this.$route.params.page == 1) {
+        alert("첫번째 페이지입니다!");
+      } else {
+        let pp = parseInt(this.$route.params.page) - 1;
+        this.$router.push({
+          name: "all",
+          params: { page: pp },
+        });
+        this.getQna(this.$route.params.page - 2);
+      }
+    },
+    // 다음페이지 기능
+    movetonextpage() {
+      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
+        alert("마지막 페이지입니다!");
+      } else {
+        let pp = parseInt(this.$route.params.page) + 1;
+        this.$router.push({
+          name: "all",
+          params: { page: pp },
+        });
+        this.getQna(this.$route.params.page);
       }
     },
   },
@@ -102,5 +169,9 @@ export default {
     border-radius: 10px;
     padding: 2px 10px 2px 10px;
   }
+}
+
+.page-box {
+  display: flex;
 }
 </style>

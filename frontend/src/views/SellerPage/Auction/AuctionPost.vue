@@ -209,6 +209,8 @@ export default {
             startDay: `${this.startDay} ${this.startTime}:00`,
             lastDay: `${this.lastDay} ${this.lastTime}:00`,
             status: this.getStatus(),
+            kind:
+              this.kind == "A" ? "경매" : this.kind == "B" ? "무료" : "구독",
           };
         } else if (this.kind == "B") {
           postData = {
@@ -237,7 +239,6 @@ export default {
               this.kind == "A" ? "경매" : this.kind == "B" ? "무료" : "구독",
           };
         }
-
         console.log(postData);
         if (!this.valid) {
           console.log(this.valid);

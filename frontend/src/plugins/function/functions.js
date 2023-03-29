@@ -1,4 +1,4 @@
-export default function getRemainingTime(lastday) {
+export function getRemainingTime(lastday) {
   // 마감날짜
   const lastDayMs = new Date(lastday).getTime();
   // console.log(lastDayMs);
