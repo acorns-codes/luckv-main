@@ -1,5 +1,4 @@
 <template>
-  <h1>video list</h1>
   <div class="video-box">
     <div v-for="item in videoList" :key="item">
       <div></div>
@@ -9,52 +8,62 @@
         loop
         @mouseover="playVideo"
         @mouseleave="stopVideo"
-        @click="gotodetail(item.ano)"
+        @click="modal = true && getInfo(item.ano)"
       ></video>
     </div>
+    <v-dialog v-model="modal" width="auto">
+      <v-card>
+        <VideoDetail :videoData="videoData" />
+        <v-card-actions>
+          <v-btn block @click="modal = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import VideoDetail from "@/components/VideoDetail.vue";
 export default {
   props: ["videoList"],
+  components: { VideoDetail },
+  data() {
+    return {
+      videoData: "",
+      modal: false,
+    };
+  },
   mounted() {
     console.log(this.videoList);
     this.videoSrc = process.env.VUE_APP_API_URL;
   },
   methods: {
+    // 각 동영상 상세 정보 불러오기
+    async getInfo(ano) {
+      console.log("비디오");
+      try {
+        const res = await this.$axios({
+          methods: "GET",
+          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${ano}`,
+        });
+        this.videoData = res.data.data;
+        console.log(this.videoData);
+        this.dday = res.data.data.lastDay;
+        console.log(this.dday);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
     // 마우스오버시, 영상재생
     playVideo(e) {
       e.target.play();
     },
     // 마우스리브시, 영상 일시정지
     stopVideo(e) {
-      console.log("마우스리브");
+      //   console.log("마우스리브");
       e.target.pause();
       e.target.currentTime = 0;
-    },
-    // 상세페이지로 이동
-    gotodetail(ano) {
-      var nWidth = "1300";
-      var nHeight = "800";
-      var xPos = document.body.clientWidth / 2 - nWidth / 2;
-      xPos += window.screenLeft; //듀얼 모니터
-      var yPos = screen.availHeight / 2 - nHeight / 2;
-      let url = `/videodetail/${ano}`;
-      // window.open(url, 500, 300);
-      window.open(
-        url,
-        "popOpen",
-        "width=" +
-          nWidth +
-          ",height=" +
-          nHeight +
-          ", left=" +
-          xPos +
-          ", top=" +
-          yPos +
-          ", toolbars=no, resizable=no, scrollbars=no"
-      );
     },
   },
 };

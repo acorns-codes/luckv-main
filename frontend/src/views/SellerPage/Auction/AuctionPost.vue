@@ -3,7 +3,7 @@
     <div id="page-root">
       <MypageNav />
       <div class="mypage">
-        <h2>경매 등록</h2>
+        <h2>동영상 등록</h2>
         <div class="form-box">
           <v-form v-model="valid" @submit.prevent="postAuction">
             <v-text-field
@@ -33,41 +33,65 @@
               :rules="videoRules"
               required
             ></v-file-input>
-            <v-text-field
-              label="경매 시작가"
-              v-model="payStart"
-              suffix="원"
-              :rules="payStartRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="시작 날짜"
-              v-model="startDay"
-              type="date"
-              :rules="StartDaytRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="시작 시간"
-              v-model="startTime"
-              type="time"
-              :rules="startTimetRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="마감 날짜"
-              v-model="lastDay"
-              type="date"
-              :rules="lastDaytRules"
-              required
-            ></v-text-field>
-            <v-text-field
-              label="마감 시간"
-              v-model="lastTime"
-              type="time"
-              :rules="lastTimetRules"
-              required
-            ></v-text-field>
+            <v-radio-group inline label="동영상 구분" v-model="kind" required>
+              <v-radio label="경매" value="A"></v-radio>
+              <v-radio label="무료" value="B"></v-radio>
+              <v-radio label="구독" value="C"></v-radio>
+            </v-radio-group>
+            <template v-if="this.kind === 'A'">
+              <v-text-field
+                label="경매 시작가"
+                v-model="payStart"
+                suffix="원"
+                :rules="payStartRules"
+                required
+              ></v-text-field>
+              <v-text-field
+                label="시작 날짜"
+                v-model="startDay"
+                type="date"
+                :rules="StartDaytRules"
+                required
+              ></v-text-field>
+              <v-text-field
+                label="시작 시간"
+                v-model="startTime"
+                type="time"
+                :rules="startTimetRules"
+                required
+              ></v-text-field>
+              <v-text-field
+                label="마감 날짜"
+                v-model="lastDay"
+                type="date"
+                :rules="lastDaytRules"
+                required
+              ></v-text-field>
+              <v-text-field
+                label="마감 시간"
+                v-model="lastTime"
+                type="time"
+                :rules="lastTimetRules"
+                required
+              ></v-text-field>
+            </template>
+            <template v-else-if="this.kind === 'B'"></template>
+            <template v-else>
+              <v-text-field
+                label="마감 날짜"
+                v-model="lastDay"
+                type="date"
+                :rules="lastDaytRules"
+                required
+              ></v-text-field>
+              <v-text-field
+                label="마감 시간"
+                v-model="lastTime"
+                type="time"
+                :rules="lastTimetRules"
+                required
+              ></v-text-field>
+            </template>
             <v-btn
               type="submit"
               block
@@ -107,6 +131,7 @@ export default {
       ],
       video: "",
       videoRules: [(v) => !!v || "비디오 등록은 필수 사항입니다."],
+      kind: "A",
       category: "",
       categoryList: ["동물", "인물", "건물", "식물", "기타"],
       categorys: [
@@ -172,17 +197,47 @@ export default {
       } else {
         this.status = "판매중";
       }
+      let postData = "";
       try {
-        const postData = {
-          seller: this.$store.state.sessionStorageData.mno,
-          title: this.title,
-          content: this.content,
-          vcate: this.category,
-          payStart: this.payStart,
-          startDay: `${this.startDay} ${this.startTime}:00`,
-          lastDay: `${this.lastDay} ${this.lastTime}:00`,
-          status: this.getStatus(),
-        };
+        if (this.kind == "A") {
+          postData = {
+            seller: this.$store.state.sessionStorageData.mno,
+            title: this.title,
+            content: this.content,
+            vcate: this.category,
+            payStart: this.payStart,
+            startDay: `${this.startDay} ${this.startTime}:00`,
+            lastDay: `${this.lastDay} ${this.lastTime}:00`,
+            status: this.getStatus(),
+          };
+        } else if (this.kind == "B") {
+          postData = {
+            seller: this.$store.state.sessionStorageData.mno,
+            title: this.title,
+            content: this.content,
+            vcate: this.category,
+            payStart: "",
+            startDay: "",
+            lastDay: "",
+            status: "",
+            kind:
+              this.kind == "A" ? "경매" : this.kind == "B" ? "무료" : "구독",
+          };
+        } else {
+          postData = {
+            seller: this.$store.state.sessionStorageData.mno,
+            title: this.title,
+            content: this.content,
+            vcate: this.category,
+            payStart: "",
+            startDay: "",
+            lastDay: `${this.lastDay} ${this.lastTime}:00`,
+            status: "",
+            kind:
+              this.kind == "A" ? "경매" : this.kind == "B" ? "무료" : "구독",
+          };
+        }
+
         console.log(postData);
         if (!this.valid) {
           console.log(this.valid);
