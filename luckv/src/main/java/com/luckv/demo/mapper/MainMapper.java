@@ -16,4 +16,10 @@ public interface MainMapper {
 		
 		// 마감임박경매 목록
 		List<Auction> auctionDeadline(Auction auction);
+		
+		// 구독동영상 목록
+		List<Auction> auctionSubs(Auction auction);
+		
+		// 무료동영상 목록
+		List<Auction> auctionFree(Auction auction);
 }

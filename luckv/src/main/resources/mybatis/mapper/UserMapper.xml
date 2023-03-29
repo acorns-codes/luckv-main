@@ -85,7 +85,7 @@
 		set 
 			sub_yn = 'N',
 			sub_day = null
-		where timestampdiff(second, now(), sub_day) <![CDATA[<=]]> 0
+		where timestampdiff(second, now(), sub_day) <![CDATA[>=]]> 0
 		</update>
     
 </mapper>

@@ -90,7 +90,7 @@ public class UserController {
 	    }
 	  	
 	 // 동영상 구독 해지
-	  	@GetMapping("videoSubNot")
+	  	@PostMapping("videoSubNot")
 	    public ResponseEntity videoSubNot(@RequestBody user user) {  	        
 	        boolean b = service.videoSubNot(user);
 			  if(b) {

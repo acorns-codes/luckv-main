@@ -26,4 +26,14 @@ public class MainService {
 	public List<Auction> auctionDeadline(Auction auction) {
 		return mainmapper.auctionDeadline(auction);
 	}
+	
+	// 무료동영상
+	public List<Auction> auctionFree(Auction auction) {
+		return mainmapper.auctionFree(auction);
+	}
+	
+	// 구독동영상
+	public List<Auction> auctionSubs(Auction auction) {
+		return mainmapper.auctionSubs(auction);
+	}
 }

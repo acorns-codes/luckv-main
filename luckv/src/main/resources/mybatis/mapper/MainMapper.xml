@@ -60,4 +60,46 @@
 	   order by last_day asc
 	   LIMIT 4
 	</select>
+	
+		<!-- 무료 동영상 -->
+	<select id="auctionFree"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
+		select 
+		  		a.ano, /*동영상 번호*/
+	        	seller, /*게시자 회원번호*/
+	        	s.mid as sellerNm, /*게시자 아이디*/ 
+	    		title,  /*판매 제목*/
+	    		content, /*판매내용*/
+	    		vcate, /*카테고리*/
+	    		kind /*동영상 판매종류*/
+        from auction a
+		  	left join user s on  a.seller = s.mno
+		  	left join video v on a.ano = v.ano 
+	  where 1 = 1
+	  and kind = '무료'
+	   order by start_day desc
+	   LIMIT 4
+	</select>
+	
+	<!-- 구독 동영상 -->
+	<select id="auctionSubs"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
+		select 
+		  		a.ano, /*동영상 번호*/
+	        	seller, /*판매자 회원번호*/
+	        	s.mid as sellerNm, /*판매자 아이디*/ 
+	    		title,  /*판매 제목*/
+	    		content, /*판매내용*/
+	    		vcate, /*카테고리*/
+	    		pay_start, /*판매 시작가*/
+	    		start_day, /*판매 시작일*/ 
+	    		last_day, /*판매 종료일*/
+	    		status, /*판매 상태*/
+	    		kind /*동영상 판매종류*/
+        from auction a
+		  	left join user s on  a.seller = s.mno
+		  	left join video v on a.ano = v.ano 
+	  where 1 = 1
+	  and kind = '구독'
+	   order by start_day desc
+	   LIMIT 4
+	</select>
 </mapper>
