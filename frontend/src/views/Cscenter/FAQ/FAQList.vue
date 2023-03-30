@@ -33,16 +33,28 @@ export default {
     };
   },
   methods: {
-    postFAQ() {
-      this.$router.push({
-        path: "/postfaq",
-      });
-    },
+
     editFAQ(fno) {
       this.$router.push({
         name: "editfaq",
         params: { fno: fno },
       });
+    },
+    async deleteFAQ(fno) {
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          url: `${process.env.VUE_APP_API_URL}/frequentlyDelete?fno=${fno}`,
+        });
+        if (res.data.data) {
+          alert("FAQ가 삭제되었습니다.");
+          window.location.reload();
+        } else {
+          alert("FAQ 삭제를 실패했습니다");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
