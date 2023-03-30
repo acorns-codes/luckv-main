@@ -132,7 +132,6 @@ export default {
   // 페이지가 켜질 때 실행
   mounted() {
     this.getNotice(this.$route.params.page - 1);
-    this.getNoticeCnt();
   },
   methods: {
     // 공지사항 불러오기
@@ -143,10 +142,9 @@ export default {
           method: "GET",
           url: `${process.env.VUE_APP_API_URL}/noticePage?page=${page}`,
         });
-        // console.log(res.data);
-        this.noticeList = res.data;
-        // console.log(this.noticeList);
-        this.page = this.cnt;
+        console.log(res.data);
+        this.noticeList = res.data.data.noticeList;
+        this.cnt = res.data.data.count;
         // console.log("cnt" + this.totalpage);
       } catch (error) {
         console.log(error);

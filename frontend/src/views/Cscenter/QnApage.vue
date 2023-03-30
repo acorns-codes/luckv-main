@@ -75,7 +75,6 @@ export default {
   // 페이지가 켜질 때 실행
   mounted() {
     this.getQna(this.$route.params.page - 1);
-    this.getQnaCnt();
   },
   methods: {
     // qna 불러오기
@@ -87,8 +86,8 @@ export default {
           url: `${process.env.VUE_APP_API_URL}/questionPage?page=${page}`,
         });
         console.log(res.data);
-        this.qnaList = res.data;
-        // console.log(this.noticeList);
+        this.qnaList = res.data.data.questionList;
+        this.cnt = res.data.data.count;
         this.page = this.cnt;
         // console.log("cnt" + this.totalpage);
       } catch (error) {

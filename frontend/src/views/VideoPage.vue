@@ -10,7 +10,7 @@
           {{ item.title }}
         </button>
       </div>
-      <VideoList :videoList="this.videoList" />
+      <VideoList :videoList="this.videoList" @video="video" />
       <div class="page-box">
         <button @click="movetopreviouspage">
           <v-icon> mdi-chevron-left </v-icon>
@@ -80,8 +80,6 @@ export default {
   mounted() {
     // 비디오 목록 받아오는 함수 실행
     this.video("", this.$route.params.page - 1);
-    // 비디오 총 개수 가져오기
-    this.Cnt();
   },
   methods: {
     // 비디오 리스트 받아오기
@@ -92,27 +90,14 @@ export default {
           methods: "GET",
           url: `${process.env.VUE_APP_API_URL}/auctionAll?${category}&page=${page}&kind=경매`,
         });
-        this.videoList = res.data.data;
-        this.page = this.cnt;
-        console.log(this.videoList);
+        console.log(res);
+        this.videoList = res.data.data.auctionList;
+        this.cnt = res.data.data.count;
       } catch (e) {
         console.log(e);
       }
     },
-    // 비디오 개수 가져오기
-    async Cnt() {
-      console.log("글 개수 가져오기");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionCount?kind=경매`,
-        });
-        console.log(res.data);
-        this.cnt = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     //////  페이징 /////////
     //이전페이지 기능
     movetopreviouspage() {

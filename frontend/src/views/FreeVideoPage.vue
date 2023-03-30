@@ -80,8 +80,6 @@ export default {
   mounted() {
     // 무료 동영상 목록 받아오는 함수 실행
     this.video("", this.$route.params.page - 1);
-    // 동영상 총 개수 가져오기
-    this.Cnt();
   },
   methods: {
     // 무료동영상 목록 불러오기
@@ -92,26 +90,14 @@ export default {
           methods: "GET",
           url: `${process.env.VUE_APP_API_URL}/auctionAll?${category}&page=${page}&kind=무료`,
         });
-        this.videoList = res.data.data;
-        this.page = this.cnt;
+        this.videoList = res.data.data.auctionList;
+        this.cnt = res.data.data.count;
         console.log(this.videoList);
       } catch (e) {
         console.log(e);
       }
     },
-    // 글 개수 가져오기
-    async Cnt() {
-      console.log("글 개수 가져오기");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionCount?kind=무료`,
-        });
-        this.cnt = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     ////// ! 페이징 ! //////
     //이전페이지 기능
     movetopreviouspage() {

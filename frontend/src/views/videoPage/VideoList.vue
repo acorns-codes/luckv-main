@@ -13,7 +13,7 @@
     </div>
     <v-dialog v-model="modal" width="auto">
       <v-card>
-        <VideoDetail :videoData="videoData" />
+        <VideoDetail :videoData="videoData" ref="videoDetail" />
         <v-card-actions>
           <v-btn block @click="closeModal">Close</v-btn>
         </v-card-actions>
@@ -66,7 +66,13 @@ export default {
       e.target.currentTime = 0;
     },
     closeModal() {
-      this.modal = true;
+      this.modal = false;
+      this.$emit("video", "", this.$route.params.page - 1);
+
+      console.log("emit확인");
+    },
+    test() {
+      this.$refs.videoDetail.closeSocket();
     },
   },
 };

@@ -34,7 +34,6 @@
 
 <script>
 import MypageNav from "@/components/MypageNav.vue";
-
 import VideoItem from "./VideoItem.vue";
 
 export default {
@@ -74,7 +73,6 @@ export default {
   },
   mounted() {
     this.getVideo("경매", this.$route.params.page - 1);
-    this.getCnt();
   },
   methods: {
     async getVideo(category, page) {
@@ -84,25 +82,15 @@ export default {
           method: "GET",
           url: `${process.env.VUE_APP_API_URL}/auctionPage?seller=${this.$store.state.sessionStorageData.mno}?page=${page}&kind=${category}`,
         });
+
         console.log(res.data);
-        this.auctionList = res.data;
+        this.auctionList = res.data.data.auctionList;
+        this.cnt = res.data.data.count;
       } catch (error) {
         console.log(error);
       }
     },
-    // 글 개수 가져오기
-    async getCnt() {
-      console.log("글 개수 가져오기");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionCount?kind=경매&seller=${this.$store.state.sessionStorageData.mno}`,
-        });
-        this.cnt = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     //이전페이지 기능
     movetopreviouspage() {
       if (this.$route.params.page == 1) {
