@@ -18,6 +18,9 @@ public interface AuctionMapper {
 		// 판매리스트 갯수
 		int auctionCount(Auction auction);
 		
+		// 판매리스트 페이지처리
+		List<Auction> auctionPage(Auction auction);
+		
 		// 경매 등록
 		int insertAuction(Auction auction);
 		
