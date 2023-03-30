@@ -43,7 +43,7 @@ public class AuctionController {
 		// 경매 전체리스트
 		  @GetMapping("/auctionAll")
 		    public ResponseEntity auctionAll(Auction auction) {
-			  				  	
+	
 		        // 페이지 설정
 		        int sn = auction.getPage();   // 현재 페이지
 		        int start = sn * 10 + 0; // 첫 페이지
@@ -53,15 +53,39 @@ public class AuctionController {
 		        auction.setEnd(end);		    	
 		        
 		        HashMap<String, Object>  auctions = new HashMap<>();
-			  	auctions.put("count", auctionService.auctionCount(auction));
+		        auctions.put("count", auctionService.auctionCount(auction));
 		        auctions.put("auctionList", auctionService.auctionAll(auction));
-		        		        		       
+		        
 				 try {
 					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auctions), HttpStatus.OK);
 					} catch (Exception e) {
 						return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 					}
 		    }
+		  
+			// 판매 리스트 페이징처리
+		  @GetMapping("/auctionPage")
+		    public ResponseEntity auctionPage(Auction auction) {
+
+		        // 페이지 설정
+		        int sn = auction.getPage();   // 현재 페이지
+		        int start = sn * 10 + 0; // 첫 페이지
+		        int end = (sn + 1) * 10; // 끝 페이지
+
+		        auction.setStart(start);
+		        auction.setEnd(end);
+
+		        HashMap<String, Object>  auctions = new HashMap<>();
+		        auctions.put("count", auctionService.auctionCount(auction));
+		        auctions.put("auctionList", auctionService.auctionPage(auction));
+		        
+		        try {
+					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auctions), HttpStatus.OK);
+					} catch (Exception e) {
+						return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+					}
+		    }
+		  
 		  
 		  
 		 
