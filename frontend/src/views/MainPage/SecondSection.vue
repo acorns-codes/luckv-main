@@ -58,7 +58,7 @@
       <v-card>
         <VideoDetail :videoData="videoData" />
         <v-card-actions>
-          <v-btn block @click="modal = false">Close</v-btn>
+          <v-btn block @click="closeModal">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -175,6 +175,10 @@ export default {
         this.seconds = format(seconds);
       }, 1000);
       console.log(x);
+    },
+    closeModal() {
+      this.modal = true;
+      window.location.reload();
     },
   },
 };

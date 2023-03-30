@@ -15,7 +15,7 @@
       <v-card>
         <VideoDetail :videoData="videoData" />
         <v-card-actions>
-          <v-btn block @click="modal = false">Close</v-btn>
+          <v-btn block @click="closeModal">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -65,6 +65,10 @@ export default {
       e.target.pause();
       e.target.currentTime = 0;
     },
+    closeModal() {
+      this.modal = true;
+      window.location.reload();
+    },
   },
 };
 </script>
@@ -80,15 +84,12 @@ span {
   display: flex;
   flex-flow: wrap;
   flex-wrap: wrap;
-
   justify-content: center;
-
   & > div {
     width: 320px;
     height: 200px;
     margin: 10px;
     cursor: pointer;
-
     & > video {
       width: inherit;
       height: inherit;

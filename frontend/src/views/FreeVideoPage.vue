@@ -65,7 +65,6 @@ export default {
       ],
     };
   },
-  // 계산 목적으로
   computed: {
     // 총 페이지 수 계산
     totalpage() {
@@ -79,8 +78,10 @@ export default {
     },
   },
   mounted() {
+    // 무료 동영상 목록 받아오는 함수 실행
     this.video("", this.$route.params.page - 1);
-    this.getCnt();
+    // 동영상 총 개수 가져오기
+    this.Cnt();
   },
   methods: {
     // 무료동영상 목록 불러오기
@@ -99,7 +100,7 @@ export default {
       }
     },
     // 글 개수 가져오기
-    async getCnt() {
+    async Cnt() {
       console.log("글 개수 가져오기");
       try {
         const res = await this.$axios({
@@ -111,6 +112,7 @@ export default {
         console.log(error);
       }
     },
+    ////// ! 페이징 ! //////
     //이전페이지 기능
     movetopreviouspage() {
       if (this.$route.params.page == 1) {
@@ -121,7 +123,7 @@ export default {
           name: "freevideo",
           params: { page: pp },
         });
-        this.getQna(this.$route.params.page - 2);
+        this.video("", this.$route.params.page - 2);
       }
     },
     // 다음페이지 기능
@@ -134,7 +136,7 @@ export default {
           name: "freevideo",
           params: { page: pp },
         });
-        this.getQna(this.$route.params.page);
+        this.video("", this.$route.params.page);
       }
     },
   },

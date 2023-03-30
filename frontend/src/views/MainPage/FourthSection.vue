@@ -46,6 +46,10 @@ export default {
         console.log(e);
       }
     },
+    closeModal() {
+      this.modal = true;
+      window.location.reload();
+    },
   },
 };
 </script>

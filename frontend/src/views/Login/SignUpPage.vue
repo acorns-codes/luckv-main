@@ -180,10 +180,12 @@ export default {
           });
           console.log(res);
           console.log("회원가입완료");
-
-          this.$router.push({
-            path: "/",
-          });
+          if (res.data.data) {
+            alert("회원가입에 성공했습니다!");
+            this.$router.push({
+              path: "/",
+            });
+          }
         }
         // console.log(this.valid);
       } catch (error) {
@@ -194,7 +196,7 @@ export default {
     async idCheck() {
       const res = await this.$axios({
         method: "POST",
-        url: "çgetId",
+        url: `${process.env.VUE_APP_API_URL}/getId`,
         data: { mid: this.id },
       });
       console.log(res);

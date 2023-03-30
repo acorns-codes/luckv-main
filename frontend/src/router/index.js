@@ -99,16 +99,16 @@ const routes = [
   },
   // 마이페이지 - 경매 참여 내역
   {
-    path: "/mydetailList",
-    name: "/mydetailList",
+    path: "/mydetailList/:page",
+    name: "mydetailList",
 
-    component: () => import("@/views/MyPage/DetailList.vue"),
+    component: () => import("@/views/MyPage/AttendList/AttendList.vue"),
   },
   // 마이페이지(셀러) - 경매 내역
   {
-    path: "/sellerauction",
-    name: "/sellerauction",
-    component: () => import("@/views/SellerPage/AuctionList.vue"),
+    path: "/sellerauction/:page",
+    name: "sellerauction",
+    component: () => import("@/views/SellerPage/VideoList.vue"),
     meta: { auth: true },
   },
   // 마이페이지(셀러) - 경매 등록

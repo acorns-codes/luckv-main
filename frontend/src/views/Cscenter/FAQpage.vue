@@ -9,43 +9,16 @@
           </div>
           <div class="panels-container">
             <div class="button-box">
-              <button>All</button>
-              <button>카테고리1</button>
-              <button>카테고리2</button>
-              <button>카테고리3</button>
+              <button
+                v-for="item in categories"
+                :key="item"
+                @click="getFAQ(item.url)"
+              >
+                {{ item.name }}
+              </button>
             </div>
-            <v-expansion-panels>
-              <v-expansion-panel v-for="item in FAQList" :key="item">
-                <v-expansion-panel-title>
-                  <v-row>
-                    <v-col>{{ item.questions }}</v-col>
-                  </v-row>
-                </v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-expansion-panel-text>{{
-                    item.asked
-                  }}</v-expansion-panel-text>
-                  <v-card-actions
-                    v-show="this.$store.state.sessionStorageData.auth === 'A'"
-                  >
-                    <v-spacer></v-spacer>
-
-                    <v-btn
-                      variant="text"
-                      color="#343434"
-                      @click="editFAQ(item.fno)"
-                      >수정</v-btn
-                    >
-                    <v-btn
-                      variant="text"
-                      color="#343434"
-                      @click="deleteFAQ(item.fno)"
-                      >삭제</v-btn
-                    >
-                  </v-card-actions>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-            </v-expansion-panels>
+            <!-- FAQ 리스트 -->
+            <FAQList :FAQList="FAQList" />
             <v-btn
               style="margin: 20px"
               v-show="this.$store.state.sessionStorageData.auth === 'A'"
@@ -62,24 +35,47 @@
 
 <script>
 import CsceterNav from "@/components/CsceterNav.vue";
+import FAQList from "./FAQ/FAQList.vue";
 export default {
-  components: { CsceterNav },
+  components: { CsceterNav, FAQList },
   data() {
     return {
-      panel: [0, 1],
       FAQList: "",
+      categories: [
+        {
+          name: "전체",
+          value: "all",
+          url: "",
+        },
+        {
+          name: "경매",
+          value: "auction",
+          url: "?category=auction",
+        },
+        {
+          name: "입찰",
+          value: "bidding",
+          url: "?category=bidding",
+        },
+        {
+          name: "기타",
+          value: "etc",
+          url: "?category=etc",
+        },
+      ],
     };
   },
-  created() {
-    this.getFAQ();
+  mounted() {
+    this.getFAQ("");
   },
   methods: {
-    async getFAQ() {
+    // FAQ 목록 불러오기
+    async getFAQ(categoty) {
       console.log("faq불러오기");
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/frequentlyList`,
+          url: `${process.env.VUE_APP_API_URL}/frequentlyList${categoty}`,
         });
         console.log(res);
         this.FAQList = res.data.data;
@@ -87,32 +83,11 @@ export default {
         console.log(error);
       }
     },
+    // 새로운 FAQ 등록
     postFAQ() {
       this.$router.push({
         path: "/postfaq",
       });
-    },
-    editFAQ(fno) {
-      this.$router.push({
-        name: "editfaq",
-        params: { fno: fno },
-      });
-    },
-    async deleteFAQ(fno) {
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/frequentlyDelete?fno=${fno}`,
-        });
-        if (res.data.data) {
-          alert("FAQ가 삭제되었습니다.");
-          window.location.reload();
-        } else {
-          alert("FAQ 삭제를 실패했습니다");
-        }
-      } catch (error) {
-        console.log(error);
-      }
     },
   },
 };
