@@ -17,10 +17,6 @@ public class NoticeService {
 
 	private final NoticeMapper noticeMapper;;
 	
-	// 공지사항 조회
-	public List<Notice> noticeList() {
-		return noticeMapper.noticeList();
-	}
 	
 	// 공지사항 갯수
 	public int noticeCount(Notice notice) {

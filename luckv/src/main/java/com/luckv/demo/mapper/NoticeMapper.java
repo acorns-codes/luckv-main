@@ -11,9 +11,6 @@ import com.luckv.demo.dto.Notice;
 @Repository
 public interface  NoticeMapper {
 	
-	// 공지사항 목록
-	List<Notice> noticeList();
-	
 	// 공지사항 갯수
 	int noticeCount(Notice notice);
 	
@@ -29,7 +26,6 @@ public interface  NoticeMapper {
 	// 공지사항 수정
 	int noticeUpdate(Notice notice);
 	
-	// 공지사항 삭제
 	
 
 }

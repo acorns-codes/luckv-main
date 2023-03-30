@@ -17,11 +17,6 @@ public class QuestionService {
 
 	private final QuestionMapper questionMapper;
 	
-	// QnA 목록
-	public List<Question> questionList(Question question) {
-		return questionMapper.questionList(question);
-	}
-
 	// QnA 갯수
 	public int questionCount(Question question) {
 		return questionMapper.questionCount(question);

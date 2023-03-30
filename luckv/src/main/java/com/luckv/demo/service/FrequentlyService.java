@@ -18,10 +18,6 @@ public class FrequentlyService {
 
 private final FrequentlyMapper frequentlyMapper;
 	
-	// FaQ 목록
-	public List<Frequently> frequentlyList(Frequently frequently) {
-		return frequentlyMapper.frequentlyList(frequently);
-	}
 	
 	// FaQ 갯수
 	public int frequentlyCount(Frequently frequently) {

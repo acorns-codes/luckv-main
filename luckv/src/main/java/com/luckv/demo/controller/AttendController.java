@@ -1,11 +1,13 @@
 package com.luckv.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -44,24 +46,14 @@ public class AttendController {
 //		:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 //	}
 	// /receive를 메시지를 받을 endpoint로 설정합니다.
-    @MessageMapping("/attend")
-    
+    @MessageMapping("/attend/{ano}")
     // /send로 메시지를 반환합니다.
-    @SendTo("/send")   
+    @SendTo("/send/{ano}")   
     // SocketHandler는 1) /receive에서 메시지를 받고, /send로 메시지를 보내줍니다.
     // 정의한 SocketVO를 1) 인자값, 2) 반환값으로 사용합니다.
-    public Attend SocketHandler(Attend attend) {
-        // vo에서 getter로 userName을 가져옵니다.
-    	int ano = attend.getAno();
-        int buyer = attend.getBuyer();
-        String buyerNm = attend.getBuyerNm();
-        // vo에서 setter로 content를 가져옵니다.
-        int bidding = attend.getBidding();
-
-        // 생성자로 반환값을 생성합니다.
-        Attend result = new Attend(ano, buyer, buyerNm, bidding);
+    public Attend SocketHandler(@DestinationVariable int ano, Attend attend) {
         // 반환
-        return result;
+        return attend;
     }
     
     	// 입찰 등록
@@ -79,8 +71,8 @@ public class AttendController {
 	
 		// 구매목록
 	  @GetMapping("/attendList")
-	    public List<Auction> attendList(Auction auction) {
-
+	    public ResponseEntity attendList(Auction auction) {		  	
+		  	
 	        // 페이지 설정
 	        int sn = auction.getPage();   // 현재 페이지
 	        int start = sn * 10 + 0; // 첫 페이지
@@ -88,9 +80,16 @@ public class AttendController {
 
 	        auction.setStart(start);
 	        auction.setEnd(end);
+	        
+	        HashMap<String, Object>  attends = new HashMap<>();
+		  	attends.put("auctionList", attendService.attendList(auction));
 
-	        return attendService.attendList(auction);
-	    }
+	        try {
+				return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, attends), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+				}
+		 }
 	  
 	  
 }

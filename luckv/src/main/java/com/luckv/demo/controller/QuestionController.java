@@ -1,5 +1,6 @@
 package com.luckv.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,27 +26,12 @@ public class QuestionController {
 	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	private final QuestionService questionService;
 	
-		 // QnA 조회
-		 @GetMapping("/questionList")
-		    public ResponseEntity<List<Question>> questionList(Question question) {
-			 List<Question> qna = questionService.questionList(question);
-			 try {
-					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, qna), HttpStatus.OK);
-				} catch (Exception e) {
-					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-					}
-		    }
-		 
-		  // QnA 갯수
-		 @GetMapping("/questionCount")
-		    public int questionCount(Question question) {
-		        return questionService.questionCount(question);
-		    }
 		 
 		// QnA 페이징처리
 		  @GetMapping("/questionPage")
-		    public List<Question> questionPage(Question question) {
-
+		    public ResponseEntity questionPage(Question question) {
+			  
+			  	
 		        // 페이지 설정
 		        int sn = question.getPage();   // 현재 페이지
 		        int start = sn * 10 + 0; // 첫 페이지
@@ -53,8 +39,17 @@ public class QuestionController {
 
 		        question.setStart(start);
 		        question.setEnd(end);
-
-		        return questionService.questionPage(question);
+		        
+		        HashMap<String, Object>  questions = new HashMap<>();
+			  	questions.put("count", questionService.questionCount(question));
+			  	questions.put("questionList", questionService.questionPage(question));
+		        
+			  	
+		        try {
+					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, questions), HttpStatus.OK);
+				} catch (Exception e) {
+					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+					}
 		    }
 		  
 

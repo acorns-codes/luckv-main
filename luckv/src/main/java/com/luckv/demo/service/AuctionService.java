@@ -30,11 +30,6 @@ public class AuctionService {
 			return auctionMapper.auctionCount(auction);
 		}
 
-		// 판매리스트 페이징처리
-		public List<Auction> auctionPage(Auction auction) {
-	        return auctionMapper.auctionPage(auction);
-		}
-		
 		// 판매 등록
 		public boolean insertAuction(Auction auction) {	
 //			System.out.println("전================="+auction.getStartDay());
