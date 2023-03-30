@@ -239,7 +239,11 @@ export default {
           buyerNm: this.$store.state.sessionStorageData.name,
           bidding: this.price,
         };
-        this.stompClient.send("/attend", JSON.stringify(msg), {});
+        this.stompClient.send(
+          `/attend/${this.videoData.ano}`,
+          JSON.stringify(msg),
+          {}
+        );
       }
       console.log(
         this.recvList,

@@ -12,7 +12,6 @@
             @blur="idCheck"
             required
           ></v-text-field>
-
           <v-text-field
             v-model="passWord"
             label="비밀번호"
