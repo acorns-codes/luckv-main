@@ -280,6 +280,7 @@ export default {
         console.log(resVideo);
         if (resVideo.data.data) {
           alert("새로운 경매가 등록되었습니다!");
+          window.location.reload();
         }
       } catch (error) {
         console.log(error);

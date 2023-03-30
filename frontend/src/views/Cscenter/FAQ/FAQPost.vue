@@ -24,8 +24,10 @@
                 <td>
                   <v-select
                     variant="plain"
-                    :items="categoryList"
-                    v-model="select"
+                    :items="categories"
+                    item-title="title"
+                    item-value="value"
+                    v-model="category"
                   ></v-select>
                 </td>
               </tr>
@@ -59,8 +61,21 @@ export default {
     return {
       title: "",
       content: "",
-      categoryList: ["A", "B", "C", "D", "E", "F"],
-      select: "A",
+      categoty: "",
+      categories: [
+        {
+          title: "경매",
+          value: "auction",
+        },
+        {
+          title: "입찰",
+          value: "bidding",
+        },
+        {
+          title: "기타",
+          value: "etc",
+        },
+      ],
     };
   },
   methods: {
@@ -70,7 +85,7 @@ export default {
         questions: this.title,
         asked: this.content,
         fid: this.$store.state.sessionStorageData.mno,
-        category: this.select,
+        category: this.category,
       };
       try {
         const res = await this.$axios({
