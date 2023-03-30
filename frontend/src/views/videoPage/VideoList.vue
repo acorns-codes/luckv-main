@@ -67,7 +67,6 @@ export default {
     },
     closeModal() {
       this.modal = true;
-      window.location.reload();
     },
   },
 };
