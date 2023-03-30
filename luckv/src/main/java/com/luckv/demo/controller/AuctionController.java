@@ -2,6 +2,7 @@ package com.luckv.demo.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,8 +42,8 @@ public class AuctionController {
 		
 		// 경매 전체리스트
 		  @GetMapping("/auctionAll")
-		    public ResponseEntity<List<Auction>> auctionAll(Auction auction) {
-	
+		    public ResponseEntity auctionAll(Auction auction) {
+			  				  	
 		        // 페이지 설정
 		        int sn = auction.getPage();   // 현재 페이지
 		        int start = sn * 10 + 0; // 첫 페이지
@@ -50,8 +51,11 @@ public class AuctionController {
 
 		        auction.setStart(start);
 		        auction.setEnd(end);		    	
-
-		        List<Auction> auctions = auctionService.auctionAll(auction);
+		        
+		        HashMap<String, Object>  auctions = new HashMap<>();
+			  	auctions.put("count", auctionService.auctionCount(auction));
+		        auctions.put("auctionList", auctionService.auctionAll(auction));
+		        		        		       
 				 try {
 					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auctions), HttpStatus.OK);
 					} catch (Exception e) {
@@ -60,27 +64,7 @@ public class AuctionController {
 		    }
 		  
 		  
-		// 판매 리스트 갯수
-		 @GetMapping("/auctionCount")
-		    public int auctionCount(Auction auction) {
-		        return auctionService.auctionCount(auction);
-		    } 
 		 
-		// 판매 리스트 페이징처리
-		  @GetMapping("/auctionPage")
-		    public List<Auction> auctionPage(Auction auction) {
-
-		        // 페이지 설정
-		        int sn = auction.getPage();   // 현재 페이지
-		        int start = sn * 10 + 0; // 첫 페이지
-		        int end = (sn + 1) * 10; // 끝 페이지
-
-		        auction.setStart(start);
-		        auction.setEnd(end);
-
-		        return auctionService.auctionPage(auction);
-		    }
-		  
 
 		   // 판매 등록
 		  @PostMapping("/insertAuction")

@@ -11,8 +11,6 @@ import com.luckv.demo.dto.Question;
 @Repository
 public interface QuestionMapper {
 
-	List<Question> questionList(Question question);
-
 	// QnA 갯수
 	int questionCount(Question question);
 	

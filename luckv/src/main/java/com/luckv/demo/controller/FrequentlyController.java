@@ -1,5 +1,6 @@
 package com.luckv.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -26,27 +27,11 @@ public class FrequentlyController {
 	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	private final FrequentlyService frequentlyService;
 	
-		 // FaQ 조회
-		 @GetMapping("/frequentlyList")
-		    public ResponseEntity<List<Frequently>> frequentlyList(Frequently frequently) {
-			 List<Frequently> faq =   frequentlyService.frequentlyList(frequently);
-			 try {
-					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, faq), HttpStatus.OK);
-				} catch (Exception e) {
-					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-					}
-			 }
-		 
-		  // FaQ 갯수
-		 @GetMapping("/frequentlyCount")
-		    public int frequentlyCount(Frequently frequently) {
-		        return frequentlyService.frequentlyCount(frequently);
-		    }
-		 
+
 		// FaQ 페이징처리
 		  @GetMapping("/frequentlyPage")
-		    public List<Frequently> frequentlyPage(Frequently frequently) {
-
+		    public ResponseEntity frequentlyPage(Frequently frequently) {
+			     			
 		        // 페이지 설정
 		        int sn = frequently.getPage();   // 현재 페이지
 		        int start = sn * 10 + 0; // 첫 페이지
@@ -54,9 +39,18 @@ public class FrequentlyController {
 
 		        frequently.setStart(start);
 		        frequently.setEnd(end);
+		        
+		        HashMap<String, Object>  frequentlys = new HashMap<>();
+				 frequentlys.put("count", frequentlyService.frequentlyCount(frequently));
+				 frequentlys.put("frequentlyList", frequentlyService.frequentlyPage(frequently));
 
-		        return frequentlyService.frequentlyPage(frequently);
-		    }
+		   
+		        try {
+					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, frequentlys), HttpStatus.OK);
+				} catch (Exception e) {
+					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+					}
+			 }
 		  
 
 		   // FaQ 등록

@@ -13,8 +13,6 @@ import com.luckv.demo.dto.Frequently;
 @Repository
 public interface FrequentlyMapper {
 
-	// FaQ 목록
-	List<Frequently> frequentlyList(Frequently frequently);
 
 	// FaQ 갯수
 	int frequentlyCount(Frequently frequently);

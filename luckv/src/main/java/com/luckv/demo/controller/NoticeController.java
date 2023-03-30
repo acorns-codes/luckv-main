@@ -13,6 +13,7 @@ import com.luckv.demo.response.ResponseMessage;
 import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.NoticeService;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -26,28 +27,11 @@ public class NoticeController {
 	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	private final NoticeService noticeService;
 	
-	  // 공지사항 조회
-	 @GetMapping("/noticeList")
-	    public ResponseEntity<List<Notice>> noticeList() {
-		 List<Notice> notice = noticeService.noticeList();
-		 try {
-			return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, notice), HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-			}
 
-	    }
-	 
-	  // 공지사항 갯수
-	 @GetMapping("/noticeCount")
-	    public int noticeCount(Notice notice) {
-	        return noticeService.noticeCount(notice);
-	    }
-	 
 	   // 공지사항 페이징처리
 	  @GetMapping("/noticePage")
-	    public List<Notice> noticePage(Notice notice) {
-
+	    public ResponseEntity noticePage(Notice notice) {	  	
+	        
 	        // 페이지 설정
 	        int sn = notice.getPage();   // 현재 페이지
 	        int start = sn * 10 + 0; // 첫 페이지
@@ -55,9 +39,17 @@ public class NoticeController {
 
 	        notice.setStart(start);
 	        notice.setEnd(end);
-
-	        return noticeService.noticePage(notice);
-	    }
+	        
+	        HashMap<String, Object>  notices = new HashMap<>();
+	        notices.put("count", noticeService.noticeCount(notice));
+	        notices.put("noticeList", noticeService.noticePage(notice));
+	        
+	        try {
+				return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, notices), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+				}
+		 }
 
 	   // 공지사항 등록
 	  @PostMapping("/insertNotice")
