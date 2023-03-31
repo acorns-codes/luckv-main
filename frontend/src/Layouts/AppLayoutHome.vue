@@ -1,10 +1,8 @@
 <template>
+  <button class="sub-btn-box"></button>
   <div>
     <HeaderLayout />
     <slot />
-    <div>
-      <button>이용권구매</button>
-    </div>
   </div>
 </template>
 
@@ -17,5 +15,10 @@ export default {
 </script>
 
 <style scoped>
-
+.sub-btn-box {
+  width: 70px;
+  height: 70px;
+  background-color: #434343;
+  position: fixed;
+}
 </style>

@@ -135,7 +135,63 @@
               </v-table>
             </div>
           </div>
+          <v-btn
+            v-if="this.auctionData.status !== '판매종료'"
+            @click="editAuction"
+            >수정</v-btn
+          >
+
+          <v-dialog v-else v-model="dialog" persistent width="500">
+            <template v-slot:activator="{ props }">
+              <v-btn variant="outlined" color="#FF9414" v-bind="props">
+                구독으로 변경
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">구독 동영상으로 변경</span>
+              </v-card-title>
+              <v-card-text>
+                <v-form v-model="valid" @submit.prevent="sendMessage">
+                  <p>동영상 제공 기간</p>
+                  <v-text-field
+                    label="날짜"
+                    v-model="Day"
+                    type="date"
+                    :rules="DaytRules"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    label="시간"
+                    v-model="Time"
+                    type="time"
+                    :rules="TimetRules"
+                    required
+                  ></v-text-field>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="blue-darken-1"
+                      variant="text"
+                      @click="dialog = false"
+                    >
+                      닫기
+                    </v-btn>
+                    <v-btn
+                      type="submit"
+                      color="blue-darken-1"
+                      variant="text"
+                      @click="moveToSub"
+                    >
+                      변경
+                    </v-btn>
+                  </v-card-actions>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
           <v-btn @click="editAuction">수정</v-btn>
+
         </div>
       </div>
       <!-- <v-btn @click="sendMessage">소켓으로 보내기</v-btn>
@@ -161,29 +217,13 @@ export default {
       lastDay: "",
       buyer: "",
       recvList: [],
+ dialog: false,
+      valid: false,
+      Day: "",
+      DaytRules: [(v) => !!v || "마감 날짜는 필수 입력 사항입니다."],
+      Time: "",
+      TimetRules: [(v) => !!v || "마감 시간는 필수 입력 사항입니다."],
       wepsocket: "",
-      categorys: [
-        {
-          title: "동물",
-          value: "animal",
-        },
-        {
-          title: "인물",
-          value: "character",
-        },
-        {
-          title: "건물",
-          value: "building",
-        },
-        {
-          title: "식물",
-          value: "plant",
-        },
-        {
-          title: "기타",
-          value: "etc",
-        },
-      ],
     };
   },
 
@@ -237,7 +277,6 @@ export default {
       this.pay;
       console.log(this.recvList, "받아온데이터어어엉어어어2");
     },
-
     send() {
       try {
         const res = this.$axios({
@@ -291,6 +330,43 @@ export default {
         name: "editauction",
         params: { ano: this.$route.params.ano },
       });
+    },
+
+    // 구독으로 넘기는 함수
+    async moveToSub() {
+      console.log("구독으로 넘겨오오오오오");
+      const editData = {
+        ano: this.auctionData.ano,
+        seller: this.$store.state.sessionStorageData.mno,
+        kind: this.auctionData.kind,
+        lastDay: `${this.Day} ${this.Time}:00`,
+      };
+      try {
+        console.log("try 부분 실행");
+        if (!this.valid) {
+          console.log(this.valid);
+          alert("제공 기간을 확인해주세요!");
+          return;
+        } else {
+          const res = this.$axios({
+            headers: {
+              "Content-type": "application/json",
+            },
+            method: "POST",
+            url: `${process.env.VUE_APP_API_URL}/auctionChange`,
+            data: editData,
+          });
+          console.log(res);
+          this.dialog = false;
+          alert("구독 동영상으로 변경되었습니다.");
+          this.$router.push({
+            name: "sellerauction",
+            params: { page: 1 },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
