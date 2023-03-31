@@ -161,7 +161,6 @@ export default {
     // 비디오 주소 미리 할당
     this.videoSrc = process.env.VUE_APP_API_URL;
     console.log(this.videoData.ano);
-
     // 소켓 연결 시도
     setTimeout(() => {
       console.log(this.videoData.ano);
@@ -211,6 +210,7 @@ export default {
       console.log("소켓종료?");
       this.stompClient.close();
       console.log(this.stompClient);
+      console.log("소켓종료!!");
     },
     // 소켓으로 데이터 보내기
     sendMessage() {
