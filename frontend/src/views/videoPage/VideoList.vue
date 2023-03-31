@@ -67,12 +67,9 @@ export default {
     },
     closeModal() {
       this.modal = false;
-      this.$emit("video", "", this.$route.params.page - 1);
-
-      console.log("emit확인");
-    },
-    test() {
       this.$refs.videoDetail.closeSocket();
+      this.$emit("video", "", this.$route.params.page - 1);
+      console.log("emit확인");
     },
   },
 };
