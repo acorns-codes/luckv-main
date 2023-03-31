@@ -1,6 +1,12 @@
 <template>
   <div id="root">
     <div id="page-root">
+      <!-- 구독자가 아닌 사람만 나오게 해놓기 -->
+      <div class="sub-box">
+        <h1>여기에 구독 할지 말지</h1>
+        <h3>구독</h3>
+      </div>
+      <!-- 구독자들은 여기서 부터 나오게 -->
       <div class="button-box">
         <button
           v-for="(item, index) in categories"
@@ -80,8 +86,6 @@ export default {
   mounted() {
     // 구독 동영상 목록 함수 실행
     this.video("", this.$route.params.page - 1);
-    // 비디오 총 개수 가져오기
-    this.Cnt();
   },
   methods: {
     // 구독 동영상 목록 불러오기
@@ -92,26 +96,14 @@ export default {
           methods: "GET",
           url: `${process.env.VUE_APP_API_URL}/auctionAll?${category}&page=${page}&kind=구독`,
         });
-        this.videoList = res.data.data;
-        this.page = this.cnt;
+        this.videoList = res.data.data.auctionList;
+        this.cnt = res.data.data.count;
         console.log(this.videoList);
       } catch (e) {
         console.log(e);
       }
     },
-    // 글 개수 가져오기
-    async Cnt() {
-      console.log("글 개수 가져오기");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionCount?kind=구독`,
-        });
-        this.cnt = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     //////// 페이징 ///////
     //이전페이지 기능
     movetopreviouspage() {
@@ -151,12 +143,16 @@ export default {
 }
 
 #page-root {
-  width: 1440px;
+  width: 1240px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
+.sub-box {
+  width: inherit;
+  height: 500px;
+  border: 1px solid black;
+}
 .button-box {
   width: 400px;
   height: 50px;

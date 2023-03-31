@@ -161,7 +161,6 @@ export default {
       lastDay: "",
       buyer: "",
       recvList: [],
-      wepsocket: "",
       categorys: [
         {
           title: "동물",
@@ -223,7 +222,7 @@ export default {
           console.log(this.recvList, "받아온데이터어어엉어어어");
         },
         (error) => {
-          // 소켓 연결 실패
+          // 소켓 연결 실패sendMessage
           console.log("소켓 연결 실패", error);
           this.connected = false;
         }

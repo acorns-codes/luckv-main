@@ -21,7 +21,7 @@
             <v-select
               required
               label="카테고리"
-              :items="categorys"
+              :items="categories"
               item-title="title"
               item-value="value"
               v-model="category"
@@ -133,8 +133,7 @@ export default {
       videoRules: [(v) => !!v || "비디오 등록은 필수 사항입니다."],
       kind: "A",
       category: "",
-      categoryList: ["동물", "인물", "건물", "식물", "기타"],
-      categorys: [
+      categories: [
         {
           title: "동물",
           value: "animal",

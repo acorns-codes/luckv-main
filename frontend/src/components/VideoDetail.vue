@@ -26,7 +26,8 @@
             <p style="color: red; font-weight: bold">
               {{ this.videoData.payMax }} 원
             </p>
-            <p>소켓 연결 : {{ this.recvList.bidding }}</p>
+
+            <p>업뎃 최고가{{ this.recvList.bidding }}</p>
           </div>
           <div>
             <p>경매기간</p>
@@ -93,7 +94,9 @@
             <p>모든 회원에게 무료로 제공되는 동영상입니다.</p>
             <p>사용 후 출처를 남겨주시면 감사하겠습니다.</p>
           </div>
-          <v-btn color="#FF9414" size="x-large">다운로드</v-btn>
+          <v-btn color="#FF9414" size="x-large" @click="videoDownload"
+            >다운로드</v-btn
+          >
         </template>
         <template v-else>
           <div class="last-box">
@@ -103,7 +106,9 @@
               목록에 있는 동영상을 자유롭게 사용하시고, 출처를 표기해주세요.
             </p>
           </div>
-          <v-btn color="#FF9414" size="x-large">다운로드</v-btn>
+          <v-btn color="#FF9414" size="x-large" @click="videoDownload"
+            >다운로드</v-btn
+          >
         </template>
       </section>
     </div>
@@ -124,7 +129,6 @@ export default {
       dialog: false,
       valid: false,
       price: "",
-      // videoData: "",
       dday: "",
       ddayData: "",
       days: 0,
@@ -156,8 +160,13 @@ export default {
   mounted() {
     // 비디오 주소 미리 할당
     this.videoSrc = process.env.VUE_APP_API_URL;
+    console.log(this.videoData.ano);
     // 소켓 연결 시도
-    this.connect(this.videoData.ano);
+    setTimeout(() => {
+      console.log(this.videoData.ano);
+      this.connect(this.videoData.ano);
+    }, 1000);
+    console.log(this.videoData.ano);
     // dday 게산 함수
     this.getRemainingTime();
   },
@@ -177,6 +186,7 @@ export default {
           console.log("소켓 연결 성공", frame);
           // 서버의 메시지 전송 endpoint를 구독합니다.
           // 이런형태를 pub sub 구조라고 합니다.
+          console.log(this.videoData.ano, "소켓안에서설정");
           this.stompClient.subscribe(`/send/${ano}`, (res) => {
             console.log("구독으로 받은 메시지 입니다.", res.body);
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
@@ -195,6 +205,13 @@ export default {
       );
     },
 
+    // 소켓 종료
+    closeSocket() {
+      console.log("소켓종료?");
+      this.stompClient.close();
+      console.log(this.stompClient);
+      console.log("소켓종료!!");
+    },
     // 소켓으로 데이터 보내기
     sendMessage() {
       if (this.price === "") {
@@ -251,40 +268,38 @@ export default {
       );
       // window.location.reload();
     },
-    // 입찰하기
-    // async bidding() {
-    //   try {
-    //     const actionData = {
-    //       ano: this.videoData.ano,
-    //       buyer: this.$store.state.sessionStorageData.mno,
-    //       bidding: this.price,
-    //     };
-    //     console.log(actionData);
-    //     if (!this.valid) {
-    //       console.log(this.valid);
-    //       alert("입찰 금액을 확인해주세요!");
-    //       return;
-    //     } else {
-    //       // 입찰 데이터 보내기
-    //       const res = await this.$axios({
-    //         headers: {
-    //           "Content-type": "application/json",
-    //         },
-    //         method: "POST",
-    //         url: `${process.env.VUE_APP_API_URL}/insertAttend`,
-    //         data: actionData,
-    //       });
-    //       console.log(res);
 
-    //       // this.$router.push({
-    //       //   path: "/",
-    //       // });
-    //     }
-    //     // console.log(this.valid);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
+    // video 다운로드
+    async videoDownload() {
+      console.log("비디오 다운로드");
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          responseType: "blob", // 응답데이터 타입 정의
+          url: `${process.env.VUE_APP_API_URL}/videoDownload/${this.videoData.ano}`,
+        });
+        console.log(res);
+        const fileName = `video_${res.request.responseURL.substr(
+          res.request.responseURL.lastIndexOf("/") + 1
+        )}`;
+        console.log(fileName);
+        const blob = new Blob([res.data]);
+        console.log(blob);
+
+        const fileObjectUrl = window.URL.createObjectURL(blob);
+        console.log(fileObjectUrl);
+
+        const fileLink = document.createElement("a");
+        fileLink.href = fileObjectUrl;
+
+        fileLink.setAttribute("download", "*.mp4");
+        document.body.appendChild(fileLink);
+
+        fileLink.click();
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     /// 날짜 ////
     getRemainingTime() {

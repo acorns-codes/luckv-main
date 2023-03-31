@@ -10,7 +10,6 @@
         }"
         >구매내역</router-link
       >
-      <router-link to="/">구독내역</router-link>
     </div>
     <div v-else>
       <router-link :to="`/mypage/${sessionData.mno}`">회원정보수정</router-link>
