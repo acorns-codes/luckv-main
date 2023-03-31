@@ -53,8 +53,8 @@ public class AuctionService {
 		}
 		
 		// 판매 상세
-		public Auction auctionDetail(int qno) {
-	        return auctionMapper.auctionDetail(qno);
+		public Auction auctionDetail(int ano) {
+	        return auctionMapper.auctionDetail(ano);
 		}
 
 		// 판매 수정

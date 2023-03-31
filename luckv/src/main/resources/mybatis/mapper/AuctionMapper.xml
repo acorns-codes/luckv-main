@@ -45,6 +45,9 @@
   		<if test="seller != null  and seller != ''">
 	         and seller = #{seller}
 	    </if>
+	    <if test="seller == null  and seller == ''">
+	         and status = '판매중'
+	    </if>
 	    <if test="kind  != null  and kind  != ''">
 	        and kind = #{kind} /*동영상 판매 형태*/
 	    </if>

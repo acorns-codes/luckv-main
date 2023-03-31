@@ -231,18 +231,95 @@ export default {
       lastDay: "",
       buyer: "",
       recvList: [],
+
       dialog: false,
       valid: false,
       Day: "",
       Time: "",
+      wepsocket: "",
+
     };
   },
-
   mounted() {
     // 상세 내역 불러오기
     this.getAuction();
   },
   methods: {
+    // 소켓 연결
+    connect() {
+      console.log("소켓연결");
+      const serverURL = `${process.env.VUE_APP_API_URL}`;
+      let socket = new SockJS(serverURL);
+      this.stompClient = Stomp.over(socket);
+      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      this.stompClient.connect(
+        {},
+        (frame) => {
+          // 소켓 연결 성공
+          this.connected = true;
+          console.log("소켓 연결 성공", frame);
+          // 서버의 메시지 전송 endpoint를 구독합니다.
+          // 이런형태를 pub sub 구조라고 합니다.
+          this.stompClient.subscribe(
+            "/send",
+            // `auctionDetail?ano=${this.$route.params.an}`,
+            (res) => {
+              console.log("구독으로 받은 메시지 입니다.", res.body);
+              // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+              this.recvList.push(JSON.parse(res.body));
+            }
+          );
+          console.log(this.recvList, "받아온데이터어어엉어어어");
+        },
+        (error) => {
+          // 소켓 연결 실패
+          console.log("소켓 연결 실패", error);
+          this.connected = false;
+        }
+      );
+    },
+    // 소켓으로 데이터 보내기
+
+    sendMessage() {
+      console.log("버튼");
+      this.send();
+      this.pay;
+      console.log(this.recvList, "받아온데이터어어엉어어어2");
+    },
+
+    send() {
+      try {
+        const res = this.$axios({
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: `${process.env.VUE_APP_API_URL}/insertAttend/`,
+          data: {
+            ano: this.$route.params.ano,
+            buyer: this.$store.state.sessionStorageData.mno,
+            bidding: this.pay,
+          },
+        });
+        console.log(res);
+        this.$store.commit("getUserData", res.data);
+        console.log(this.$store.state.userData);
+      } catch (error) {
+        console.log(error);
+      }
+      console.log("Send message:" + this.message);
+      if (this.stompClient && this.stompClient.connected) {
+        const msg = {
+          ano: this.$route.params.ano,
+          buyer: 1,
+          buyerNm: this.buyer,
+          bidding: this.pay,
+        };
+        this.stompClient.send("/attend", JSON.stringify(msg), {});
+      }
+      console.log(this.recvList, "받아온데이터어어엉어어어3");
+    },
+
     // 각 경매의 상세페이지 받아오기
     async getAuction() {
       console.log("경매조회");
