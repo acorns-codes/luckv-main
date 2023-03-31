@@ -24,8 +24,10 @@
           <div>
             <p style="color: red">최고가</p>
             <p style="color: red; font-weight: bold">
-              {{ this.recvList.bidding }}원
+              {{ this.videoData.payMax }} 원
             </p>
+
+            <p>업뎃 최고가{{ this.recvList.bidding }}</p>
           </div>
           <div>
             <p>경매기간</p>
@@ -57,7 +59,7 @@
                   <v-text-field
                     suffix="원"
                     required
-                    :placeholder="`현재 최고가 : ${this.recvList.bidding}`"
+                    :placeholder="`현재 최고가 : ${this.videoData.payMax}`"
                     :rules="priceRule"
                     v-model="price"
                   ></v-text-field>
@@ -123,6 +125,7 @@ export default {
     return {
       //소켓에서 담긴 데이터
       recvList: "",
+      state: "ins",
       dialog: false,
       valid: false,
       price: "",
@@ -133,13 +136,19 @@ export default {
       minutes: 0,
       seconds: 0,
       priceRule: [
+        (v) => /^[0-9]+/g.test(v) || "숫자만 입력해주세요",
         (v) =>
-          (/^[0-9]+/g.test(v) || "숫자만 입력해주세요") &&
-          (!!v || "금액은 필수 입력사항입니다.") &&
-          (this.videoData.payStart < !!v ||
-            "시작가보다 높게 입찰금액을 입력하셔야합니다.") &&
-          (this.recvList.bidding < !!v ||
-            "최고가보다 높게 입찰금액을 입력하셔야합니다."),
+          this.state === "ins" ? !!v || "금액은 필수 입력사항입니다." : true,
+        (v) =>
+          this.state === "ins"
+            ? this.videoData.payStart < v ||
+              "시작가보다 높게 입찰금액을 입력하셔야합니다."
+            : true,
+        (v) =>
+          this.state === "ins"
+            ? this.videoData.payMax < v ||
+              "최고가보다 높게 입찰금액을 입력하셔야합니다."
+            : true,
       ],
     };
   },
@@ -178,19 +187,14 @@ export default {
           // 서버의 메시지 전송 endpoint를 구독합니다.
           // 이런형태를 pub sub 구조라고 합니다.
           console.log(this.videoData.ano, "소켓안에서설정");
-          this.stompClient.subscribe(
-            `/send/${ano}`,
-            (res) => {
-              console.log("구독으로 받은 메시지 입니다.", res.body);
-              // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-              // res.body
-              // 처음엔 여기서 아무거도 안받아졌는데, 입찰 버튼 눌러서 입찰하게되면
-              // res.body안에
-              this.recvList = JSON.parse(res.body);
-            },
-            { ano: ano }
-          );
-          console.log(this.stompClient.subscriptions);
+          this.stompClient.subscribe(`/send/${ano}`, (res) => {
+            console.log("구독으로 받은 메시지 입니다.", res.body);
+            // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+            // res.body
+            // 처음엔 여기서 아무거도 안받아졌는데, 입찰 버튼 눌러서 입찰하게되면
+            // res.body안에
+            this.recvList = JSON.parse(res.body);
+          });
           console.log(this.recvList, "소켓 연결 성공하고 받아는 데이터");
         },
         (error) => {
@@ -204,8 +208,8 @@ export default {
     // 소켓 종료
     closeSocket() {
       console.log("소켓종료?");
-      this.stompClient.unsubscribe();
-      console.log(this.stompClient.unsubscribe);
+      this.stompClient.close();
+      console.log(this.stompClient);
       console.log("소켓종료!!");
     },
     // 소켓으로 데이터 보내기
@@ -213,10 +217,6 @@ export default {
       if (this.price === "") {
         alert("입찰 금액을 입력해주세요");
         this.price = "";
-      } else if (!this.valid) {
-        console.log(this.valid);
-        alert("입찰가를 확인해주세요!");
-        return;
       } else if (this.$store.state.sessionStorageData.auth !== "B") {
         alert("구매자회원만 입찰에 참여할 수 있습니다!");
         this.price = "";
