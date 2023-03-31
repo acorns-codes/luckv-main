@@ -9,6 +9,13 @@
         <Console name="Console_Appender" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
+        <RollingFile name="file" fileName="./logs/file/all.log" 
+                   filePattern="./logs/file/$${date:yyyy}/$${date:MM}/all_%d{yyyyMMddHH}.log">
+                <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+                <Policies>
+                        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+                </Policies>
+        </RollingFile>
     </Appenders>
 
     <Loggers>
