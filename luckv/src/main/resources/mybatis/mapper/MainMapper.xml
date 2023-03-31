@@ -24,7 +24,7 @@
 		  	left join video v on a.ano = v.ano 
 		  	left join (SELECT ano, MAX(bidding) as bidding
            FROM attend  GROUP BY ano) a1 on a1.ano = a.ano         
-            left JOIN attend  att ON att.bidding = a1.bidding
+            left JOIN attend  att ON att.ano = a1.ano = att.bidding = a1.bidding
 		  	left join user b on att.buyer = b.mno  
 	  where 1 = 1
 		  and status = '판매중'
@@ -54,7 +54,7 @@
 		  	left join video v on a.ano = v.ano 
 		  	left join (SELECT ano, MAX(bidding) as bidding
            FROM attend  GROUP BY ano) a1 on a1.ano = a.ano         
-            left JOIN attend  att ON att.bidding = a1.bidding
+            left JOIN attend  att ON att.ano = a1.ano = att.bidding = a1.bidding
 		  	left join user b on att.buyer = b.mno  
 	  where 1 = 1
 	  and status = '판매중'

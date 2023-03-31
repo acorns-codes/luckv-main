@@ -25,7 +25,7 @@ public class Auction {
 	
 	private String vcate; // 경매 카테고리 
 	private String status; // 판매상태
-	private String buyer; // 경매낙찰자 회원번호
+	private int  buyer; // 경매낙찰자 회원번호
 	private String buyerNm; // 경매낙찰자 이름
 	private String kind; // 동영상 형태 (구독,무료, 경매)
 

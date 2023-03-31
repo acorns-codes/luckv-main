@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,7 @@ public class AttendController {
 
 	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	private final AttendService  attendService;
+	private final AuctionService auctionService;
 //
 //	@RequestMapping("/insertAttend")	
 //	public ResponseEntity insertAttend(int ano) {
@@ -56,6 +58,19 @@ public class AttendController {
         return attend;
     }
     
+    // room 입장시 send로 반환할 메세지
+    @SubscribeMapping("/send/{ano}")
+    	public Attend handleSubscripton(@DestinationVariable int ano) {
+    	
+    	Auction a = auctionService.auctionDetail(ano);
+    	Attend attend = new Attend();
+    	attend.setAno(ano);
+    	attend.setBidding( a.getPayMax());
+    	attend.setBuyer(a.getBuyer());
+    	attend.setBuyerNm(a.getBuyerNm());
+    	 	
+        return attend;
+       }
     	// 입찰 등록
 	  @PostMapping("/insertAttend")
 	    public ResponseEntity insertAuction(@RequestBody Attend attend) {

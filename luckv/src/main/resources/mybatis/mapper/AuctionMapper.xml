@@ -45,6 +45,9 @@
   		<if test="seller != null  and seller != ''">
 	         and seller = #{seller}
 	    </if>
+	    <if test="seller == null  and seller == ''">
+	         and status = '판매중'
+	    </if>
 	    <if test="kind  != null  and kind  != ''">
 	        and kind = #{kind} /*동영상 판매 형태*/
 	    </if>
@@ -133,7 +136,7 @@
 		  set 
 		 	start_day = now(), /*구독 시작일*/
         	last_day = date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'), /*구독중지기간*/
-			kind = '구독', /*판매 제목*/
+			kind = '구독' /*판매 제목*/
 		  where ano = #{ano}
 		  and seller = #{seller}
 		  and kind = '경매'
