@@ -16,7 +16,13 @@
         }"
         >QnA</router-link
       >
-      <router-link to="/csfaq">FAQ</router-link>
+      <router-link
+        :to="{
+          name: 'csfaq',
+          params: { page: 1 },
+        }"
+        >FAQ</router-link
+      >
     </div>
   </div>
 </template>

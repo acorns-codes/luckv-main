@@ -74,7 +74,7 @@ const routes = [
 
   // FAQ 목록
   {
-    path: "/csfaq",
+    path: "/csfaq/:page",
     name: "csfaq",
     component: () => import("@/views/Cscenter/FAQpage.vue"),
   },

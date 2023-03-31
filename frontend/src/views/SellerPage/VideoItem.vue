@@ -20,8 +20,6 @@
         >
           <td>{{ index + 1 }}</td>
           <td>{{ item.title }}</td>
-          <td>{{ item.payStart }}</td>
-          <td>{{ item.payMax }}</td>
           <td>{{ item.status }}</td>
         </tr>
       </tbody>
@@ -38,8 +36,6 @@ export default {
       headers: [
         { title: "index", value: "번호" },
         { title: "title", value: "제목" },
-        { title: "content", value: "시작가" },
-        { title: "payMax", value: "최고가" },
         { title: "status", value: "진행사항" },
       ],
     };
@@ -64,7 +60,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 button {
-  margin: 30px;
+  margin: 10px;
 }
 
 .event:hover {

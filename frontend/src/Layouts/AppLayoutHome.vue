@@ -2,6 +2,9 @@
   <div>
     <HeaderLayout />
     <slot />
+    <div>
+      <button>이용권구매</button>
+    </div>
   </div>
 </template>
 
@@ -13,4 +16,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
