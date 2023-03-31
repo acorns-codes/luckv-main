@@ -10,7 +10,7 @@ import com.luckv.demo.service.UserService;
 import lombok.extern.log4j.Log4j2;
 
 @Component
-@Log4j2
+//@Log4j2
 public class luckvScheduler {
 	
 	@Autowired 
@@ -19,9 +19,9 @@ public class luckvScheduler {
 	@Autowired 
 	UserService userService;
 	
-	@Scheduled(fixedRate=1000)
-	public void statusIngUpdate() {
-		int row = auctionService.statusIngUpdate();
-	}
+//	@Scheduled(fixedRate=1000)
+//	public void statusIngUpdate() {
+//		int row = auctionService.statusIngUpdate();
+//	}
 	
 }

@@ -66,8 +66,8 @@
                         v-model="this.auctionData.payStart"
                         suffix="원"
                         :rules="payStartRules"
-                        required
                         readonly
+                        required
                       ></v-text-field>
                     </td>
                   </tr>
@@ -199,6 +199,7 @@ export default {
   mounted() {
     // 상세 내역 불러오기
     this.getAuction();
+    console.log(this.$store.state.sessionStorageData);
   },
   methods: {
     // 각 경매의 상세페이지 받아오기
@@ -219,6 +220,13 @@ export default {
     },
     async editAuction() {
       console.log("경매내역 수정");
+      const editdata = {
+        title: this.auctionData.title,
+        content: this.auctionData.content,
+        vcate: this.auctionData.vcate,
+        seller: this.$store.state.sessionStorageData.mno,
+        ano: this.$route.params.ano,
+      };
       try {
         const res = await this.$axios({
           headers: {
@@ -226,17 +234,10 @@ export default {
           },
           method: "POST",
           url: `${process.env.VUE_APP_API_URL}/auctionUpdate`,
-          data: {
-            title: this.auctionData.title,
-            content: this.auctionData.content,
-            vcate: this.auctionData.vcate,
-            seller: this.$store.state.sessionData.mno,
-            ano: this.$route.params.ano,
-          },
+          data: editdata,
         });
+        console.log(editdata);
         console.log(res);
-        this.$store.commit("getUserData", res.data);
-        console.log(this.$store.state.userData);
       } catch (error) {
         console.log(error);
       }

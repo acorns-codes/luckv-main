@@ -47,6 +47,10 @@ public class AttendController {
 //    	return auction != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auction), HttpStatus.OK)
 //		:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 //	}
+	@SubscribeMapping("/send/{ano}")
+	public String onSubscribe(int ano) {
+		return "ok";
+	}
 	// /receive를 메시지를 받을 endpoint로 설정합니다.
     @MessageMapping("/attend/{ano}")
     // /send로 메시지를 반환합니다.
@@ -55,6 +59,7 @@ public class AttendController {
     // 정의한 SocketVO를 1) 인자값, 2) 반환값으로 사용합니다.
     public Attend SocketHandler(@DestinationVariable int ano, Attend attend) {
         // 반환
+    	System.out.println("확인=======" +  attend);
         return attend;
     }
     

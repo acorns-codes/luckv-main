@@ -150,19 +150,6 @@ export default {
         console.log(error);
       }
     },
-    // 공지사항 글 개수 가져오기
-    async getNoticeCnt() {
-      console.log("공지사항 글 개수 가져오기");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/noticeCount`,
-        });
-        this.cnt = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     //이전페이지 기능
     movetopreviouspage() {
       if (this.$route.params.page == 1) {

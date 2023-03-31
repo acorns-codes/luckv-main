@@ -67,7 +67,7 @@ export default {
     },
     closeModal() {
       this.modal = false;
-      // this.$refs.videoDetail.closeSocket();
+      this.$refs.videoDetail.closeSocket();
       this.$emit("video", "", this.$route.params.page - 1);
       console.log("emit확인");
     },
@@ -82,11 +82,9 @@ span {
 }
 
 .video-box {
-  width: 1040px;
+  width: 1020px;
   display: flex;
-  flex-flow: wrap;
   flex-wrap: wrap;
-  justify-content: center;
   & > div {
     width: 320px;
     height: 200px;
