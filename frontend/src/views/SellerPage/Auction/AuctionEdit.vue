@@ -128,7 +128,6 @@
 
               <v-btn
                 type="submit"
-                block
                 color="success"
                 variant="elevated"
                 class="mt-2"
@@ -199,7 +198,7 @@ export default {
   mounted() {
     // 상세 내역 불러오기
     this.getAuction();
-    console.log(this.$store.state.sessionStorageData);
+    // console.log(this.$store.state.sessionStorageData);
   },
   methods: {
     // 각 경매의 상세페이지 받아오기
@@ -259,20 +258,19 @@ export default {
   align-items: flex-start;
   justify-content: space-between;
 }
+.page-box {
+  /* width: 100%; */
+  flex-direction: column;
+  display: flex;
+  padding-bottom: 10px;
+}
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding-top: 110px;
-  & > div {
-    width: 100%;
-    /* flex-direction: column; */
-    display: flex;
-    /* align-items: center; */
-
-    padding-bottom: 10px;
-  }
+  margin-bottom: 50px;
 }
 .table-box {
   width: 700px;

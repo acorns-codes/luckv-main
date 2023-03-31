@@ -174,17 +174,16 @@
                     label="날짜"
                     v-model="Day"
                     type="date"
-                    :rules="lastDaytRules"
+                    :rules="DaytRules"
                     required
                   ></v-text-field>
                   <v-text-field
                     label="시간"
                     v-model="Time"
                     type="time"
-                    :rules="lastTimetRules"
+                    :rules="TimetRules"
                     required
                   ></v-text-field>
-
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -198,7 +197,7 @@
                       type="submit"
                       color="blue-darken-1"
                       variant="text"
-                      @click="dialog = false"
+                      @click="moveToSub"
                     >
                       변경
                     </v-btn>
@@ -219,7 +218,8 @@
 
 <script>
 import MypageNav from "@/components/MypageNav.vue";
-
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
 export default {
   components: { MypageNav },
   data() {
@@ -231,13 +231,13 @@ export default {
       lastDay: "",
       buyer: "",
       recvList: [],
-
       dialog: false,
       valid: false,
       Day: "",
+      DaytRules: [(v) => !!v || "마감 날짜는 필수 입력 사항입니다."],
       Time: "",
+      TimetRules: [(v) => !!v || "마감 시간는 필수 입력 사항입니다."],
       wepsocket: "",
-
     };
   },
   mounted() {
@@ -286,7 +286,6 @@ export default {
       this.pay;
       console.log(this.recvList, "받아온데이터어어엉어어어2");
     },
-
     send() {
       try {
         const res = this.$axios({
@@ -353,26 +352,17 @@ export default {
         params: { ano: this.$route.params.ano },
       });
     },
-    // 구독으로 넘길지 확인
-    confirmToSub() {
-      if (
-        !confirm(
-          "종료된 경매의 입찰을 취소하고 동영상을 구독으로 넘기시겠습니까?"
-        )
-      ) {
-        console.log("아니요");
-      } else {
-        console.log("구독으로 넘기기");
-        this.moveToSub();
-      }
-    },
     // 구독으로 넘기는 함수
     async moveToSub() {
       console.log("구독으로 넘겨오오오오오");
       const editData = {
         ano: this.auctionData.ano,
+        seller: this.$store.state.sessionStorageData.mno,
+        kind: this.auctionData.kind,
+        lastDay: `${this.Day} ${this.Time}:00`,
       };
       try {
+        console.log("try 부분 실행");
         if (!this.valid) {
           console.log(this.valid);
           alert("제공 기간을 확인해주세요!");
@@ -387,6 +377,12 @@ export default {
             data: editData,
           });
           console.log(res);
+          this.dialog = false;
+          alert("구독 동영상으로 변경되었습니다.");
+          this.$router.push({
+            name: "sellerauction",
+            params: { page: 1 },
+          });
         }
       } catch (error) {
         console.log(error);
