@@ -64,7 +64,7 @@
             <v-btn color="success" width="50%" @click="dialog = false"
               >닫기</v-btn
             >
-            <v-btn color="success" width="50%" @click="qnaDetail()">확인</v-btn>
+            <v-btn color="success" width="50%" @click="qnaDetail">확인</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -84,6 +84,7 @@ export default {
       page: "",
       dialog: false,
       password: "",
+      selectedItem: null
     };
   },
   // 계산 목적으로
@@ -162,41 +163,24 @@ export default {
     },
 
     // 상세페이지로 이동
-    qnaDetail(no) {
-      // console.log(no);
-      // if (qpwd !== null) {
-      //   console.log("비밀번호 확인하자");
-      //   this.dialog = true;
-      //   if (qpwd === this.password) {
-      //     console.log("비밀번호일치");
-      //     this.$router.push({
-      //       name: "csqnadetail",
-      //       params: { no: no },
-      //     });
-      //   }
-      // } else {
-      //   this.$router.push({
-      //     name: "csqnadetail",
-      //     params: { no: no },
-      //   });
-      // }
+    qnaDetail() {
+      if (this.password === this.selectedItem.qpwd) {
+          this.$router.push({
+          name: "csqnadetail",
+          params: { no: this.selectedItem.no },
+        });
+        } else {
+          // 비밀번호가 틀린 경우
+          console.log('비밀번호가 틀렸습니다.');
+        }
 
-      this.$router.push({
-        name: "csqnadetail",
-        params: { no: no },
-      });
     },
 
     // 비밀번호 체크
     checkPwd(no, qpwd) {
       console.log(no);
       if (qpwd !== null) {
-        console.log("비밀번호 확인하자");
-        this.dialog = true;
-        if (qpwd === this.password) {
-          console.log("비밀번호일치");
-          this.qnaDetail(no);
-        }
+        this.selectedItem = { no, qpwd }; // 데이터 담기
       } else {
         this.$router.push({
           name: "csqnadetail",
