@@ -47,10 +47,6 @@ public class AttendController {
 //    	return auction != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auction), HttpStatus.OK)
 //		:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 //	}
-	@SubscribeMapping("/send/{ano}")
-	public String onSubscribe(int ano) {
-		return "ok";
-	}
 	// /receive를 메시지를 받을 endpoint로 설정합니다.
     @MessageMapping("/attend/{ano}")
     // /send로 메시지를 반환합니다.
@@ -102,6 +98,7 @@ public class AttendController {
 	        auction.setEnd(end);
 	        
 	        HashMap<String, Object>  attends = new HashMap<>();
+	        attends.put("count", attendService.attendCount(auction));
 		  	attends.put("auctionList", attendService.attendList(auction));
 
 	        try {
@@ -111,5 +108,27 @@ public class AttendController {
 				}
 		 }
 	  
+	  	// 내 입찰목록
+		@GetMapping("/attendMy")
+		  public ResponseEntity attendMy(Auction auction) {		  	
+			  	
+	        // 페이지 설정
+	        int sn = auction.getPage();   // 현재 페이지
+	        int start = sn * 10 + 0; // 첫 페이지
+	        int end = (sn + 1) * 10; // 끝 페이지
+
+	        auction.setStart(start);
+	        auction.setEnd(end);
+	        
+	        HashMap<String, Object>  attends = new HashMap<>();
+	        attends.put("count", attendService.attendMyCount(auction));
+		  	attends.put("auctionList", attendService.attendMy(auction));
+
+	        try {
+				return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, attends), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+				}
+		 }
 	  
 }

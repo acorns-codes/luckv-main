@@ -18,4 +18,13 @@ public interface AttendMapper {
 		
 		// 구매목록
 		List<Auction> attendList(Auction auction);
+		// 구매목록 갯수
+		int attendCount(Auction auction);
+		
+		// 내 입찰 목록
+		List<Auction> attendMy(Auction auction);
+		// 구매목록 갯수
+		int attendMyCount(Auction auction);
+		
 }
+		

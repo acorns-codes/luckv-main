@@ -40,4 +40,18 @@ public class AttendService {
         return attendMapper.attendList(auction);
 	}
 	
+	// 구매목록 갯수
+	public int attendCount(Auction auction) {
+		return attendMapper.attendCount(auction);
+	}
+			
+	// 내 입찰 목록
+	public List<Auction> attendMy(Auction auction) {
+        return attendMapper.attendMy(auction);
+	}
+
+	// 내 입찰 목록 갯수
+	public int attendMyCount(Auction auction) {
+		return attendMapper.attendMyCount(auction);
+	}
 }
