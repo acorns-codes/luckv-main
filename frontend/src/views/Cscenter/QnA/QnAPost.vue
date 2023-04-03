@@ -19,6 +19,25 @@
                   ></v-text-field>
                 </td>
               </tr>
+              <tr>
+                <th>비밀글</th>
+                <td>
+                  <v-radio-group inline v-model="auth" required>
+                    <v-radio label="비밀글" value="A"></v-radio>
+                    <v-radio label="공개글" value="B"></v-radio>
+                  </v-radio-group>
+                  <v-text-field
+                    v-if="auth === 'A'"
+                    prepend-inner-icon="mdi-lock-outline"
+                    v-model="password"
+                    type="password"
+                    variant="outlined"
+                    placeholder="4자리의 숫자로 입력해주세요"
+                    :rules="pwRules"
+                  ></v-text-field>
+                </td>
+              </tr>
+
               <tr class="content">
                 <th>내용</th>
                 <td>
@@ -49,6 +68,13 @@ export default {
     return {
       title: "",
       content: "",
+      auth: "A",
+      password: "",
+      pwRules: [
+        (v) => !!v || "패스워드는 필수 입력사항입니다.",
+        (v) => /[0-9]/.test(v) || "숫자만 입력해주세요.",
+        (v) => v.length === 4 || "4자리로 입력해주세요",
+      ],
     };
   },
   mounted() {
@@ -61,6 +87,7 @@ export default {
         title: this.title,
         content: this.content,
         qid: this.$store.state.sessionStorageData.mno,
+        qpwd: this.password,
       };
       console.log(qnaData);
       try {

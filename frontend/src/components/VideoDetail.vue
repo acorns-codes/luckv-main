@@ -266,7 +266,7 @@ export default {
         this.recvList,
         "입찰금액 보내는 함수 안!!! 입찰금액 다 보내진건지??"
       );
-      // window.location.reload();
+  
     },
 
     // video 다운로드

@@ -59,7 +59,7 @@ section {
     }
   }
   & > div:nth-child(2) {
-    width: 1440px;
+    width: 100%;
     height: 500px;
     position: absolute;
     z-index: -1;

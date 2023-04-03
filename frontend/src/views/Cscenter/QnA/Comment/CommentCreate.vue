@@ -39,7 +39,7 @@ export default {
           data: commnetData,
         });
         console.log(res);
-        window.location.reload();
+        this.$router.go();
       } catch (error) {
         console.log(error);
       }

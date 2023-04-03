@@ -8,6 +8,7 @@ export default createStore({
     accessToken: "",
     sessionStorageData: "",
     userData: "",
+    socket: "",
   },
   getters: {
     // 로그인 확인
@@ -39,6 +40,9 @@ export default createStore({
     // 회원정보 불러와서 UserData에 저장
     getUserData(state, userData) {
       state.userData = userData;
+    },
+    storeSocket(state, socket) {
+      state.socket = socket;
     },
   },
   // 새로고침해도 session정보 유지 될 수 있도록 했음

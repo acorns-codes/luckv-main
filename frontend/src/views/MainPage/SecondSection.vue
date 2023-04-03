@@ -15,7 +15,7 @@
           </div>
           <div>
             <p style="background-color: red">최고가</p>
-            <p style="color: red">{{this.recvList.bidding }} 원</p>
+            <p style="color: red">{{ this.recvList.bidding }} 원</p>
           </div>
           <div class="dday-box">
             <div>
@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      recvList: "",  //소켓에서 담긴 데이터
+      recvList: "", //소켓에서 담긴 데이터
       videoData: "",
       deadlineData: "",
       ddayList: "",
@@ -96,8 +96,8 @@ export default {
   },
   mounted() {
     this.videoSrc = process.env.VUE_APP_API_URL;
-     // 소켓 연결 시도
-     setTimeout(() => {
+    // 소켓 연결 시도
+    setTimeout(() => {
       console.log(this.deadlineData.ano);
       this.connect(this.deadlineData.ano);
     }, 1000);
@@ -123,6 +123,9 @@ export default {
       const serverURL = `${process.env.VUE_APP_API_URL}`;
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
+      // 소켓 전역으로 설정
+      this.$store.commit("storeSocket", this.stompClient);
+      console.log(this.$store.state.socket, "소켓저자아아아앙");
       // console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
       this.stompClient.connect(
         {},
@@ -155,8 +158,8 @@ export default {
         }
       );
     },
-     // 소켓 종료
-     closeSocket() {
+    // 소켓 종료
+    closeSocket() {
       console.log("소켓종료?");
       this.stompClient.unsubscribe();
       console.log(this.stompClient.unsubscribe);
@@ -230,7 +233,7 @@ export default {
     },
     closeModal() {
       this.modal = true;
-      window.location.reload();
+      this.getVideo();
     },
   },
 };

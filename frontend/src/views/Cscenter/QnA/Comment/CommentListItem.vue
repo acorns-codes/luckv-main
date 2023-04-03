@@ -85,7 +85,7 @@ export default {
           });
           if (res.data.data) {
             alert("댓글 수정이 완료되었습니다!");
-            window.location.reload();
+            this.getQnACommentList();
           } else {
             alert("댓글 수정을 할 수 없습니다!");
           }
@@ -132,13 +132,11 @@ export default {
         console.log(res);
         if (res.data.data) {
           alert("댓글이 삭제되었습니다!");
-          this.$router.push({
-            name: "csfaq",
-          });
+          this.getQnACommentList();
         } else {
           alert("댓글을 삭제할 수 없습니다!");
         }
-        window.location.reload();
+        this.getQnACommentList();
       } catch (error) {
         console.log(error);
       }

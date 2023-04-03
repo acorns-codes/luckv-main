@@ -129,6 +129,12 @@ export default {
       }
     },
   },
+  // watch: {
+  //   $route(to,from){
+
+  //   }
+  // },
+
   created() {
     this.getNotice(this.$route.params.page - 1);
   },

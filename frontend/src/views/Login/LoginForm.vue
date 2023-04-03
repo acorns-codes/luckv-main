@@ -79,7 +79,7 @@ export default {
         if (res.data.statusCode !== 200) {
           console.log("로그인불가");
           alert(`${res.data.responseMessage}`);
-          window.onload();
+          this.$router.go();
         } else {
           console.log("로그인성공");
           this.$store.commit("getUserId", res.data.data.mid);
@@ -96,8 +96,7 @@ export default {
           console.log(this.$store.state.sessionStorageData.auth);
           alert(`${res.data.data.name}님 환영합니다!`);
           this.$store.state.isClicked = false;
-          window.location.reload();
-          // window.location.reload(true);
+          this.$router.go();
         }
       } catch (error) {
         console.log(error);

@@ -48,7 +48,7 @@ export default {
         });
         if (res.data.data) {
           alert("FAQ가 삭제되었습니다.");
-          window.location.reload();
+          this.$router.go();
         } else {
           alert("FAQ 삭제를 실패했습니다");
         }

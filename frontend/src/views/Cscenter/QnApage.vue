@@ -21,10 +21,15 @@
                 v-for="item in qnaList"
                 :key="item.no"
                 class="event"
-                @click="qnaDetail(item.no)"
+                @click="checkPwd(item.no, item.qpwd)"
               >
                 <td>{{ item.no }}</td>
-                <td style="width: 400px">{{ item.title }}</td>
+                <td style="width: 400px">
+                  <v-icon size="x-small" v-if="item.qpwd !== null">
+                    mdi-lock-outline
+                  </v-icon>
+                  {{ item.title }} ({{ item.reply }})
+                </td>
                 <td>{{ item.id }}</td>
                 <td>{{ item.qcreate }}</td>
               </tr>
@@ -43,6 +48,26 @@
         </div>
         <v-btn color="success" class="mt-2" @click="postQna">QnA 작성</v-btn>
       </div>
+      <v-dialog v-model="dialog" width="500px">
+        <v-card>
+          <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
+          <v-card-text>
+            <v-text-field
+              prepend-inner-icon="mdi-lock-outline"
+              v-model="password"
+              type="password"
+              variant="outlined"
+            ></v-text-field>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn color="success" width="50%" @click="dialog = false"
+              >닫기</v-btn
+            >
+            <v-btn color="success" width="50%" @click="qnaDetail()">확인</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -57,6 +82,8 @@ export default {
       cnt: "",
       defaultCnt: 10,
       page: "",
+      dialog: false,
+      password: "",
     };
   },
   // 계산 목적으로
@@ -136,11 +163,46 @@ export default {
 
     // 상세페이지로 이동
     qnaDetail(no) {
-      console.log(no);
+      // console.log(no);
+      // if (qpwd !== null) {
+      //   console.log("비밀번호 확인하자");
+      //   this.dialog = true;
+      //   if (qpwd === this.password) {
+      //     console.log("비밀번호일치");
+      //     this.$router.push({
+      //       name: "csqnadetail",
+      //       params: { no: no },
+      //     });
+      //   }
+      // } else {
+      //   this.$router.push({
+      //     name: "csqnadetail",
+      //     params: { no: no },
+      //   });
+      // }
+
       this.$router.push({
         name: "csqnadetail",
         params: { no: no },
       });
+    },
+
+    // 비밀번호 체크
+    checkPwd(no, qpwd) {
+      console.log(no);
+      if (qpwd !== null) {
+        console.log("비밀번호 확인하자");
+        this.dialog = true;
+        if (qpwd === this.password) {
+          console.log("비밀번호일치");
+          this.qnaDetail(no);
+        }
+      } else {
+        this.$router.push({
+          name: "csqnadetail",
+          params: { no: no },
+        });
+      }
     },
     // 글 작성기능
     postQna() {
