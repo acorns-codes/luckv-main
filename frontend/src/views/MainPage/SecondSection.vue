@@ -15,7 +15,7 @@
           </div>
           <div>
             <p style="background-color: red">최고가</p>
-            <p style="color: red">{{ deadlineData.payMax }} 원</p>
+            <p style="color: red">{{this.recvList.bidding }} 원</p>
           </div>
           <div class="dday-box">
             <div>
@@ -68,12 +68,15 @@
 <script>
 // import priceToString from "@/plugins/function/funciton.js";
 import VideoDetail from "@/components/VideoDetail.vue";
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
 export default {
   components: {
     VideoDetail,
   },
   data() {
     return {
+      recvList: "",  //소켓에서 담긴 데이터
       videoData: "",
       deadlineData: "",
       ddayList: "",
@@ -93,6 +96,11 @@ export default {
   },
   mounted() {
     this.videoSrc = process.env.VUE_APP_API_URL;
+     // 소켓 연결 시도
+     setTimeout(() => {
+      console.log(this.deadlineData.ano);
+      this.connect(this.deadlineData.ano);
+    }, 1000);
     this.getRemainingTime();
   },
   methods: {
@@ -109,6 +117,50 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    connect(ano) {
+      console.log("소켓연결");
+      const serverURL = `${process.env.VUE_APP_API_URL}`;
+      let socket = new SockJS(serverURL);
+      this.stompClient = Stomp.over(socket);
+      // console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
+      this.stompClient.connect(
+        {},
+        (frame) => {
+          // 소켓 연결 성공
+          this.connected = true;
+          console.log("소켓 연결 성공", frame);
+          // 서버의 메시지 전송 endpoint를 구독합니다.
+          // 이런형태를 pub sub 구조라고 합니다.
+          console.log(this.videoData.ano, "소켓안에서설정");
+          this.stompClient.subscribe(
+            `/send/${ano}`,
+            (res) => {
+              console.log("구독으로 받은 메시지 입니다.", res.body);
+              // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+              // res.body
+              // 처음엔 여기서 아무거도 안받아졌는데, 입찰 버튼 눌러서 입찰하게되면
+              // res.body안에
+              this.recvList = JSON.parse(res.body);
+            },
+            { ano: ano }
+          );
+          console.log(this.stompClient.subscriptions);
+          console.log(this.recvList, "소켓 연결 성공하고 받아는 데이터");
+        },
+        (error) => {
+          // 소켓 연결 실패
+          console.log("소켓 연결 실패", error);
+          this.connected = false;
+        }
+      );
+    },
+     // 소켓 종료
+     closeSocket() {
+      console.log("소켓종료?");
+      this.stompClient.unsubscribe();
+      console.log(this.stompClient.unsubscribe);
+      console.log("소켓종료!!");
     },
     // 마우스오버시, 영상재생
     playVideo(e) {
