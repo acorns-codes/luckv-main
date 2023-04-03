@@ -1,12 +1,6 @@
 <template>
   <div id="root">
     <div id="page-root">
-      <!-- 구독자가 아닌 사람만 나오게 해놓기 -->
-      <div class="sub-box">
-        <h1>여기에 구독 할지 말지</h1>
-        <h3>구독</h3>
-      </div>
-      <!-- 구독자들은 여기서 부터 나오게 -->
       <div class="button-box">
         <button
           v-for="(item, index) in categories"
@@ -84,10 +78,18 @@ export default {
     },
   },
   mounted() {
+    this.subUser();
     // 구독 동영상 목록 함수 실행
     this.video("", this.$route.params.page - 1);
   },
   methods: {
+    // 구독자 확인
+    subUser() {
+      console.log(this.$store.state.sessionStorageData);
+      if (this.$store.state.sessionStorageData.subYn !== "Y") {
+        alert("구독 회원을 위한 영상입니다! 사용을 원하시면 신청을 해주세요!");
+      }
+    },
     // 구독 동영상 목록 불러오기
     async video(category, page) {
       console.log("비디오");

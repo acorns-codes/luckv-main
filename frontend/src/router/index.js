@@ -29,22 +29,22 @@ const routes = [
   },
   // 공지사항 목록
   {
-    path: "/cscenter/:page",
-    name: "cscenter",
+    path: "/cscenter/notice/:page",
+    name: "notice",
     component: () => import("@/views/Cscenter/NoticePage"),
     meta: { auth: true },
   },
   // 공지사항 상세페이지
   {
-    path: "/content/:no",
-    name: "content",
-    component: () => import("@/views/Cscenter/Notice/NoticeContent.vue"),
+    path: "/cscenter/noticedetail/:no",
+    name: "noticedetail",
+    component: () => import("@/views/Cscenter/Notice/NoticeDetail.vue"),
   },
   // 공지사항 수정
   {
-    path: "/content/:no/edit",
-    name: "contentEdit",
-    component: () => import("@/views/Cscenter/Notice/NoticeEdit.vue"),
+    path: "/cscenter/noticedetail/:no/edit",
+    name: "noticedetailEdit",
+    component: () => import("@/views/Cscenter/Notice/NoticeDetailEdit.vue"),
   },
 
   // QnA 상세페이지

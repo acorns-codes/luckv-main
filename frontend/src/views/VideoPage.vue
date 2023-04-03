@@ -81,6 +81,9 @@ export default {
     // 비디오 목록 받아오는 함수 실행
     this.video("", this.$route.params.page - 1);
   },
+  watch: {
+    $route: "video",
+  },
   methods: {
     // 비디오 리스트 받아오기
     async video(category, page) {
