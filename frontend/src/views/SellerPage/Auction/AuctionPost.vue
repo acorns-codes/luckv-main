@@ -1,116 +1,109 @@
 <template>
-  <div id="root">
-    <div id="page-root">
-      <MypageNav />
-      <div class="mypage">
-        <h2>동영상 등록</h2>
-        <div class="form-box">
-          <v-form v-model="valid" @submit.prevent="postAuction">
-            <v-text-field
-              label="제목"
-              v-model="title"
-              :rules="titleRules"
-              required
-            ></v-text-field>
-            <v-textarea
-              label="내용"
-              v-model="content"
-              :rules="contentRules"
-              required
-            ></v-textarea>
-            <v-select
-              required
-              label="카테고리"
-              :items="categories"
-              item-title="title"
-              item-value="value"
-              v-model="category"
-            ></v-select>
-            <v-file-input
-              label="동영상 올리기"
-              prepend-icon="mdi-video"
-              v-model="video"
-              :rules="videoRules"
-              required
-            ></v-file-input>
-            <v-radio-group inline label="동영상 구분" v-model="kind" required>
-              <v-radio label="경매" value="A"></v-radio>
-              <v-radio label="무료" value="B"></v-radio>
-              <v-radio label="구독" value="C"></v-radio>
-            </v-radio-group>
-            <template v-if="this.kind === 'A'">
-              <v-text-field
-                label="경매 시작가"
-                v-model="payStart"
-                suffix="원"
-                :rules="payStartRules"
-                required
-              ></v-text-field>
-              <v-text-field
-                label="시작 날짜"
-                v-model="startDay"
-                type="date"
-                :rules="StartDaytRules"
-                required
-              ></v-text-field>
-              <v-text-field
-                label="시작 시간"
-                v-model="startTime"
-                type="time"
-                :rules="startTimetRules"
-                required
-              ></v-text-field>
-              <v-text-field
-                label="마감 날짜"
-                v-model="lastDay"
-                type="date"
-                :rules="lastDaytRules"
-                required
-              ></v-text-field>
-              <v-text-field
-                label="마감 시간"
-                v-model="lastTime"
-                type="time"
-                :rules="lastTimetRules"
-                required
-              ></v-text-field>
-            </template>
-            <template v-else-if="this.kind === 'B'"></template>
-            <template v-else>
-              <v-text-field
-                label="마감 날짜"
-                v-model="lastDay"
-                type="date"
-                :rules="lastDaytRules"
-                required
-              ></v-text-field>
-              <v-text-field
-                label="마감 시간"
-                v-model="lastTime"
-                type="time"
-                :rules="lastTimetRules"
-                required
-              ></v-text-field>
-            </template>
-            <v-btn
-              type="submit"
-              block
-              color="success"
-              variant="elevated"
-              class="mt-2"
-              >경매 등록</v-btn
-            >
-          </v-form>
-        </div>
-      </div>
+  <div class="mypage">
+    <h2>동영상 등록</h2>
+    <div class="form-box">
+      <v-form v-model="valid" @submit.prevent="postAuction">
+        <v-text-field
+          label="제목"
+          v-model="title"
+          :rules="titleRules"
+          required
+        ></v-text-field>
+        <v-textarea
+          label="내용"
+          v-model="content"
+          :rules="contentRules"
+          required
+        ></v-textarea>
+        <v-select
+          required
+          label="카테고리"
+          :items="categories"
+          item-title="title"
+          item-value="value"
+          v-model="category"
+        ></v-select>
+        <v-file-input
+          label="동영상 올리기"
+          prepend-icon="mdi-video"
+          v-model="video"
+          :rules="videoRules"
+          required
+        ></v-file-input>
+        <v-radio-group inline label="동영상 구분" v-model="kind" required>
+          <v-radio label="경매" value="A"></v-radio>
+          <v-radio label="무료" value="B"></v-radio>
+          <v-radio label="구독" value="C"></v-radio>
+        </v-radio-group>
+        <template v-if="this.kind === 'A'">
+          <v-text-field
+            label="경매 시작가"
+            v-model="payStart"
+            suffix="원"
+            :rules="payStartRules"
+            required
+          ></v-text-field>
+          <v-text-field
+            label="시작 날짜"
+            v-model="startDay"
+            type="date"
+            :rules="StartDaytRules"
+            required
+          ></v-text-field>
+          <v-text-field
+            label="시작 시간"
+            v-model="startTime"
+            type="time"
+            :rules="startTimetRules"
+            required
+          ></v-text-field>
+          <v-text-field
+            label="마감 날짜"
+            v-model="lastDay"
+            type="date"
+            :rules="lastDaytRules"
+            required
+          ></v-text-field>
+          <v-text-field
+            label="마감 시간"
+            v-model="lastTime"
+            type="time"
+            :rules="lastTimetRules"
+            required
+          ></v-text-field>
+        </template>
+        <template v-else-if="this.kind === 'B'"></template>
+        <template v-else>
+          <v-text-field
+            label="마감 날짜"
+            v-model="lastDay"
+            type="date"
+            :rules="lastDaytRules"
+            required
+          ></v-text-field>
+          <v-text-field
+            label="마감 시간"
+            v-model="lastTime"
+            type="time"
+            :rules="lastTimetRules"
+            required
+          ></v-text-field>
+        </template>
+        <v-btn
+          type="submit"
+          block
+          color="success"
+          variant="elevated"
+          class="mt-2"
+          >경매 등록</v-btn
+        >
+      </v-form>
     </div>
   </div>
 </template>
 
 <script>
-import MypageNav from "@/components/MypageNav.vue";
 export default {
-  components: { MypageNav },
   data() {
     return {
       valid: false,
@@ -290,19 +283,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#page-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .mypage {
   display: flex;
   flex-direction: column;

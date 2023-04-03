@@ -1,107 +1,97 @@
 <template>
-  <div id="root">
-    <div id="cscenter-root">
-      <CsceterNav />
-      <div class="cs-center">
-        <div>
-          <div>
-            <h2>공지사항</h2>
-          </div>
-          <v-table>
-            <thead>
-              <tr style="font-weight: bolder">
-                <th class="text-center">글번호</th>
-                <th class="text-center">제목</th>
-                <th class="text-center">작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="item in noticeList"
-                :key="item.no"
-                class="event"
-                @click="noticeContent(item.no)"
-              >
-                <td>{{ item.no }}</td>
-                <td>
-                  {{ item.title }}
-                </td>
-                <td>{{ item.createAt }}</td>
-              </tr>
-            </tbody>
-          </v-table>
-        </div>
-        <div class="page-box">
-          <button @click="movetopreviouspage">
-            <v-icon> mdi-chevron-left </v-icon>
-          </button>
-          <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-          <button @click="movetonextpage">
-            <!-- 다음페이지로 이동 -->
-            <v-icon> mdi-chevron-right </v-icon>
-          </button>
-        </div>
-        <!-- 관리자만 공지사항 등록 버튼 보임-->
-        <v-row justify="center">
-          <v-dialog v-model="dialog" persistent width="500">
-            <template v-slot:activator="{ props }">
-              <v-btn
-                v-show="this.$store.state.sessionStorageData.auth === 'A'"
-                color="success"
-                v-bind="props"
-              >
-                공지사항 등록
-              </v-btn>
-            </template>
-            <v-card>
-              <h3>공지사항 등록</h3>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="제목"
-                        v-model="title"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-textarea
-                        label="내용"
-                        v-model="content"
-                        required
-                      ></v-textarea>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="blue-darken-1"
-                  variant="text"
-                  @click="dialog = false"
-                >
-                  Close
-                </v-btn>
-                <v-btn
-                  color="blue-darken-1"
-                  variant="text"
-                  @click="[(dialog = false), postNotice()]"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-row>
+  <div class="cs-center">
+    <div>
+      <div>
+        <h2>공지사항</h2>
       </div>
+      <v-table>
+        <thead>
+          <tr style="font-weight: bolder">
+            <th class="text-center">글번호</th>
+            <th class="text-center">제목</th>
+            <th class="text-center">작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in noticeList"
+            :key="item.no"
+            class="event"
+            @click="noticeContent(item.no)"
+          >
+            <td>{{ item.no }}</td>
+            <td>
+              {{ item.title }}
+            </td>
+            <td>{{ item.createAt }}</td>
+          </tr>
+        </tbody>
+      </v-table>
     </div>
+    <div class="page-box">
+      <button @click="movetopreviouspage">
+        <v-icon> mdi-chevron-left </v-icon>
+      </button>
+      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
+      <button @click="movetonextpage">
+        <!-- 다음페이지로 이동 -->
+        <v-icon> mdi-chevron-right </v-icon>
+      </button>
+    </div>
+    <!-- 관리자만 공지사항 등록 버튼 보임-->
+    <v-row justify="center">
+      <v-dialog v-model="dialog" persistent width="500">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            v-show="this.$store.state.sessionStorageData.auth === 'A'"
+            color="success"
+            v-bind="props"
+          >
+            공지사항 등록
+          </v-btn>
+        </template>
+        <v-card>
+          <h3>공지사항 등록</h3>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    label="제목"
+                    v-model="title"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-textarea
+                    label="내용"
+                    v-model="content"
+                    required
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+              Close
+            </v-btn>
+            <v-btn
+              color="blue-darken-1"
+              variant="text"
+              @click="[(dialog = false), postNotice()]"
+            >
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
 export default {
   data() {
     return {
@@ -114,7 +104,6 @@ export default {
       content: "",
     };
   },
-  components: { CsceterNav },
 
   // 계산 목적으로
   computed: {
@@ -221,19 +210,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#cscenter-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .cs-center {
   display: flex;
   flex-direction: column;

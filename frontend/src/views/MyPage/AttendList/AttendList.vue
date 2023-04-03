@@ -1,32 +1,26 @@
 <template>
-  <div id="root">
-    <div id="page-root">
-      <MypageNav />
-      <div class="mypage">
-        <div>
-          <AttendItem :attendList="attendList" />
-        </div>
-        <!-- 페이징 -->
-        <div class="page-box">
-          <button @click="movetopreviouspage">
-            <v-icon> mdi-chevron-left </v-icon>
-          </button>
-          <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-          <button @click="movetonextpage">
-            <v-icon> mdi-chevron-right </v-icon>
-          </button>
-        </div>
-      </div>
+  <div class="mypage">
+    <div>
+      <AttendItem :attendList="attendList" />
+    </div>
+    <!-- 페이징 -->
+    <div class="page-box">
+      <button @click="movetopreviouspage">
+        <v-icon> mdi-chevron-left </v-icon>
+      </button>
+      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
+      <button @click="movetonextpage">
+        <v-icon> mdi-chevron-right </v-icon>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import MypageNav from "@/components/MypageNav.vue";
 import AttendItem from "./AttendItem.vue";
 
 export default {
-  components: { MypageNav, AttendItem },
+  components: { AttendItem },
   data() {
     return {
       attendList: "",
@@ -110,19 +104,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#page-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .mypage {
   display: flex;
   flex-direction: column;

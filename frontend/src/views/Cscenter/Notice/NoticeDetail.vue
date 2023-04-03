@@ -1,39 +1,31 @@
 <template>
-  <div id="root">
-    <div id="page-root">
-      <CsceterNav />
-      <div class="container">
-        <div>
-          <div>
-            <h2>공지사항</h2>
-          </div>
-          <v-table class="table-box">
-            <thead>
-              <tr>
-                <th>제목</th>
-                <td>{{ detaillData.title }}</td>
-              </tr>
-              <tr class="content">
-                <th>내용</th>
-                <td>{{ detaillData.content }}</td>
-              </tr>
-            </thead>
-          </v-table>
-          <!-- 관리자만 보이게 해야함 -->
-          <div>
-            <v-btn color="#eee" @click="edit"> 수정 </v-btn>
-          </div>
-        </div>
+  <div class="container">
+    <div>
+      <div>
+        <h2>공지사항</h2>
+      </div>
+      <v-table class="table-box">
+        <thead>
+          <tr>
+            <th>제목</th>
+            <td>{{ detaillData.title }}</td>
+          </tr>
+          <tr class="content">
+            <th>내용</th>
+            <td>{{ detaillData.content }}</td>
+          </tr>
+        </thead>
+      </v-table>
+      <!-- 관리자만 보이게 해야함 -->
+      <div>
+        <v-btn color="#eee" @click="edit"> 수정 </v-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
-
 export default {
-  components: { CsceterNav },
   data() {
     return {
       detaillData: "",
@@ -63,7 +55,7 @@ export default {
     },
     edit() {
       this.$router.push({
-        name: "contentEdit",
+        name: "noticedetailEdit",
       });
     },
     deleteNotice() {
@@ -98,19 +90,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#page-root {
-  width: 1440px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
 .container {
   display: flex;
   flex-direction: column;

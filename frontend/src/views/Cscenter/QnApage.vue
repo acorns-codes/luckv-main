@@ -1,79 +1,72 @@
 <template>
-  <div id="root">
-    <div id="cscenter-root">
-      <CsceterNav />
-      <div class="cs-center">
-        <div>
-          <div>
-            <h2>QnA</h2>
-          </div>
-          <v-table>
-            <thead>
-              <tr style="font-weight: bolder">
-                <th class="text-center">글번호</th>
-                <th class="text-center">제목</th>
-                <th class="text-center">작성자</th>
-                <th class="text-center">작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="item in qnaList"
-                :key="item.no"
-                class="event"
-                @click="checkPwd(item.no, item.qpwd)"
-              >
-                <td>{{ item.no }}</td>
-                <td style="width: 400px">
-                  <v-icon size="x-small" v-if="item.qpwd !== null">
-                    mdi-lock-outline
-                  </v-icon>
-                  {{ item.title }} ({{ item.reply }})
-                </td>
-                <td>{{ item.id }}</td>
-                <td>{{ item.qcreate }}</td>
-              </tr>
-            </tbody>
-          </v-table>
-        </div>
-        <div class="page-box">
-          <button @click="movetopreviouspage">
-            <v-icon> mdi-chevron-left </v-icon>
-          </button>
-          <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-          <button @click="movetonextpage">
-            <!-- 다음페이지로 이동 -->
-            <v-icon> mdi-chevron-right </v-icon>
-          </button>
-        </div>
-        <v-btn color="success" class="mt-2" @click="postQna">QnA 작성</v-btn>
+  <div class="cs-center">
+    <div>
+      <div>
+        <h2>QnA</h2>
       </div>
-      <v-dialog v-model="dialog" width="500px">
-        <v-card>
-          <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
-          <v-card-text>
-            <v-text-field
-              prepend-inner-icon="mdi-lock-outline"
-              v-model="password"
-              type="password"
-              variant="outlined"
-            ></v-text-field>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="success" width="50%" @click="closeModeal">닫기</v-btn>
-            <v-btn color="success" width="50%" @click="qnaDetail">확인</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <v-table>
+        <thead>
+          <tr style="font-weight: bolder">
+            <th class="text-center">글번호</th>
+            <th class="text-center">제목</th>
+            <th class="text-center">작성자</th>
+            <th class="text-center">작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in qnaList"
+            :key="item.no"
+            class="event"
+            @click="checkPwd(item.no, item.qpwd)"
+          >
+            <td>{{ item.no }}</td>
+            <td style="width: 400px">
+              <v-icon size="x-small" v-if="item.qpwd !== null">
+                mdi-lock-outline
+              </v-icon>
+              {{ item.title }} ({{ item.reply }})
+            </td>
+            <td>{{ item.id }}</td>
+            <td>{{ item.qcreate }}</td>
+          </tr>
+        </tbody>
+      </v-table>
     </div>
+    <div class="page-box">
+      <button @click="movetopreviouspage">
+        <v-icon> mdi-chevron-left </v-icon>
+      </button>
+      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
+      <button @click="movetonextpage">
+        <!-- 다음페이지로 이동 -->
+        <v-icon> mdi-chevron-right </v-icon>
+      </button>
+    </div>
+    <v-btn color="success" class="mt-2" @click="postQna">QnA 작성</v-btn>
   </div>
+  <v-dialog v-model="dialog" width="500px">
+    <v-card>
+      <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
+      <v-card-text>
+        <v-text-field
+          prepend-inner-icon="mdi-lock-outline"
+          v-model="password"
+          type="password"
+          variant="outlined"
+        ></v-text-field>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-btn color="success" width="50%" @click="closeModeal">닫기</v-btn>
+        <v-btn color="success" width="50%" @click="qnaDetail">확인</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
 export default {
-  components: { CsceterNav },
   data() {
     return {
       qnaList: [],
@@ -164,7 +157,7 @@ export default {
     qnaDetail() {
       if (this.password === this.selectedItem.qpwd) {
         this.$router.push({
-          name: "csqnadetail",
+          name: "qnadetail",
           params: { no: this.selectedItem.no },
         });
       } else {
@@ -182,7 +175,7 @@ export default {
         this.selectedItem = { no, qpwd }; // 데이터 담기
       } else {
         this.$router.push({
-          name: "csqnadetail",
+          name: "qnadetail",
           params: { no: no },
         });
       }
@@ -195,7 +188,7 @@ export default {
     // 글 작성기능
     postQna() {
       this.$router.push({
-        path: "/postqna",
+        name: "postqna",
       });
     },
   },
@@ -203,19 +196,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#cscenter-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .cs-center {
   display: flex;
   flex-direction: column;

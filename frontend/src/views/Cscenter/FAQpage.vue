@@ -1,42 +1,37 @@
 <template>
-  <div id="root">
-    <div id="cscenter-root">
-      <CsceterNav />
-      <div class="cs-center">
-        <div>
-          <div>
-            <h2>자주 물어보는 질문</h2>
-          </div>
-          <div class="panels-container">
-            <div class="button-box">
-              <button
-                v-for="item in categories"
-                :key="item"
-                @click="getFAQ(item.url, this.$route.params.page - 1)"
-              >
-                {{ item.name }}
-              </button>
-            </div>
-            <!-- FAQ 리스트 -->
-            <FAQList :FAQList="FAQList" />
-            <v-btn
-              style="margin: 20px"
-              v-show="this.$store.state.sessionStorageData.auth === 'A'"
-              color="success"
-              @click="postFAQ"
-              >FAQ등록</v-btn
-            >
-            <div class="page-box">
-              <button @click="movetopreviouspage">
-                <v-icon> mdi-chevron-left </v-icon>
-              </button>
-              <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-              <button @click="movetonextpage">
-                <!-- 다음페이지로 이동 -->
-                <v-icon> mdi-chevron-right </v-icon>
-              </button>
-            </div>
-          </div>
+  <div class="cs-center">
+    <div>
+      <div>
+        <h2>자주 물어보는 질문</h2>
+      </div>
+      <div class="panels-container">
+        <div class="button-box">
+          <button
+            v-for="item in categories"
+            :key="item"
+            @click="getFAQ(item.url, this.$route.params.page - 1)"
+          >
+            {{ item.name }}
+          </button>
+        </div>
+        <!-- FAQ 리스트 -->
+        <FAQList :FAQList="FAQList" />
+        <v-btn
+          style="margin: 20px"
+          v-show="this.$store.state.sessionStorageData.auth === 'A'"
+          color="success"
+          @click="postFAQ"
+          >FAQ등록</v-btn
+        >
+        <div class="page-box">
+          <button @click="movetopreviouspage">
+            <v-icon> mdi-chevron-left </v-icon>
+          </button>
+          <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
+          <button @click="movetonextpage">
+            <!-- 다음페이지로 이동 -->
+            <v-icon> mdi-chevron-right </v-icon>
+          </button>
         </div>
       </div>
     </div>
@@ -44,10 +39,9 @@
 </template>
 
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
 import FAQList from "./FAQ/FAQList.vue";
 export default {
-  components: { CsceterNav, FAQList },
+  components: { FAQList },
   data() {
     return {
       FAQList: "",
@@ -129,7 +123,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) + 1;
         this.$router.push({
-          name: "csfaq",
+          name: "faq",
           params: { page: pp },
         });
         this.getNotice(this.$route.params.page);
@@ -138,7 +132,7 @@ export default {
     // 새로운 FAQ 등록
     postFAQ() {
       this.$router.push({
-        path: "/postfaq",
+        name: "postfaq",
       });
     },
   },
@@ -146,19 +140,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#cscenter-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .cs-center {
   display: flex;
   flex-direction: column;

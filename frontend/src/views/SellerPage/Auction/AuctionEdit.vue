@@ -1,51 +1,48 @@
 <template>
-  <div id="root">
-    <div id="page-root">
-      <MypageNav />
-      <div class="container">
-        <h2>경매 수정</h2>
-        <div>
-          <div class="page-box">
-            <v-form v-model="valid" @submit.prevent="editAuction">
-              <v-table class="table-box">
-                <thead>
-                  <tr>
-                    <th>제목</th>
-                    <td>
-                      <v-text-field
-                        variant="plain"
-                        v-model="this.auctionData.title"
-                        :rules="titleRules"
-                        required
-                      ></v-text-field>
-                    </td>
-                  </tr>
-                  <tr class="content">
-                    <th>내용</th>
-                    <td>
-                      <v-textarea
-                        rows="10"
-                        variant="plain"
-                        v-model="this.auctionData.content"
-                        :rules="contentRules"
-                        required
-                      ></v-textarea>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>카테고리</th>
-                    <td>
-                      <v-select
-                        variant="plain"
-                        required
-                        :items="categorys"
-                        v-model="this.auctionData.vcate"
-                        item-title="title"
-                        item-value="value"
-                      ></v-select>
-                    </td>
-                  </tr>
-                  <!-- <tr>
+  <div class="container">
+    <h2>경매 수정</h2>
+    <div>
+      <div class="page-box">
+        <v-form v-model="valid" @submit.prevent="editAuction">
+          <v-table class="table-box">
+            <thead>
+              <tr>
+                <th>제목</th>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.auctionData.title"
+                    :rules="titleRules"
+                    required
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr class="content">
+                <th>내용</th>
+                <td>
+                  <v-textarea
+                    rows="10"
+                    variant="plain"
+                    v-model="this.auctionData.content"
+                    :rules="contentRules"
+                    required
+                  ></v-textarea>
+                </td>
+              </tr>
+              <tr>
+                <th>카테고리</th>
+                <td>
+                  <v-select
+                    variant="plain"
+                    required
+                    :items="categorys"
+                    v-model="this.auctionData.vcate"
+                    item-title="title"
+                    item-value="value"
+                  ></v-select>
+                </td>
+              </tr>
+              <!-- <tr>
                     <th>동영상</th>
                     <td>
                       <v-file-input
@@ -58,94 +55,85 @@
                     </td>
                   </tr> -->
 
-                  <tr>
-                    <th>경매 시작가</th>
-                    <td>
-                      <v-text-field
-                        variant="plain"
-                        v-model="this.auctionData.payStart"
-                        suffix="원"
-                        :rules="payStartRules"
-                        readonly
-                        required
-                      ></v-text-field>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>경매 시작 날짜</th>
-                    <td>
-                      <v-text-field
-                        v-model="this.startDay[0]"
-                        variant="plain"
-                        type="date"
-                        :rules="StartDaytRules"
-                        required
-                        readonly
-                      ></v-text-field>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>경매 시작 시간</th>
-                    <td>
-                      <v-text-field
-                        variant="plain"
-                        v-model="this.startDay[1]"
-                        type="time"
-                        :rules="startTimetRules"
-                        required
-                        readonly
-                      ></v-text-field>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>경매 마감 날짜</th>
-                    <td>
-                      <v-text-field
-                        v-model="this.lastDay[0]"
-                        variant="plain"
-                        type="date"
-                        :rules="lastDaytRules"
-                        required
-                        readonly
-                      ></v-text-field>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>경매 마감 시간</th>
-                    <td>
-                      <v-text-field
-                        variant="plain"
-                        v-model="this.lastDay[1]"
-                        type="time"
-                        :rules="lastTimetRules"
-                        required
-                        readonly
-                      ></v-text-field>
-                    </td>
-                  </tr>
-                </thead>
-              </v-table>
+              <tr>
+                <th>경매 시작가</th>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.auctionData.payStart"
+                    suffix="원"
+                    :rules="payStartRules"
+                    readonly
+                    required
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <th>경매 시작 날짜</th>
+                <td>
+                  <v-text-field
+                    v-model="this.startDay[0]"
+                    variant="plain"
+                    type="date"
+                    :rules="StartDaytRules"
+                    required
+                    readonly
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <th>경매 시작 시간</th>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.startDay[1]"
+                    type="time"
+                    :rules="startTimetRules"
+                    required
+                    readonly
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <th>경매 마감 날짜</th>
+                <td>
+                  <v-text-field
+                    v-model="this.lastDay[0]"
+                    variant="plain"
+                    type="date"
+                    :rules="lastDaytRules"
+                    required
+                    readonly
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <th>경매 마감 시간</th>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.lastDay[1]"
+                    type="time"
+                    :rules="lastTimetRules"
+                    required
+                    readonly
+                  ></v-text-field>
+                </td>
+              </tr>
+            </thead>
+          </v-table>
 
-              <v-btn
-                type="submit"
-                color="success"
-                variant="elevated"
-                class="mt-2"
-                >수정</v-btn
-              >
-            </v-form>
-          </div>
-        </div>
+          <v-btn type="submit" color="success" variant="elevated" class="mt-2"
+            >수정</v-btn
+          >
+        </v-form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import MypageNav from "@/components/MypageNav.vue";
-
 export default {
-  components: { MypageNav },
   data() {
     return {
       valid: false,
@@ -246,18 +234,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#page-root {
-  width: 1440px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .page-box {
   /* width: 100%; */
   flex-direction: column;
