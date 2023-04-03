@@ -49,9 +49,10 @@ export default {
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/questionDetail?qno=${this.$route.params.no}`,
+          url: `${process.env.VUE_APP_API_URL}/questionDetail?no=${this.$route.params.no}`,
         });
         this.detaillData = res.data.data;
+        console.log(this.detaillData);
       } catch (error) {
         console.log(error);
       }

@@ -78,7 +78,7 @@ export default {
       console.log("로그아웃유저");
       this.$store.commit("clearUser");
       this.$store.state.sessionStorageData = "";
-      window.location.reload();
+      this.$router.go();
     },
   },
   // created() {

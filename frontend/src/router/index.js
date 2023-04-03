@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import store from "@/store";
 const routes = [
   {
     path: "/",
     name: "Home",
     component: () => import("@/views/MainPage"),
-
     // 메타 필드
     // $route.matched를 반복하여 라우터 레코드의 메타필드를 검사한다.
   },
@@ -151,4 +150,18 @@ const router = createRouter({
 //   }
 //   next();
 // });
+
+router.beforeEach((to, from, next) => {
+  if (store.state.socket && store.state.socket.connected) {
+    store.state.socket.disconnect(() => {
+      console.log("WebSocket 연결이 종료되었습니다.");
+      store.state.socket = "";
+      console.log(store.state.socket);
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 export default router;
