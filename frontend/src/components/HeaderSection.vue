@@ -2,8 +2,8 @@
   <section>
     <div>
       <div>
-        <h3>{{ name }}</h3>
-        <p>{{ content }}</p>
+        <h3>{{ kind.name }}</h3>
+        <p>{{ kind.content }}</p>
       </div>
       <VideoList :videoList="this.videoList" />
     </div>
@@ -16,9 +16,7 @@ import VideoList from "@/views/videoPage/VideoList.vue";
 export default {
   components: { VideoList },
   props: {
-    name: String,
-    content: String,
-    api: String,
+    kind: Object,
   },
   data() {
     return {
@@ -29,7 +27,7 @@ export default {
   created() {},
   mounted() {
     console.log(this.api);
-    this.getVideo(this.api);
+    this.getVideo(this.kind.api);
     this.videoSrc = process.env.VUE_APP_API_URL;
   },
   methods: {
