@@ -96,6 +96,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 50px 0 50px;
+
   & a {
     text-decoration: none;
     color: #2c3e50;
@@ -114,6 +115,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin: auto;
+
   & a {
     text-decoration: none;
     color: #2c3e50;
