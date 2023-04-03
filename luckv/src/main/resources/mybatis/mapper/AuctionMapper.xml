@@ -136,7 +136,8 @@
 		  set 
 		 	start_day = now(), /*구독 시작일*/
         	last_day = date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'), /*구독중지기간*/
-			kind = '구독' /*판매 제목*/
+			kind = '구독', /*판매 제목*/
+			pay_start = null
 		  where ano = #{ano}
 		  and seller = #{seller}
 		  and kind = '경매'
