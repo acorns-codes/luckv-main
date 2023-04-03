@@ -45,8 +45,85 @@
 	   		LIMIT #{start}, #{end}
 	
        </select>
+       
+	    <!-- 내 입찰내역 -->
+	    <select id="attendMy"  parameterType="com.luckv.demo.dto.Auction"  resultType="com.luckv.demo.dto.Auction">
+	       	select 
+		  		a.ano, /*경매 번호*/
+	        	seller, /*판매자 회원번호*/
+	        	s.mid as sellerNm, /*판매자 아이디*/ 
+	    		title,  /*판매 제목*/
+	    		content, /*판매내용*/
+	    		vcate, /*카테고리*/
+	    		pay_start, /*판매 시작가*/
+	    		start_day, /*판매 시작일*/
+	    		last_day, /*판매 종료일*/
+	    		att.bidding as bidding, /*입찰가*/
+	    		att.buyer as buyer, /*입찰자 회원번호*/
+	    		b.mid as buyerNm, /*입찰자 아이디*/
+	    		status /*판매 상태*/
+        	from auction a
+			  	left join user s on  a.seller = s.mno
+			  	left join video v on a.ano = v.ano     
+	            left join attend  att  on a.ano = att.ano 
+			  	left join user b on att.buyer = b.mno		  			  	
+		  	where att.buyer = #{buyer}
+		 	 	order by a.ano desc
+		   	LIMIT #{start}, #{end}
+		
+	       </select>
+	    
     
-    
-    
+		     <!-- 구매내역 총 개수 -->
+		    <select id="attendCount" parameterType="com.luckv.demo.dto.Auction" resultType="Integer">
+		    	 select count(*) AS cnt from (
+			    	 select 
+				  		a.ano, /*경매 번호*/
+			        	seller, /*판매자 회원번호*/
+			        	s.mid as sellerNm, /*판매자 아이디*/ 
+			    		title,  /*판매 제목*/
+			    		content, /*판매내용*/
+			    		vcate, /*카테고리*/
+			    		pay_start, /*판매 시작가*/
+			    		start_day, /*판매 시작일*/
+			    		last_day, /*판매 종료일*/
+			    		att.bidding as pay_max, /*최고가*/
+			    		att.buyer as buyer, /*낙찰자 회원번호*/
+			    		b.mid as buyerNm, /*낙찰자 아이디*/
+			    		status /*판매 상태*/
+		        	from auction a
+					  	left join user s on  a.seller = s.mno
+					  	left join video v on a.ano = v.ano
+					  	left join (SELECT ano, MAX(bidding) as bidding
+			           FROM attend  GROUP BY ano) a1 on a1.ano = a.ano         
+			            left join attend  att  on a1.ano = att.ano and att.bidding = a1.bidding
+					  	left join user b on att.buyer = b.mno		  			  	
+				  	where a.status = '판매종료' and att.buyer = #{buyer}) as attendcount
+			</select>
+			
+			<!-- 구매내역 총 개수 -->
+		    <select id="attendMyCount" parameterType="com.luckv.demo.dto.Auction" resultType="Integer">
+		    	 select count(*) AS cnt from (
+			    	 select 
+					  	a.ano, /*경매 번호*/
+			        	seller, /*판매자 회원번호*/
+			        	s.mid as sellerNm, /*판매자 아이디*/ 
+			    		title,  /*판매 제목*/
+			    		content, /*판매내용*/
+			    		vcate, /*카테고리*/
+			    		pay_start, /*판매 시작가*/
+			    		start_day, /*판매 시작일*/
+			    		last_day, /*판매 종료일*/
+			    		att.bidding as bidding, /*입찰가*/
+			    		att.buyer as buyer, /*입찰자 회원번호*/
+			    		b.mid as buyerNm, /*입찰자 아이디*/
+			    		status /*판매 상태*/
+		        	from auction a
+					  	left join user s on  a.seller = s.mno
+					  	left join video v on a.ano = v.ano     
+			            left join attend  att  on a.ano = att.ano 
+					  	left join user b on att.buyer = b.mno		  			  	
+				  	where att.buyer =  #{buyer}) as attendcount
+			</select>
     
 </mapper>
