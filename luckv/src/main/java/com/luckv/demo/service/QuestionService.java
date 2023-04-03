@@ -34,8 +34,8 @@ public class QuestionService {
 	}
 	
 	// QnA 상세
-	public Question questionDetail(int qno) {
-        return questionMapper.questionDetail(qno);
+	public Question questionDetail(Question question) {
+        return questionMapper.questionDetail(question);
 	}
 
 	// QnA 수정

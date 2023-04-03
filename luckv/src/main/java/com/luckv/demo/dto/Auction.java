@@ -22,13 +22,13 @@ public class Auction {
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone = "Asia/Seoul")
 	private LocalDateTime  lastDay; // 경매 종료일
-	
+	private int  bidding; // 입찰가
+
 	private String vcate; // 경매 카테고리 
 	private String status; // 판매상태
 	private int  buyer; // 경매낙찰자 회원번호
 	private String buyerNm; // 경매낙찰자 이름
 	private String kind; // 동영상 형태 (구독,무료, 경매)
-
 	
 	
 	

@@ -21,7 +21,7 @@ public interface QuestionMapper {
 	int insertQuestion(Question question);
 	
 	// QnA 상세보기
-	Question questionDetail(int qno);
+	Question questionDetail(Question question);
 	
 	// QnA 수정
 	int questionUpdate(Question question);
