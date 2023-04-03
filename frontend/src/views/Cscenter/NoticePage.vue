@@ -129,10 +129,12 @@ export default {
       }
     },
   },
-  // 페이지가 켜질 때 실행
-  mounted() {
+  created() {
     this.getNotice(this.$route.params.page - 1);
   },
+
+  // 페이지가 켜질 때 실행
+  mounted() {},
   methods: {
     // 공지사항 불러오기
     async getNotice(page) {
@@ -157,7 +159,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) - 1;
         this.$router.push({
-          name: "cscenter",
+          name: "notice",
           params: { page: pp },
         });
         this.getNotice(this.$route.params.page - 2);
@@ -170,7 +172,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) + 1;
         this.$router.push({
-          name: "cscenter",
+          name: "notice",
           params: { page: pp },
         });
         this.getNotice(this.$route.params.page);
@@ -181,7 +183,7 @@ export default {
     noticeContent(no) {
       console.log(no);
       this.$router.push({
-        name: "content",
+        name: "noticedetail",
         params: { no: no },
       });
     },

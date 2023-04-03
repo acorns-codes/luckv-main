@@ -4,7 +4,7 @@
     <div>
       <router-link
         :to="{
-          name: 'cscenter',
+          name: 'notice',
           params: { page: 1 },
         }"
         >공지사항</router-link

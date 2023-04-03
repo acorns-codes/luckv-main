@@ -1,7 +1,7 @@
 <template>
   <div id="root">
     <div id="page-root">
-      <CsceterNav />
+      <!-- <CsceterNav /> -->
       <div class="container">
         <div>
           <div>
@@ -36,9 +36,9 @@
   </div>
 </template>
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
+// import CsceterNav from "@/components/CsceterNav.vue";
 export default {
-  components: { CsceterNav },
+  // components: { CsceterNav },
   data() {
     return {
       detaillData: "",
@@ -86,7 +86,7 @@ export default {
         if (res.data.data) {
           alert("게시글 수정이 완료되었습니다!");
           this.$router.push({
-            name: "cscenter",
+            name: "notice",
             params: { page: 1 },
           });
         } else {

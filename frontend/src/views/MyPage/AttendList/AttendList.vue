@@ -49,19 +49,19 @@ export default {
   },
   mounted() {
     this.getList(this.$route.params.page - 1);
-    this.getCnt();
+    // this.getCnt();
   },
   methods: {
-    async getList(page) {
+    async getList() {
       console.log("참여내역 불러오기");
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/attendList?buyer=${this.$store.state.sessionStorageData.mno}&page=${page}`,
+          url: `${process.env.VUE_APP_API_URL}/attendList?buyer=${this.$store.state.sessionStorageData.mno}`,
         });
         console.log(res);
-        console.log(res.data);
-        this.attendList = res.data;
+        this.attendList = res.data.data.auctionList;
+        console.log(this.attendList);
       } catch (error) {
         console.log(error);
       }

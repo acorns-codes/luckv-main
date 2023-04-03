@@ -43,7 +43,7 @@
       >
       <router-link
         :to="{
-          name: 'cscenter',
+          name: 'notice',
           params: { page: 1 },
         }"
         >CScenter</router-link
