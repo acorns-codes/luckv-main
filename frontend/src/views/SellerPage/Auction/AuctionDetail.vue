@@ -3,312 +3,205 @@
     <div id="page-root">
       <MypageNav />
       <div class="container">
-        <h2>경매 상세 페이지</h2>
+        <h2>경매 수정</h2>
         <div>
           <div class="page-box">
-            <v-table class="table-box">
-              <thead>
-                <tr>
-                  <th>제목</th>
-                  <td>
-                    <v-text-field
-                      variant="plain"
-                      v-model="this.auctionData.title"
-                      readonly
-                    ></v-text-field>
-                  </td>
-                </tr>
-                <tr class="content">
-                  <th>내용</th>
-                  <td>
-                    <v-textarea
-                      rows="10"
-                      variant="plain"
-                      readonly
-                      v-model="this.auctionData.content"
-                    ></v-textarea>
-                  </td>
-                </tr>
-                <tr>
-                  <th>카테고리</th>
-                  <td>
-                    <v-text-field
-                      variant="plain"
-                      readonly
-                      v-model="this.auctionData.vcate"
-                    ></v-text-field>
-                  </td>
-                </tr>
-
-                <tr>
-                  <th>경매 시작가</th>
-                  <td>
-                    <v-text-field
-                      variant="plain"
-                      readonly
-                      v-model="this.auctionData.payStart"
-                      suffix="원"
-                    ></v-text-field>
-                  </td>
-                </tr>
-                <tr>
-                  <th>경매 시작 날짜</th>
-                  <td>
-                    <v-text-field
-                      v-model="this.startDay[0]"
-                      variant="plain"
-                      readonly
-                      type="date"
-                    ></v-text-field>
-                  </td>
-                </tr>
-                <tr>
-                  <th>경매 시작 시간</th>
-                  <td>
-                    <v-text-field
-                      variant="plain"
-                      v-model="this.startDay[1]"
-                      type="time"
-                      readonly
-                    ></v-text-field>
-                  </td>
-                </tr>
-                <tr>
-                  <th>경매 마감 날짜</th>
-                  <td>
-                    <v-text-field
-                      v-model="this.lastDay[0]"
-                      variant="plain"
-                      readonly
-                      type="date"
-                    ></v-text-field>
-                  </td>
-                </tr>
-                <tr>
-                  <th>경매 마감 시간</th>
-                  <td>
-                    <v-text-field
-                      variant="plain"
-                      v-model="this.lastDay[1]"
-                      type="time"
-                      readonly
-                    ></v-text-field>
-                  </td>
-                </tr>
-              </thead>
-            </v-table>
-            <div>
+            <v-form v-model="valid" @submit.prevent="editAuction">
               <v-table class="table-box">
                 <thead>
                   <tr>
-                    <th>현재 상태</th>
+                    <th>제목</th>
                     <td>
                       <v-text-field
                         variant="plain"
-                        readonly
-                        v-model="this.auctionData.status"
+                        v-model="this.auctionData.title"
+                        :rules="titleRules"
+                        required
                       ></v-text-field>
                     </td>
                   </tr>
+                  <tr class="content">
+                    <th>내용</th>
+                    <td>
+                      <v-textarea
+                        rows="10"
+                        variant="plain"
+                        v-model="this.auctionData.content"
+                        :rules="contentRules"
+                        required
+                      ></v-textarea>
+                    </td>
+                  </tr>
                   <tr>
-                    <th>낙찰자</th>
+                    <th>카테고리</th>
+                    <td>
+                      <v-select
+                        variant="plain"
+                        required
+                        :items="categorys"
+                        v-model="this.auctionData.vcate"
+                        item-title="title"
+                        item-value="value"
+                      ></v-select>
+                    </td>
+                  </tr>
+                  <!-- <tr>
+                    <th>동영상</th>
+                    <td>
+                      <v-file-input
+                        variant="plain"
+                        prepend-icon="mdi-video"
+                        v-model="video"
+                        :rules="videoRules"
+                        required
+                      ></v-file-input>
+                    </td>
+                  </tr> -->
+
+                  <tr>
+                    <th>경매 시작가</th>
                     <td>
                       <v-text-field
                         variant="plain"
-                        readonly
-                        v-model="this.auctionData.buyerNm"
-                      ></v-text-field>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>최고가</th>
-                    <td>
-                      <v-text-field
+                        v-model="this.auctionData.payStart"
                         suffix="원"
+                        :rules="payStartRules"
                         readonly
+                        required
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 시작 날짜</th>
+                    <td>
+                      <v-text-field
+                        v-model="this.startDay[0]"
                         variant="plain"
-                        v-model="pay"
+                        type="date"
+                        :rules="StartDaytRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 시작 시간</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        v-model="this.startDay[1]"
+                        type="time"
+                        :rules="startTimetRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 마감 날짜</th>
+                    <td>
+                      <v-text-field
+                        v-model="this.lastDay[0]"
+                        variant="plain"
+                        type="date"
+                        :rules="lastDaytRules"
+                        required
+                        readonly
+                      ></v-text-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>경매 마감 시간</th>
+                    <td>
+                      <v-text-field
+                        variant="plain"
+                        v-model="this.lastDay[1]"
+                        type="time"
+                        :rules="lastTimetRules"
+                        required
+                        readonly
                       ></v-text-field>
                     </td>
                   </tr>
                 </thead>
               </v-table>
-            </div>
+
+              <v-btn
+                type="submit"
+                block
+                color="success"
+                variant="elevated"
+                class="mt-2"
+                >수정</v-btn
+              >
+            </v-form>
           </div>
-          <v-btn
-            v-if="this.auctionData.status !== '판매종료'"
-            @click="editAuction"
-            >수정</v-btn
-          >
-
-          <v-dialog v-else v-model="dialog" persistent width="500">
-            <template v-slot:activator="{ props }">
-              <v-btn variant="outlined" color="#FF9414" v-bind="props">
-                구독으로 변경
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">구독 동영상으로 변경</span>
-              </v-card-title>
-              <v-card-text>
-                <v-form v-model="valid" @submit.prevent="sendMessage">
-                  <p>동영상 제공 기간</p>
-                  <v-text-field
-                    label="날짜"
-                    v-model="Day"
-                    type="date"
-                    :rules="DaytRules"
-                    required
-                  ></v-text-field>
-                  <v-text-field
-                    label="시간"
-                    v-model="Time"
-                    type="time"
-                    :rules="TimetRules"
-                    required
-                  ></v-text-field>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="dialog = false"
-                    >
-                      닫기
-                    </v-btn>
-                    <v-btn
-                      type="submit"
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="moveToSub"
-                    >
-                      변경
-                    </v-btn>
-                  </v-card-actions>
-                </v-form>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-          <v-btn @click="editAuction">수정</v-btn>
-
         </div>
       </div>
-      <!-- <v-btn @click="sendMessage">소켓으로 보내기</v-btn>
-      <div v-for="(item, idx) in recvList" :key="idx">
-        <h3>유저이름: {{ item.bidding }}</h3>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import MypageNav from "@/components/MypageNav.vue";
-import Stomp from "webstomp-client";
-import SockJS from "sockjs-client";
+
 export default {
   components: { MypageNav },
   data() {
     return {
+      valid: false,
       auctionData: "",
-      pay: "",
-      category: "",
       startDay: "",
       lastDay: "",
-      buyer: "",
-      recvList: [],
- dialog: false,
-      valid: false,
-      Day: "",
-      DaytRules: [(v) => !!v || "마감 날짜는 필수 입력 사항입니다."],
-      Time: "",
-      TimetRules: [(v) => !!v || "마감 시간는 필수 입력 사항입니다."],
-      wepsocket: "",
+      titleRules: [
+        (v) => !!v || "제목은 필수 입력사항입니다.",
+        // (v) =>
+        //   /^[A-Za-z0-9]{2,20}$/g.test(v) ||
+        //   "제목은 2자 이상 20자 이하로 작성해주세요.",
+      ],
+      contentRules: [
+        (v) => !!v || "내용은 필수 입력사항입니다.",
+        // (v) =>
+        //   /^[a-z0-9@.]{2,150}$/g.test(v) ||
+        //   "내용은 2자 이상 150자 이하로 작성해주세요.",
+      ],
+      videoRules: [(v) => !!v || "비디오 등록은 필수 사항입니다."],
+      payStartRules: [(v) => !!v || "경매 시작가는 필수 입력 사항입니다."],
+      StartDaytRules: [(v) => !!v || "시작 날짜는 필수 입력 사항입니다."],
+      startTimetRules: [(v) => !!v || "시작 시간는 필수 입력 사항입니다."],
+      lastDaytRules: [(v) => !!v || "마감 날짜는 필수 입력 사항입니다."],
+      lastTimetRules: [(v) => !!v || "마감 시간는 필수 입력 사항입니다."],
+      categorys: [
+        {
+          title: "동물",
+          value: "animal",
+        },
+        {
+          title: "인물",
+          value: "character",
+        },
+        {
+          title: "건물",
+          value: "building",
+        },
+        {
+          title: "식물",
+          value: "plant",
+        },
+        {
+          title: "기타",
+          value: "etc",
+        },
+      ],
     };
   },
 
-  created() {
-    // 소켓 연결 시도
-    this.connect();
-  },
   mounted() {
     // 상세 내역 불러오기
     this.getAuction();
+    console.log(this.$store.state.sessionStorageData);
   },
   methods: {
-    // 소켓 연결
-    connect() {
-      console.log("소켓연결");
-      const serverURL = `http://localhost:80`;
-      let socket = new SockJS(serverURL);
-      this.stompClient = Stomp.over(socket);
-      console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
-      this.stompClient.connect(
-        {},
-        (frame) => {
-          // 소켓 연결 성공
-          this.connected = true;
-          console.log("소켓 연결 성공", frame);
-          // 서버의 메시지 전송 endpoint를 구독합니다.
-          // 이런형태를 pub sub 구조라고 합니다.
-          this.stompClient.subscribe(
-            "/send",
-            // `auctionDetail?ano=${this.$route.params.an}`,
-            (res) => {
-              console.log("구독으로 받은 메시지 입니다.", res.body);
-              // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-              this.recvList.push(JSON.parse(res.body));
-            }
-          );
-          console.log(this.recvList, "받아온데이터어어엉어어어");
-        },
-        (error) => {
-          // 소켓 연결 실패
-          console.log("소켓 연결 실패", error);
-          this.connected = false;
-        }
-      );
-    },
-    // 소켓으로 데이터 보내기
-
-    sendMessage() {
-      console.log("버튼");
-      this.send();
-      this.pay;
-      console.log(this.recvList, "받아온데이터어어엉어어어2");
-    },
-    send() {
-      try {
-        const res = this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/insertAttend/`,
-          data: {
-            ano: this.$route.params.ano,
-            buyer: this.$store.state.sessionStorageData.mno,
-            bidding: this.pay,
-          },
-        });
-        console.log(res);
-        this.$store.commit("getUserData", res.data);
-        console.log(this.$store.state.userData);
-      } catch (error) {
-        console.log(error);
-      }
-      console.log("Send message:" + this.message);
-      if (this.stompClient && this.stompClient.connected) {
-        const msg = {
-          ano: this.$route.params.ano,
-          buyer: 1,
-          buyerNm: this.buyer,
-          bidding: this.pay,
-        };
-        this.stompClient.send("/attend", JSON.stringify(msg), {});
-      }
-      console.log(this.recvList, "받아온데이터어어엉어어어3");
-    },
     // 각 경매의 상세페이지 받아오기
     async getAuction() {
       console.log("경매조회");
@@ -325,45 +218,26 @@ export default {
         console.log(error);
       }
     },
-    editAuction() {
-      this.$router.push({
-        name: "editauction",
-        params: { ano: this.$route.params.ano },
-      });
-    },
-
-    // 구독으로 넘기는 함수
-    async moveToSub() {
-      console.log("구독으로 넘겨오오오오오");
-      const editData = {
-        ano: this.auctionData.ano,
+    async editAuction() {
+      console.log("경매내역 수정");
+      const editdata = {
+        title: this.auctionData.title,
+        content: this.auctionData.content,
+        vcate: this.auctionData.vcate,
         seller: this.$store.state.sessionStorageData.mno,
-        kind: this.auctionData.kind,
-        lastDay: `${this.Day} ${this.Time}:00`,
+        ano: this.$route.params.ano,
       };
       try {
-        console.log("try 부분 실행");
-        if (!this.valid) {
-          console.log(this.valid);
-          alert("제공 기간을 확인해주세요!");
-          return;
-        } else {
-          const res = this.$axios({
-            headers: {
-              "Content-type": "application/json",
-            },
-            method: "POST",
-            url: `${process.env.VUE_APP_API_URL}/auctionChange`,
-            data: editData,
-          });
-          console.log(res);
-          this.dialog = false;
-          alert("구독 동영상으로 변경되었습니다.");
-          this.$router.push({
-            name: "sellerauction",
-            params: { page: 1 },
-          });
-        }
+        const res = await this.$axios({
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          url: `${process.env.VUE_APP_API_URL}/auctionUpdate`,
+          data: editdata,
+        });
+        console.log(editdata);
+        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -385,20 +259,20 @@ export default {
   align-items: flex-start;
   justify-content: space-between;
 }
-
-.page-box {
-  /* width: 100%; */
-  flex-direction: column;
-  display: flex;
-  /* align-items: center; */
-  padding-bottom: 10px;
-}
 .container {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
+  align-items: center;
   width: 100%;
   padding-top: 110px;
+  & > div {
+    width: 100%;
+    /* flex-direction: column; */
+    display: flex;
+    /* align-items: center; */
+
+    padding-bottom: 10px;
+  }
 }
 .table-box {
   width: 700px;
@@ -428,6 +302,6 @@ export default {
 }
 
 button {
-  margin: 20px;
+  margin-top: 20px;
 }
 </style>
