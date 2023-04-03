@@ -129,11 +129,11 @@ export default {
       }
     },
   },
-  // watch: {
-  //   $route(to,from){
-
-  //   }
-  // },
+  watch: {
+    $route(to, form) {
+      if (to.path !== form.path) this.getNotice(this.$route.params.page - 1);
+    },
+  },
 
   created() {
     this.getNotice(this.$route.params.page - 1);
