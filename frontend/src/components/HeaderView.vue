@@ -10,7 +10,7 @@
       <div v-else>
         <router-link
           :to="{
-            name: 'mypage',
+            name: 'mypageEdit',
             params: { mno: this.sessionData.mno },
           }"
           >Mypage</router-link

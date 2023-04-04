@@ -1,8 +1,8 @@
 <template>
-  <div class="main-container">
-    <div class="form-box">
+  <div class="login-root">
+    <div class="login-form-box">
       <v-card class="mx-auto px-6 py-8" max-width="344">
-        <div class="btn-box" @click="this.$store.state.isClicked = false">
+        <div class="login-btn-box" @click="this.$store.state.isClicked = false">
           <img :src="require(`@/assets/images/close.svg`)" />
         </div>
         <h3>로그인</h3>
@@ -36,7 +36,7 @@
       </v-card>
     </div>
   </div>
-</template>
+</template>np
 
 <script>
 export default {
@@ -106,35 +106,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-h3 {
-  font-size: 1.5rem;
-  padding-bottom: 10px;
-}
-
-.main-container {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.496);
-}
-.form-box {
-  width: 500px;
-}
-.btn-box {
-  display: flex;
-  justify-content: flex-end;
-  & > img {
-    width: 10px;
-    cursor: pointer;
-  }
-}
-.sign-up {
-  padding-top: 10px;
-  border-bottom: 1px solid #343434;
-}
-</style>
+<style lang="scss" scoped></style>

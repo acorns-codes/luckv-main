@@ -1,28 +1,33 @@
 <template>
-  <div class="main-container">
-    <h1>고객센터</h1>
-    <div>
-      <router-link
-        :to="{
-          name: 'notice',
-          params: { page: 1 },
-        }"
-        >공지사항</router-link
-      >
-      <router-link
-        :to="{
-          name: 'csqna',
-          params: { page: 1 },
-        }"
-        >QnA</router-link
-      >
-      <router-link
-        :to="{
-          name: 'csfaq',
-          params: { page: 1 },
-        }"
-        >FAQ</router-link
-      >
+  <div id="root">
+    <div id="cscenter-root">
+      <div class="main-container">
+        <h1>고객센터</h1>
+        <div>
+          <router-link
+            :to="{
+              name: 'notice',
+              params: { page: 1 },
+            }"
+            >공지사항</router-link
+          >
+          <router-link
+            :to="{
+              name: 'qna',
+              params: { page: 1 },
+            }"
+            >QnA</router-link
+          >
+          <router-link
+            :to="{
+              name: 'faq',
+              params: { page: 1 },
+            }"
+            >FAQ</router-link
+          >
+        </div>
+      </div>
+      <router-view />
     </div>
   </div>
 </template>
@@ -36,6 +41,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+#cscenter-root {
+  width: 1440px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
 .main-container {
   width: 300px;
   display: flex;

@@ -1,40 +1,34 @@
 <template>
-  <div id="root">
-    <div id="mypage-root">
-      <CsceterNav />
-      <div class="container">
-        <div>
-          <div>
-            <h2>QnA</h2>
-          </div>
-          <!-- 작성자만 보일 수 있도록 설정해야 함 -->
-          <div class="btn-box">
-            <v-btn size="small" color="#eee" @click="editBtn"> 수정 </v-btn>
-            <v-btn size="small" color="#eee" @click="deleteBtn"> 삭제 </v-btn>
-          </div>
-          <v-table class="table-box">
-            <thead>
-              <tr>
-                <th>제목</th>
-                <td>{{ detaillData.title }}</td>
-              </tr>
-              <tr class="content">
-                <th>내용</th>
-                <td>{{ detaillData.content }}</td>
-              </tr>
-            </thead>
-          </v-table>
-          <CommentList />
-        </div>
+  <div class="container">
+    <div>
+      <div>
+        <h2>QnA</h2>
       </div>
+      <!-- 작성자만 보일 수 있도록 설정해야 함 -->
+      <div class="btn-box">
+        <v-btn size="small" color="#eee" @click="editBtn"> 수정 </v-btn>
+        <v-btn size="small" color="#eee" @click="deleteBtn"> 삭제 </v-btn>
+      </div>
+      <v-table class="table-box">
+        <thead>
+          <tr>
+            <th>제목</th>
+            <td>{{ detaillData.title }}</td>
+          </tr>
+          <tr class="content">
+            <th>내용</th>
+            <td>{{ detaillData.content }}</td>
+          </tr>
+        </thead>
+      </v-table>
+      <CommentList />
     </div>
   </div>
 </template>
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
 import CommentList from "./Comment/CommentList.vue";
 export default {
-  components: { CsceterNav, CommentList },
+  components: { CommentList },
   data() {
     return {
       detaillData: "",
@@ -59,7 +53,7 @@ export default {
     },
     editBtn() {
       this.$router.push({
-        name: "csqnadetailEdit",
+        name: "qnadetailEdit",
       });
     },
     async deleteBtn() {
@@ -72,7 +66,7 @@ export default {
         if (res.data.data) {
           alert("QnA가 삭제되었습니다!");
           this.$router.push({
-            name: "csqna",
+            name: "qna",
             params: { page: 1 },
           });
         } else {

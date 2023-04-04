@@ -1,43 +1,37 @@
 <template>
-  <div id="root">
-    <div id="page-root">
-      <MypageNav />
-      <div class="mypage">
-        <div>
-          <div class="button-box">
-            <button
-              v-for="(item, index) in categorys"
-              :key="index"
-              style="margin: 10px"
-              @click="getVideo(item.title, this.$route.params.page - 1)"
-            >
-              {{ item.title }}
-            </button>
-          </div>
-
-          <VideoItem :auctionList="auctionList" />
-        </div>
-        <!-- 페이징 -->
-        <div class="page-box">
-          <button @click="movetopreviouspage">
-            <v-icon> mdi-chevron-left </v-icon>
-          </button>
-          <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-          <button @click="movetonextpage">
-            <v-icon> mdi-chevron-right </v-icon>
-          </button>
-        </div>
+  <div class="mypage">
+    <div>
+      <div class="button-box">
+        <button
+          v-for="(item, index) in categorys"
+          :key="index"
+          style="margin: 10px"
+          @click="getVideo(item.title, this.$route.params.page - 1)"
+        >
+          {{ item.title }}
+        </button>
       </div>
+
+      <VideoItem :auctionList="auctionList" />
+    </div>
+    <!-- 페이징 -->
+    <div class="page-box">
+      <button @click="movetopreviouspage">
+        <v-icon> mdi-chevron-left </v-icon>
+      </button>
+      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
+      <button @click="movetonextpage">
+        <v-icon> mdi-chevron-right </v-icon>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import MypageNav from "@/components/MypageNav.vue";
 import VideoItem from "./VideoItem.vue";
 
 export default {
-  components: { MypageNav, VideoItem },
+  components: { VideoItem },
   data() {
     return {
       auctionList: "",
@@ -122,19 +116,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#page-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .mypage {
   display: flex;
   flex-direction: column;

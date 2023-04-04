@@ -1,38 +1,33 @@
 <template>
-  <div id="root">
-    <div id="page-root">
-      <!-- <CsceterNav /> -->
-      <div class="container">
-        <div>
-          <div>
-            <h2>공지사항</h2>
-          </div>
-          <v-table class="table-box">
-            <thead>
-              <tr>
-                <th>제목</th>
-                <td>
-                  <v-text-field
-                    variant="plain"
-                    v-model="this.detaillData.title"
-                  ></v-text-field>
-                </td>
-              </tr>
-              <tr class="content">
-                <th>내용</th>
-                <td>
-                  <v-textarea
-                    variant="plain"
-                    v-model="this.detaillData.content"
-                  ></v-textarea>
-                </td>
-              </tr>
-            </thead>
-          </v-table>
-        </div>
-        <v-btn color="#eee" @click="editNotice"> 수정 </v-btn>
+  <div class="container">
+    <div>
+      <div>
+        <h2>공지사항</h2>
       </div>
+      <v-table class="table-box">
+        <thead>
+          <tr>
+            <th>제목</th>
+            <td>
+              <v-text-field
+                variant="plain"
+                v-model="this.detaillData.title"
+              ></v-text-field>
+            </td>
+          </tr>
+          <tr class="content">
+            <th>내용</th>
+            <td>
+              <v-textarea
+                variant="plain"
+                v-model="this.detaillData.content"
+              ></v-textarea>
+            </td>
+          </tr>
+        </thead>
+      </v-table>
     </div>
+    <v-btn color="#eee" @click="editNotice"> 수정 </v-btn>
   </div>
 </template>
 <script>
@@ -102,19 +97,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#page-root {
-  width: 1440px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
 .container {
   display: flex;
   flex-direction: column;

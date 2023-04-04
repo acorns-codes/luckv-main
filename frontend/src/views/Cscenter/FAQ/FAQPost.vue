@@ -1,62 +1,53 @@
 <template>
-  <div id="root">
-    <div id="page-root">
-      <CsceterNav />
-      <div class="container">
-        <div>
-          <div>
-            <h2>FAQ 등록</h2>
-          </div>
-          <v-table class="table-box">
-            <thead>
-              <tr>
-                <th>제목</th>
-                <td>
-                  <v-text-field
-                    placeholder="제목을 입력하세요"
-                    variant="plain"
-                    v-model="title"
-                  ></v-text-field>
-                </td>
-              </tr>
-              <tr>
-                <th>카테고리</th>
-                <td>
-                  <v-select
-                    variant="plain"
-                    :items="categories"
-                    item-title="title"
-                    item-value="value"
-                    v-model="category"
-                  ></v-select>
-                </td>
-              </tr>
-              <tr class="content">
-                <th>내용</th>
-                <td>
-                  <v-textarea
-                    rows="20"
-                    placeholder="내용을 입력하세요"
-                    variant="plain"
-                    v-model="content"
-                  ></v-textarea>
-                </td>
-              </tr>
-            </thead>
-          </v-table>
-        </div>
-        <v-btn @click="postQnA">등록</v-btn>
+  <div class="container">
+    <div>
+      <div>
+        <h2>FAQ 등록</h2>
       </div>
+      <v-table class="table-box">
+        <thead>
+          <tr>
+            <th>제목</th>
+            <td>
+              <v-text-field
+                placeholder="제목을 입력하세요"
+                variant="plain"
+                v-model="title"
+              ></v-text-field>
+            </td>
+          </tr>
+          <tr>
+            <th>카테고리</th>
+            <td>
+              <v-select
+                variant="plain"
+                :items="categories"
+                item-title="title"
+                item-value="value"
+                v-model="category"
+              ></v-select>
+            </td>
+          </tr>
+          <tr class="content">
+            <th>내용</th>
+            <td>
+              <v-textarea
+                rows="20"
+                placeholder="내용을 입력하세요"
+                variant="plain"
+                v-model="content"
+              ></v-textarea>
+            </td>
+          </tr>
+        </thead>
+      </v-table>
     </div>
+    <v-btn @click="postQnA">등록</v-btn>
   </div>
 </template>
 
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
 export default {
-  components: {
-    CsceterNav,
-  },
   data() {
     return {
       title: "",
@@ -99,7 +90,7 @@ export default {
         if (res.data.data) {
           alert("새로운 FAQ가 등록되었습니다!");
           this.$router.push({
-            name: "csfaq",
+            name: "faq",
           });
         } else {
           alert("FAQ를 등록할 수 없습니다!");
@@ -114,18 +105,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#page-root {
-  width: 1440px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .container {
   display: flex;
   flex-direction: column;

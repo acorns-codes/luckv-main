@@ -1,53 +1,47 @@
 <template>
-  <div id="root">
-    <div id="cscenter-root">
-      <CsceterNav />
-      <div class="cs-center">
-        <div>
-          <div>
-            <h2>QnA</h2>
-          </div>
-          <v-table>
-            <thead>
-              <tr style="font-weight: bolder">
-                <th class="text-center">글번호</th>
-                <th class="text-center">제목</th>
-                <th class="text-center">작성자</th>
-                <th class="text-center">작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="item in qnaList"
-                :key="item.no"
-                class="event"
-                @click="checkPwd(item.no, item.qpwd)"
-              >
-                <td>{{ item.no }}</td>
-                <td style="width: 400px">
-                  <v-icon size="x-small" v-if="item.qpwd !== null">
-                    mdi-lock-outline
-                  </v-icon>
-                  {{ item.title }} ({{ item.reply }})
-                </td>
-                <td>{{ item.id }}</td>
-                <td>{{ item.qcreate }}</td>
-              </tr>
-            </tbody>
-          </v-table>
-        </div>
-        <div class="page-box">
-          <button @click="movetopreviouspage">
-            <v-icon> mdi-chevron-left </v-icon>
-          </button>
-          <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-          <button @click="movetonextpage">
-            <!-- 다음페이지로 이동 -->
-            <v-icon> mdi-chevron-right </v-icon>
-          </button>
-        </div>
-        <v-btn color="success" class="mt-2" @click="postQna">QnA 작성</v-btn>
+  <div class="cs-center">
+    <div>
+      <div>
+        <h2>QnA</h2>
       </div>
+      <v-table>
+        <thead>
+          <tr style="font-weight: bolder">
+            <th class="text-center">글번호</th>
+            <th class="text-center">제목</th>
+            <th class="text-center">작성자</th>
+            <th class="text-center">작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in qnaList"
+            :key="item.no"
+            class="event"
+            @click="checkPwd(item.no, item.qpwd)"
+          >
+            <td>{{ item.no }}</td>
+            <td style="width: 400px">
+              <v-icon size="x-small" v-if="item.qpwd !== null">
+                mdi-lock-outline
+              </v-icon>
+              {{ item.title }} ({{ item.reply }})
+            </td>
+            <td>{{ item.id }}</td>
+            <td>{{ item.qcreate }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+    </div>
+    <div class="page-box">
+      <button @click="movetopreviouspage">
+        <v-icon> mdi-chevron-left </v-icon>
+      </button>
+      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
+      <button @click="movetonextpage">
+        <!-- 다음페이지로 이동 -->
+        <v-icon> mdi-chevron-right </v-icon>
+      </button>
       <v-dialog v-model="dialog" width="500px">
         <v-card>
           <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
@@ -68,14 +62,11 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
-  </div>
+
 </template>
 
 <script>
-import CsceterNav from "@/components/CsceterNav.vue";
 export default {
-  components: { CsceterNav },
   data() {
     return {
       qnaList: [],
@@ -165,14 +156,15 @@ export default {
     // 상세페이지로 이동
     qnaDetail() {
       if (this.password === this.selectedItem.qpwd) {
-          this.$router.push({
-          name: "csqnadetail",
+        this.$router.push({
+          name: "qnadetail",
           params: { no: this.selectedItem.no },
         });
-        } else {
-          // 비밀번호가 틀린 경우
-          console.log('비밀번호가 틀렸습니다.');
-        }
+      } else {
+        // 비밀번호가 틀린 경우
+        alert("비밀번호가 틀렸습니다.");
+        this.password = null;
+      }
 
     },
 
@@ -180,18 +172,24 @@ export default {
     checkPwd(no, qpwd) {
       console.log(no);
       if (qpwd !== null) {
+        this.dialog = true;
         this.selectedItem = { no, qpwd }; // 데이터 담기
       } else {
         this.$router.push({
-          name: "csqnadetail",
+          name: "qnadetail",
           params: { no: no },
         });
       }
     },
+    // 비밀번호 확인 모달 닫기
+    closeModeal() {
+      this.dialog = false;
+      this.password = null;
+    },
     // 글 작성기능
     postQna() {
       this.$router.push({
-        path: "/postqna",
+        name: "postqna",
       });
     },
   },
@@ -199,19 +197,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#cscenter-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .cs-center {
   display: flex;
   flex-direction: column;
