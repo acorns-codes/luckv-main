@@ -1,9 +1,9 @@
 <template>
   <section>
-    <div>
-      <h2>마감이 임박한 동영상입니다.</h2>
-      <p>마감이 얼마 남지 않은 동영상입니다.</p>
-      <p>합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!</p>
+    <div id="f-div">
+      <h2 style="font-size: 70px;">마감이 임박한 동영상입니다.</h2>
+      <p style="font-size: 30px;">마감이 얼마 남지 않은 동영상입니다.</p>
+      <p style="font-size: 30px;">합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!</p>
       <div class="container">
         <div>
           <h2>{{ deadlineData.title }}</h2>
