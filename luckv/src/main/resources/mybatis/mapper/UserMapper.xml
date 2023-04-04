@@ -37,7 +37,7 @@
       <!-- 로그인 -->
     <select id="login"  parameterType="com.luckv.demo.dto.user"  resultType="com.luckv.demo.dto.user">
         select 
-        	mid, name, auth, mno 
+        	*
         from user
         where mid = #{mid} and pwd = #{pwd}
     </select>
@@ -82,7 +82,7 @@
 			user 
 		set 
 			sub_yn = 'N',
-			sub_day = null
+			sub_last_day = null
 		where mno = #{mno}
 	</update>
 	
@@ -91,8 +91,8 @@
 			user 
 		set 
 			sub_yn = 'N',
-			sub_day = null
-		where timestampdiff(second, now(), sub_day) <![CDATA[>=]]> 0
+			sub_last_day = null
+		where timestampdiff(second, now(), sub_last_day) <![CDATA[>=]]> 0
 		</update>
     
 </mapper>

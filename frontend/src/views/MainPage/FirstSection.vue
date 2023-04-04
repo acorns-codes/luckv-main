@@ -41,7 +41,7 @@ export default {
 <style lang="scss" scoped>
 section {
   width: 100%;
-  height: 640px;
+  height: 850px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -70,5 +70,19 @@ video {
   width: inherit;
   height: inherit;
   object-fit: cover;
+}
+
+.btext {
+  animation: slideInFromTop 1s ease-out;
+}
+
+
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 </style>
