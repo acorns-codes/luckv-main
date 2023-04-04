@@ -19,12 +19,12 @@
           <div>
             <p>시작가</p>
 
-            <p>{{ this.videoData.payStart }} 원</p>
+            <p>{{ $globalFuc(this.videoData.payStart) }} 원</p>
           </div>
           <div>
             <p style="color: red">최고가</p>
             <p style="color: red; font-weight: bold">
-              {{ this.recvList.bidding }}원
+              {{ $globalFuc(this.recvList.bidding) }}원
             </p>
           </div>
           <div>
@@ -266,7 +266,6 @@ export default {
         this.recvList,
         "입찰금액 보내는 함수 안!!! 입찰금액 다 보내진건지??"
       );
-  
     },
 
     // video 다운로드

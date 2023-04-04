@@ -17,7 +17,7 @@
       >
         <td>{{ index + 1 }}</td>
         <td>{{ item.title }}</td>
-        <td>{{ item.payMax }}</td>
+        <td>{{ $globalFuc(item.payMax) }}</td>
         <td>{{ item.status }}</td>
       </tr>
     </tbody>

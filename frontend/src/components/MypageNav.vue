@@ -35,6 +35,7 @@
             }"
             >동영상 목록</router-link
           >
+          
           <router-link to="/postauction">동영상 등록</router-link>
         </div>
       </div>

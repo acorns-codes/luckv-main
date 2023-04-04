@@ -201,6 +201,7 @@ export default {
         this.auctionData = res.data.data;
         this.startDay = this.auctionData.startDay.split(" ");
         this.lastDay = this.auctionData.lastDay.split(" ");
+        this.auctionData.payStart = this.$globalFuc(this.auctionData.payStart);
       } catch (error) {
         console.log(error);
       }

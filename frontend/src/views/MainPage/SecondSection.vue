@@ -11,11 +11,11 @@
           <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
           <div>
             <p>시작가</p>
-            <p>{{ deadlineData.payStart }} 원</p>
+            <p>{{ $globalFuc(deadlineData.payStart) }} 원</p>
           </div>
           <div>
             <p style="background-color: red">최고가</p>
-            <p style="color: red">{{ this.recvList.bidding }} 원</p>
+            <p style="color: red">{{ $globalFuc(this.recvList.bidding) }} 원</p>
           </div>
           <div class="dday-box">
             <div>
@@ -66,7 +66,6 @@
 </template>
 
 <script>
-// import priceToString from "@/plugins/function/funciton.js";
 import VideoDetail from "@/components/VideoDetail.vue";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
@@ -74,7 +73,7 @@ export default {
   components: {
     VideoDetail,
   },
-  
+
   data() {
     return {
       recvList: "", //소켓에서 담긴 데이터
@@ -293,7 +292,7 @@ section {
         font-size: 0.8rem;
       }
       & > p:not(:first-of-type) {
-        width: 100px;
+        width: 120px;
       }
     }
   }

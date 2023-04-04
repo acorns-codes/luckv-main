@@ -164,6 +164,8 @@ export default {
         this.attendData = res.data.data;
         this.startDay = this.attendData.startDay.split(" ");
         this.lastDay = this.attendData.lastDay.split(" ");
+        this.attendData.payStart = this.$globalFuc(this.attendData.payStart);
+        this.attendData.payMax = this.$globalFuc(this.attendData.payMax);
       } catch (error) {
         console.log(error);
       }

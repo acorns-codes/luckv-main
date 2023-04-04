@@ -81,11 +81,12 @@ export default {
     this.subUser();
     // 구독 동영상 목록 함수 실행
     this.video("", this.$route.params.page - 1);
+    // console.log(this.$store.state.subAuth);
   },
   methods: {
     // 구독자 확인
     subUser() {
-      console.log(this.$store.state.sessionStorageData);
+      // console.log(this.$store.state.sessionStorageData.subYn);
       if (this.$store.state.sessionStorageData.subYn !== "Y") {
         alert("구독 회원을 위한 영상입니다! 사용을 원하시면 신청을 해주세요!");
       }

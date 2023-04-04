@@ -11,7 +11,6 @@
           {{ item.title }}
         </button>
       </div>
-
       <VideoItem :auctionList="auctionList" />
     </div>
     <!-- 페이징 -->
