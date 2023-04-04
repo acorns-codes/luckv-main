@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <anmaition-bar />
     <app-layout-home>
       <router-view />
     </app-layout-home>
@@ -7,10 +8,11 @@
 </template>
 
 <script>
+import AnmaitionBar from "./views/MainPage/AnmaitionBar.vue";
 import AppLayoutHome from "./Layouts/AppLayoutHome.vue";
 export default {
   name: "App",
-  components: { AppLayoutHome },
+  components: { AnmaitionBar, AppLayoutHome },
   mounted() {
     this.sesstionCheck();
   },
@@ -27,9 +29,9 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; */
   text-align: center;
   color: #2c3e50;
 }

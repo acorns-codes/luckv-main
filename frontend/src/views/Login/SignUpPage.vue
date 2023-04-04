@@ -1,6 +1,6 @@
 <template>
-  <div class="main-container">
-    <div class="form-box">
+  <div class="signup-main-container">
+    <div>
       <v-card class="mx-auto px-6 py-8">
         <h3>회원가입</h3>
         <v-form v-model="valid" fast-fail @submit.prevent="signUp">
@@ -209,22 +209,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-h3 {
-  font-size: 1.5rem;
-  padding-bottom: 10px;
-}
-.main-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.496);
-  padding: 40px;
-}
-.form-box {
-  width: 500px;
-}
-</style>

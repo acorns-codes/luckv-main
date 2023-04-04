@@ -46,29 +46,18 @@ export default {
     // this.getCnt();
   },
   methods: {
-    async getList() {
+    async getList(page) {
       console.log("참여내역 불러오기");
       try {
         const res = await this.$axios({
           method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/attendList?buyer=${this.$store.state.sessionStorageData.mno}`,
+          url: `${process.env.VUE_APP_API_URL}/attendList?buyer=${this.$store.state.sessionStorageData.mno}&page=${page}`,
         });
         console.log(res);
         this.attendList = res.data.data.auctionList;
+        this.cnt = res.data.data.count;
+        console.log(this.cnt);
         console.log(this.attendList);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // 글 개수 가져오기
-    async getCnt() {
-      console.log("글 개수 가져오기");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionCount?kind=경매&seller=${this.$store.state.sessionStorageData.mno}`,
-        });
-        this.cnt = res.data;
       } catch (error) {
         console.log(error);
       }
@@ -80,7 +69,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) - 1;
         this.$router.push({
-          name: "sellerauction",
+          name: "mydetailList",
           params: { page: pp },
         });
         this.getQna(this.$route.params.page - 2);
@@ -93,7 +82,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) + 1;
         this.$router.push({
-          name: "sellerauction",
+          name: "mydetailList",
           params: { page: pp },
         });
         this.getQna(this.$route.params.page);
