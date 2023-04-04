@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import src from "@/assets/video/151053.mp4";
+import src from "@/assets/video/70796.mp4";
 export default {
   data() {
     return {
