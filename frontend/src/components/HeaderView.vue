@@ -92,14 +92,14 @@ export default {
 @import "@/styles/sass/variables.scss";
 #header {
   display: flex;
-  height: 100px;
   justify-content: space-between;
   align-items: center;
-  padding: 0 50px 0 50px;
+  height: 50px;
+  padding: 0px 50px 0px 50px;
 
   & a {
     text-decoration: none;
-    color: #2c3e50;
+    color: #f9f9f9;
   }
   & > div {
     width: 170px;
@@ -110,7 +110,7 @@ export default {
 
 #nav {
   width: 700px;
-  height: 100px;
+  height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -118,11 +118,15 @@ export default {
 
   & a {
     text-decoration: none;
-    color: #2c3e50;
+    color: #bcddff;
   }
 }
 #nav a.router-link-exact-active {
-  color: #ff9414;
+  color: #ffffff;
   font-weight: bold;
+}
+.root {
+  position: fixed;
+  width: 100%;
 }
 </style>

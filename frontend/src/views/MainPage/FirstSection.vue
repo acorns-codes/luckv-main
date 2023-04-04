@@ -41,7 +41,7 @@ export default {
 <style lang="scss" scoped>
 section {
   width: 100%;
-  height: 600px;
+  height: 640px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,7 +60,8 @@ section {
   }
   & > div:nth-child(2) {
     width: 100%;
-    height: 500px;
+    height: 100%;
+    top: 0px;
     position: absolute;
     z-index: -1;
   }

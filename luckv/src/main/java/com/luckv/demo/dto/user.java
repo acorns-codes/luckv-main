@@ -21,5 +21,7 @@ public class user {
     private Date birthDate; // 생년월일 
     private String subYn; // 구독여부
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone = "Asia/Seoul")
-	private LocalDateTime  subDay; // 구독 종료일
+   	private LocalDateTime  subStartDay; // 구독 시작일
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone = "Asia/Seoul")
+	private LocalDateTime  subLastDay; // 구독 종료일
 }
