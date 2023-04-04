@@ -6,8 +6,21 @@
         <v-table class="table-box">
           <thead>
             <tr>
+              <th>동영상</th>
+              <td colspan="3">
+                <div class="video-box">
+                  <video
+                    controls
+                    @mouseover="playVideo"
+                    @mouseleave="stopVideo"
+                    :src="`${videoSrc}/videoplay?ano=${this.auctionData.ano}`"
+                  ></video>
+                </div>
+              </td>
+            </tr>
+            <tr>
               <th>제목</th>
-              <td>
+              <td colspan="3">
                 <v-text-field
                   variant="plain"
                   v-model="this.auctionData.title"
@@ -15,9 +28,10 @@
                 ></v-text-field>
               </td>
             </tr>
+
             <tr class="content">
               <th>내용</th>
-              <td>
+              <td colspan="3">
                 <v-textarea
                   rows="10"
                   variant="plain"
@@ -26,9 +40,10 @@
                 ></v-textarea>
               </td>
             </tr>
+
             <tr>
               <th>카테고리</th>
-              <td>
+              <td colspan="3">
                 <v-select
                   variant="plain"
                   required
@@ -40,20 +55,15 @@
                 ></v-select>
               </td>
             </tr>
-            <!-- <tr>
-                    <th>동영상</th>
-                    <td>
-                      <v-file-input
-                        variant="plain"
-                        prepend-icon="mdi-video"
-                        v-model="video"
-                        :rules="videoRules"
-                        required
-                      ></v-file-input>
-                    </td>
-                  </tr> -->
-
             <tr>
+              <th>경매 상태</th>
+              <td>
+                <v-text-field
+                  v-model="this.auctionData.status"
+                  variant="plain"
+                  readonly
+                ></v-text-field>
+              </td>
               <th>경매 시작가</th>
               <td>
                 <v-text-field
@@ -64,6 +74,7 @@
                 ></v-text-field>
               </td>
             </tr>
+
             <tr>
               <th>경매 시작 날짜</th>
               <td>
@@ -74,8 +85,6 @@
                   readonly
                 ></v-text-field>
               </td>
-            </tr>
-            <tr>
               <th>경매 시작 시간</th>
               <td>
                 <v-text-field
@@ -96,8 +105,6 @@
                   readonly
                 ></v-text-field>
               </td>
-            </tr>
-            <tr>
               <th>경매 마감 시간</th>
               <td>
                 <v-text-field
@@ -110,8 +117,50 @@
             </tr>
           </thead>
         </v-table>
-
-        <v-btn @click="edit" class="mt-2">수정</v-btn>
+        <v-dialog
+          v-if="this.auctionData.status === '판매종료'"
+          v-model="dialog"
+          persistent
+          width="500"
+        >
+          <template v-slot:activator="{ props }">
+            <v-btn class="mt-2" v-bind="props"> 구독으로 변경 </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">구독 제공 기간 설정</span>
+            </v-card-title>
+            <v-card-text>
+              <p>기간 설정</p>
+              <v-form v-model="valid" @submit.prevent="auctionChange">
+                <v-text-field
+                  v-model="date"
+                  type="date"
+                  :rules="dateRules"
+                ></v-text-field>
+                <v-text-field
+                  v-model="time"
+                  type="time"
+                  :rules="timeRules"
+                ></v-text-field>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="blue-darken-1"
+                    variant="text"
+                    @click="dialog = false"
+                  >
+                    닫기
+                  </v-btn>
+                  <v-btn type="submit" color="blue-darken-1" variant="text">
+                    입찰
+                  </v-btn>
+                </v-card-actions>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-btn v-else @click="edit" class="mt-2">수정</v-btn>
       </div>
     </div>
   </div>
@@ -125,6 +174,11 @@ export default {
       auctionData: "",
       startDay: "",
       lastDay: "",
+      dialog: false,
+      date: "",
+      time: "",
+      dateRules: [(v) => !!v || "날짜를 입력하셔야합니다!"],
+      timeRules: [(v) => !!v || "시간을 입력하셔야합니다!"],
       categorys: [
         {
           title: "동물",
@@ -152,6 +206,7 @@ export default {
   computed() {},
 
   mounted() {
+    this.videoSrc = process.env.VUE_APP_API_URL;
     // 상세 내역 불러오기
     this.getAuction();
     console.log(this.$store.state.sessionStorageData);
@@ -174,11 +229,49 @@ export default {
         console.log(error);
       }
     },
+    // 경매 수정 버튼
     edit() {
       this.$router.push({
         name: "editauction",
         params: { ano: this.$route.params.ano },
       });
+    },
+    // 판매 종료 후 구독으로 변경
+    async auctionChange() {
+      console.log("구독으로 변경");
+      if (!this.valid) {
+        alert("날짜를 확인해주세요!");
+      } else {
+        const editDate = `${this.date} ${this.time}:00`;
+        const editdata = {
+          ano: this.$route.params.ano,
+          seller: this.$store.state.sessionStorageData.mno,
+          kind: this.auctionData.kind,
+          lastDay: editDate,
+        };
+        console.log(editdata);
+        try {
+          const res = await this.$axios({
+            headers: {
+              "Content-type": "application/json",
+            },
+            method: "POST",
+            url: `${process.env.VUE_APP_API_URL}/auctionChange`,
+            data: editdata,
+          });
+          console.log(editdata);
+          console.log(res.data.data);
+          if (res.data.data) {
+            alert("구독으로 변경하였습니다!");
+            this.$router.push({
+              name: "sellerauction",
+              params: { page: 1 },
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     },
   },
 };
@@ -205,6 +298,7 @@ export default {
   width: 700px;
   margin: 10px;
   border-top: 1px solid #343434;
+  font-size: 0.9rem;
   th {
     width: 150px;
   }
@@ -221,11 +315,14 @@ export default {
 }
 
 .video-box {
-  width: 400px;
-  height: 300px;
-  background-color: antiquewhite;
-  margin: 0 auto;
-  margin-bottom: 30px;
+  width: 520px;
+  height: 360px;
+  margin: 10px;
+  & > video {
+    width: inherit;
+    height: inherit;
+    object-fit: cover;
+  }
 }
 
 button {

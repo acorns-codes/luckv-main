@@ -20,7 +20,15 @@
         >
           <td>{{ index + 1 }}</td>
           <td>{{ item.title }}</td>
-          <td>{{ item.status }}</td>
+          <td>
+            {{
+              item.kind === "경매"
+                ? item.status
+                : item.status === "판매중"
+                ? "게시중"
+                : "게시완료"
+            }}
+          </td>
         </tr>
       </tbody>
     </v-table>
