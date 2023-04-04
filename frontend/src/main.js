@@ -9,12 +9,13 @@ import "@mdi/font/css/materialdesignicons.css";
 // icon이 안나와서 import 하니까 바로 나타남
 
 import "@/styles/sass/main.scss";
-
 // Vuetify
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+
+import globalPlugin from "./global/globalPlugin";
 
 const vuetify = createVuetify({
   components,
@@ -25,6 +26,7 @@ const vuetify = createVuetify({
 const app = createApp(App);
 app.use(router).use(store).mount("#app");
 // [라우터 사용 설정]
+app.use(globalPlugin);
 app.config.globalProperties.$axios = axios;
 // [axios / http 통신 ]
 app.use(vuetify);

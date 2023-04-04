@@ -9,6 +9,7 @@ export default createStore({
     sessionStorageData: "",
     userData: "",
     socket: "",
+    subAuth: "",
   },
   getters: {
     // 로그인 확인
@@ -43,6 +44,9 @@ export default createStore({
     },
     storeSocket(state, socket) {
       state.socket = socket;
+    },
+    storeSubAuth(state, subAuth) {
+      state.subAuth = subAuth;
     },
   },
   // 새로고침해도 session정보 유지 될 수 있도록 했음

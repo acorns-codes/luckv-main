@@ -26,6 +26,7 @@ export default {
           console.log(res);
           if (res.data.data) {
             alert("구독 신청이 완료되었습니다!");
+            this.$store.commit("storeSubAuth", "Y");
           }
         } catch (error) {
           console.log(error);
