@@ -63,9 +63,16 @@
 	<update id="videoSubYn"  parameterType="com.luckv.demo.dto.user">
 		update 
 			user 
-		set 
+		    <set>
 			sub_yn = 'Y',
-			sub_day = date_add(now(), interval +1 month)
+			<if test="subStartDay == null">
+				sub_start_day = now(),
+	        	sub_last_day = date_add(now(), interval +1 month)
+	     	</if>
+	     	<if test="subStartDay != null">
+	        	sub_last_day = date_add(date_format(#{subLastDay}, '%Y-%m-%d %H:%i:%s'), interval +1 month)
+	     	</if>
+	     	</set>
 		where mno = #{mno}
 	</update>
     
