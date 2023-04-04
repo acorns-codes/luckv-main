@@ -74,6 +74,7 @@ export default {
   components: {
     VideoDetail,
   },
+  
   data() {
     return {
       recvList: "", //소켓에서 담긴 데이터

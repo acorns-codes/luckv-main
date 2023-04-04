@@ -67,10 +67,10 @@ public class QuestionController {
 		    
 		    // QnA 상세
 		    @GetMapping("/questionDetail")
-		    public ResponseEntity questionDetail(int qno) {
-		    	Question question = questionService.questionDetail(qno);
+		    public ResponseEntity questionDetail(Question question) {
+		    	Question questions= questionService.questionDetail(question);
 		    	
-		    	return question != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, question), HttpStatus.OK)
+		    	return questions != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, questions), HttpStatus.OK)
 				:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
 		    }
 		    

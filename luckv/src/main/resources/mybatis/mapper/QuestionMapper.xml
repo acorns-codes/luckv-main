@@ -28,6 +28,7 @@
         	q_title as title, /*QnA 제목*/
         	q_create, /*QnA 작성일*/
         	u.mid as id, /*작성자*/
+        	q.qpwd, /*비밀번호*/
         	(SELECT COUNT(*) FROM answer a  WHERE q.qno = a.qno) as reply /*댓글갯수*/
         	
         from question q
@@ -65,6 +66,7 @@
        			 q.q_content as content, /*QnA 내용*/
        			 q.q_create , /*QnA 작성일*/
        			 q.q_update, /*QnA 수정일*/
+       			 q.qpwd,
        			 u.mid as id /*작성자*/
        		from question q 
        		inner join user u on  q.qid = u.mno 

@@ -42,27 +42,27 @@
         <!-- 다음페이지로 이동 -->
         <v-icon> mdi-chevron-right </v-icon>
       </button>
-    </div>
-    <v-btn color="success" class="mt-2" @click="postQna">QnA 작성</v-btn>
-  </div>
-  <v-dialog v-model="dialog" width="500px">
-    <v-card>
-      <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
-      <v-card-text>
-        <v-text-field
-          prepend-inner-icon="mdi-lock-outline"
-          v-model="password"
-          type="password"
-          variant="outlined"
-        ></v-text-field>
-      </v-card-text>
+      <v-dialog v-model="dialog" width="500px">
+        <v-card>
+          <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
+          <v-card-text>
+            <v-text-field
+              prepend-inner-icon="mdi-lock-outline"
+              v-model="password"
+              type="password"
+              variant="outlined"
+            ></v-text-field>
+          </v-card-text>
 
-      <v-card-actions>
-        <v-btn color="success" width="50%" @click="closeModeal">닫기</v-btn>
-        <v-btn color="success" width="50%" @click="qnaDetail">확인</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+          <v-card-actions>
+            <v-btn color="success" width="50%" @click="dialog = false"
+              >닫기</v-btn
+            >
+            <v-btn color="success" width="50%" @click="qnaDetail">확인</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
 </template>
 
 <script>
@@ -75,7 +75,7 @@ export default {
       page: "",
       dialog: false,
       password: "",
-      selectedItem: null,
+      selectedItem: null
     };
   },
   // 계산 목적으로
@@ -165,6 +165,7 @@ export default {
         alert("비밀번호가 틀렸습니다.");
         this.password = null;
       }
+
     },
 
     // 비밀번호 체크
