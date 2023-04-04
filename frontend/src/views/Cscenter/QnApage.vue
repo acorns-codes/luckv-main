@@ -62,7 +62,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-
+    </div>
+  </div>
 </template>
 
 <script>
@@ -75,7 +76,7 @@ export default {
       page: "",
       dialog: false,
       password: "",
-      selectedItem: null
+      selectedItem: null,
     };
   },
   // 계산 목적으로
@@ -165,7 +166,6 @@ export default {
         alert("비밀번호가 틀렸습니다.");
         this.password = null;
       }
-
     },
 
     // 비밀번호 체크

@@ -19,16 +19,6 @@ import * as directives from "vuetify/directives";
 const vuetify = createVuetify({
   components,
   directives,
-  theme: {
-    themes: {
-      light: {
-        primary: "#3f51b5",
-        secondary: "#b0bec5",
-        accent: "#8c9eff",
-        error: "#b71c1c",
-      },
-    },
-  },
 });
 
 // [앱 생성 실시 및 라우터 사용 설정 / store 사용 / main 아이디 : 렌더링 시작점

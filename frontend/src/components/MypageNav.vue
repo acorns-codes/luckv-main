@@ -13,7 +13,14 @@
               name: 'mydetailList',
               params: { page: 1 },
             }"
-            >구매내역</router-link
+            >경매 낙찰 내역</router-link
+          >
+          <router-link
+            :to="{
+              name: 'mysubdetail',
+              params: { mno: sessionData.mno },
+            }"
+            >구독 내역</router-link
           >
         </div>
         <div v-else>

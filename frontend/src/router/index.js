@@ -111,11 +111,23 @@ const routes = [
         name: "mypageEdit",
         component: () => import("@/views/MyPage/MyPageEdit.vue"),
       },
-      // 마이페이지 - 경매 참여 내역
+      // 마이페이지 - 경매 낙찰 내역
       {
         path: "/mydetailList/:page",
         name: "mydetailList",
         component: () => import("@/views/MyPage/AttendList/AttendList.vue"),
+      },
+      // 마이페이지 - 경매 낙찰 상세 내역
+      {
+        path: "/mydetailList/detail/:ano",
+        name: "mydetailListdetail",
+        component: () => import("@/views/MyPage/AttendList/AttendDetail.vue"),
+      },
+      // 마이페이지 - 구독 내역
+      {
+        path: "/mysubdetail/:mno",
+        name: "mysubdetail",
+        component: () => import("@/views/MyPage/Subscriptrion/SubDetail.vue"),
       },
       // 마이페이지(셀러) - 경매 내역
       {

@@ -247,6 +247,7 @@ export default {
   padding-top: 110px;
   & > div {
     width: 100%;
+    justify-content: center;
     /* flex-direction: column; */
     display: flex;
     /* align-items: center; */

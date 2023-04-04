@@ -10,12 +10,20 @@
 
 // Vuetify Globals
 // Vuetify에 자동으로 오버라이드 됨
-$body-font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-$border-radius-root: 6px;
-$font-size-root: 14px;
+// $body-font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+// $border-radius-root: 6px;
+// $font-size-root: 14px;
+$body-font-family: "NanumSquareNeo";
 
 // 사용자 정의 변수
 // 여기에 매인컬러, 서브컬러 등의 변수를 설정하면 SCSS 어디에서도 사용할 수 있습니다.
 //////////////////////////////////////////////
-$col-1: #343434;
-$col-2: #ff9414;
+
+$col-1: #ffffff;
+$col-2: #eeeeee;
+$col-3: #ff9414;
+$col-4: #343434;
+
+* {
+  font-family: "NanumSquareNeo";
+}
