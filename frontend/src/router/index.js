@@ -58,6 +58,38 @@ const routes = [
     path: "/subscription/:page",
     name: "subscription",
     component: () => import("@/views/SubscriptionPage"),
+    children: [
+      {
+        path: "/:page",
+        name: "구독전체",
+        component: () => import("@/views/SubscriptionPage"),
+      },
+      {
+        path: "/animal/:page",
+        name: "subanimal",
+        component: () => import("@/views/SubscriptionPage"),
+      },
+      {
+        path: "/character/:page",
+        name: "subcharacter",
+        component: () => import("@/views/SubscriptionPage"),
+      },
+      {
+        path: "/building/:page",
+        name: "subbuilding",
+        component: () => import("@/views/SubscriptionPage"),
+      },
+      {
+        path: "/plant/:page",
+        name: "subplant",
+        component: () => import("@/views/SubscriptionPage"),
+      },
+      {
+        path: "/etc/:page",
+        name: "subetc",
+        component: () => import("@/views/SubscriptionPage"),
+      },
+    ],
   },
   //  **   CScenter  **  //
   {

@@ -4,7 +4,7 @@
       <h2 class="test_obj hover-event">Auction Video</h2>
     </div>
     <div id="page-root">
-      <VideoCategory />
+      <VideoCategory :category="category" />
       <VideoList :videoList="this.videoList" @video="video" />
       <div class="page-box">
         <button @click="movetopreviouspage">
@@ -31,34 +31,7 @@ export default {
       cnt: "",
       defaultCnt: 10,
       page: "",
-      categorys: [
-        { title: "ALL", value: "", url: "" },
-        {
-          title: "동물",
-          value: "animal",
-          url: "vcate=animal",
-        },
-        {
-          title: "인물",
-          value: "character",
-          url: "vcate=character",
-        },
-        {
-          title: "건물",
-          value: "building",
-          url: "vcate=building",
-        },
-        {
-          title: "식물",
-          value: "plant",
-          url: "vcate=plant",
-        },
-        {
-          title: "기타",
-          value: "etc",
-          url: "vcate=etc",
-        },
-      ],
+      category: ["전체", "animal", "character", "building", "plant", "etc"],
     };
   },
   computed: {
@@ -141,7 +114,7 @@ export default {
 
 <style lang="scss" scoped>
 #root {
-  padding-top: 50px;
+  padding-top: 100px;
   width: 100%;
   height: 100%;
   display: flex;
