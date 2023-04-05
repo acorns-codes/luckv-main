@@ -55,7 +55,6 @@
           :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
         ></video>
       </div>
-    </div>
     <v-dialog v-model="modal" width="auto">
       <v-card>
         <VideoDetail :videoData="videoData" />
