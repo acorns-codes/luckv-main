@@ -6,8 +6,28 @@
         <v-table class="table-box">
           <thead>
             <tr>
+              <th>동영상</th>
+              <td colspan="3">
+                <div class="video-box">
+                  <video
+                    controls
+                    @mouseover="playVideo"
+                    @mouseleave="stopVideo"
+                    :src="`${videoSrc}/videoplay?ano=${this.attendData.ano}`"
+                  ></video>
+                  <v-btn
+                    prepend-icon="mdi-arrow-down-bold-circle-outline"
+                    color="orange"
+                    variant="outlined"
+                    @click="videoDownload"
+                    >다운로드</v-btn
+                  >
+                </div>
+              </td>
+            </tr>
+            <tr>
               <th>제목</th>
-              <td>
+              <td colspan="3">
                 <v-text-field
                   variant="plain"
                   v-model="this.attendData.title"
@@ -17,7 +37,7 @@
             </tr>
             <tr class="content">
               <th>내용</th>
-              <td>
+              <td colspan="3">
                 <v-textarea
                   rows="10"
                   variant="plain"
@@ -31,24 +51,22 @@
               <td>
                 <v-text-field
                   variant="plain"
+                  :items="categorys"
                   v-model="this.attendData.vcate"
+                  item-title="title"
+                  item-value="value"
+                  readonly
+                ></v-text-field>
+              </td>
+              <th>경매 상태</th>
+              <td>
+                <v-text-field
+                  v-model="this.attendData.status"
+                  variant="plain"
                   readonly
                 ></v-text-field>
               </td>
             </tr>
-            <!-- <tr>
-                      <th>동영상</th>
-                      <td>
-                        <v-file-input
-                          variant="plain"
-                          prepend-icon="mdi-video"
-                          v-model="video"
-                          :rules="videoRules"
-                          required
-                        ></v-file-input>
-                      </td>
-                    </tr> -->
-
             <tr>
               <th>경매 시작가</th>
               <td>
@@ -59,8 +77,6 @@
                   readonly
                 ></v-text-field>
               </td>
-            </tr>
-            <tr>
               <th>낙찰가</th>
               <td>
                 <v-text-field
@@ -71,7 +87,6 @@
                 ></v-text-field>
               </td>
             </tr>
-
             <tr>
               <th>경매 시작 날짜</th>
               <td>
@@ -82,9 +97,6 @@
                   readonly
                 ></v-text-field>
               </td>
-            </tr>
-
-            <tr>
               <th>경매 시작 시간</th>
               <td>
                 <v-text-field
@@ -95,7 +107,6 @@
                 ></v-text-field>
               </td>
             </tr>
-
             <tr>
               <th>경매 마감 날짜</th>
               <td>
@@ -106,24 +117,12 @@
                   readonly
                 ></v-text-field>
               </td>
-            </tr>
-            <tr>
               <th>경매 마감 시간</th>
               <td>
                 <v-text-field
                   variant="plain"
                   v-model="this.lastDay[1]"
                   type="time"
-                  readonly
-                ></v-text-field>
-              </td>
-            </tr>
-            <tr>
-              <th>진행사항</th>
-              <td>
-                <v-text-field
-                  variant="plain"
-                  v-model="this.attendData.status"
                   readonly
                 ></v-text-field>
               </td>
@@ -147,6 +146,7 @@ export default {
   },
 
   mounted() {
+    this.videoSrc = process.env.VUE_APP_API_URL;
     // 상세 내역 불러오기
     this.getAttend();
     // console.log(this.$store.state.sessionStorageData);
@@ -166,6 +166,38 @@ export default {
         this.lastDay = this.attendData.lastDay.split(" ");
         this.attendData.payStart = this.$globalFuc(this.attendData.payStart);
         this.attendData.payMax = this.$globalFuc(this.attendData.payMax);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async videoDownload() {
+      console.log("비디오 다운로드");
+      console.log(this.attendData.ano);
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          responseType: "blob", // 응답데이터 타입 정의
+          url: `${process.env.VUE_APP_API_URL}/videoDownload/${this.attendData.ano}`,
+        });
+        console.log(res);
+        const fileName = `video_${res.request.responseURL.substr(
+          res.request.responseURL.lastIndexOf("/") + 1
+        )}`;
+        console.log(fileName);
+        const blob = new Blob([res.data]);
+        console.log(blob);
+
+        const fileObjectUrl = window.URL.createObjectURL(blob);
+        console.log(fileObjectUrl);
+
+        const fileLink = document.createElement("a");
+        fileLink.href = fileObjectUrl;
+
+        fileLink.setAttribute("download", `${fileName}.mp4`);
+        document.body.appendChild(fileLink);
+
+        fileLink.click();
       } catch (error) {
         console.log(error);
       }
@@ -212,11 +244,14 @@ export default {
 }
 
 .video-box {
-  width: 400px;
-  height: 300px;
-  background-color: antiquewhite;
-  margin: 0 auto;
-  margin-bottom: 30px;
+  width: 520px;
+  height: 430px;
+  margin: 10px;
+  & > video {
+    width: inherit;
+    height: 360px;
+    object-fit: cover;
+  }
 }
 
 button {

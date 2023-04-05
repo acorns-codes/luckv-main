@@ -1,11 +1,13 @@
 <template>
   <LoginForm v-if="this.$store.state.isClicked" />
-  <div id="root" :class="{ short : isHeaderSmall }">
-    <div id="header" :class="{ short : isHeaderSmall }">
+  <div id="root" :class="{ short: isHeaderSmall }">
+    <div id="header" :class="{ short: isHeaderSmall }">
       <router-link to="/">
-        <h1>Luck
+        <h1>
+          Luck
           <span>V</span>
-        </h1></router-link>
+        </h1></router-link
+      >
       <div v-if="!isUserLogin">
         <router-link to="/" @click="onClicked">Login</router-link>
         <router-link to="/signup">Signup</router-link>
@@ -21,11 +23,11 @@
         <a href="/" @click="logoutUser">Logout</a>
       </div>
     </div>
-    <div id="nav" :class="{ short : isHeaderSmall }">
+    <div id="nav" :class="{ short: isHeaderSmall }">
       <router-link to="/">Home</router-link>
       <router-link
         :to="{
-          name: 'all',
+          name: '전체',
           params: { page: 1 },
         }"
         >Auction</router-link
@@ -66,9 +68,9 @@ export default {
       isHeaderSmall: false,
       sessionData: this.$store.state.sessionStorageData,
     };
-  }, 
+  },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
   },
   computed: {
     isUserLogin() {
@@ -138,9 +140,6 @@ export default {
   }
 }
 
-
-
-
 #nav {
   width: 700px;
   height: 50px;
@@ -177,7 +176,7 @@ export default {
   top: 0px;
   transition: background-color 0.5s ease-in-out;
 }
-#root.short  { 
+#root.short {
   position: fixed;
   width: 100%;
   top: 0px;
@@ -188,7 +187,7 @@ h1 span {
   position: relative;
   top: 10px;
   display: inline-block;
-  animation: bounce .3s ease infinite alternate;
+  animation: bounce 0.3s ease infinite alternate;
   font-size: 30px;
   color: #ff9100;
 }
@@ -198,5 +197,4 @@ h1 span {
     top: -3px;
   }
 }
-
 </style>

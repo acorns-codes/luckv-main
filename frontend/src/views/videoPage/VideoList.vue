@@ -58,6 +58,7 @@ export default {
     // 마우스오버시, 영상재생
     playVideo(e) {
       e.target.play();
+      console.log(e);
     },
     // 마우스리브시, 영상 일시정지
     stopVideo(e) {
@@ -82,19 +83,18 @@ span {
 }
 
 .video-box {
-  width: 1020px;
+  width: 1240px;
   display: flex;
   flex-wrap: wrap;
   & > div {
-    width: 320px;
-    height: 200px;
-    margin: 10px;
+    width: 360px;
+    height: 360px;
+    margin: 25px;
     cursor: pointer;
     & > video {
       width: inherit;
       height: inherit;
       object-fit: cover;
-      border-radius: 10px;
     }
   }
 }

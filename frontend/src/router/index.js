@@ -14,6 +14,38 @@ const routes = [
     path: "/video/:page",
     name: "all",
     component: () => import("@/views/VideoPage"),
+    children: [
+      {
+        path: "/:page",
+        name: "전체",
+        component: () => import("@/views/VideoPage"),
+      },
+      {
+        path: "/animal/:page",
+        name: "animal",
+        component: () => import("@/views/VideoPage"),
+      },
+      {
+        path: "/character/:page",
+        name: "character",
+        component: () => import("@/views/VideoPage"),
+      },
+      {
+        path: "/building/:page",
+        name: "building",
+        component: () => import("@/views/VideoPage"),
+      },
+      {
+        path: "/plant/:page",
+        name: "plant",
+        component: () => import("@/views/VideoPage"),
+      },
+      {
+        path: "/etc/:page",
+        name: "etc",
+        component: () => import("@/views/FreeVideoPage"),
+      },
+    ],
   },
   // 무료 동영상 페이지
   {
@@ -87,7 +119,7 @@ const routes = [
       // FAQ 등록
       {
         path: "/postfaq",
-        name: "ç",
+        name: "postfaq",
         component: () => import("@/views/Cscenter/FAQ/FAQPost.vue"),
       },
       // FAQ 수정
@@ -129,30 +161,53 @@ const routes = [
         name: "mysubdetail",
         component: () => import("@/views/MyPage/Subscriptrion/SubDetail.vue"),
       },
-      // 마이페이지(셀러) - 경매 내역
+      // 마이페이지(셀러) - 동영상 목록
       {
-        path: "/sellerauction/:page",
-        name: "sellerauction",
-        component: () => import("@/views/SellerPage/VideoList.vue"),
-      },
-      // 마이페이지(셀러) - 경매 등록
-      {
-        path: "/postauction",
-        name: "/postauction",
-        component: () => import("@/views/SellerPage/Auction/AuctionPost.vue"),
+        path: "/sellervideo",
+        name: "sellervideo",
+        component: () => import("@/views/SellerPage/VideoList/VideoList.vue"),
+
+        children: [
+          // 동영상 목록 - 경매
+          {
+            path: "/auction/:page",
+            name: "경매",
+            component: () =>
+              import("@/views/SellerPage/VideoList/VideoList.vue"),
+          },
+          {
+            path: "/free/:page",
+            name: "무료",
+            component: () =>
+              import("@/views/SellerPage/VideoList/VideoList.vue"),
+          },
+          {
+            path: "/subscription/:page",
+            name: "구독",
+            component: () =>
+              import("@/views/SellerPage/VideoList/VideoList.vue"),
+          },
+        ],
       },
       // 마이페이지(셀러) - 경매 상세페이지
       {
-        path: "/auctiondetail/:ano",
-        name: "auctionDetail",
-        component: () => import("@/views/SellerPage/Auction/AuctionDetail.vue"),
+        path: "/videodetail/:ano",
+        name: "videoDetail",
+        component: () =>
+          import("@/views/SellerPage/VideoList/VideoDetail/VideoDetail.vue"),
         meta: { auth: true },
       },
-      // 마이페이지(셀러) - 경매 수정
+      // 마이페이지(셀러) - 동영상 등록
+      {
+        path: "/postauction",
+        name: "/postauction",
+        component: () => import("@/views/SellerPage/VideoPost/VideoPost.vue"),
+      },
+      // 마이페이지(셀러) - 동영상 수정
       {
         path: "/editauction/:ano",
         name: "editauction",
-        component: () => import("@/views/SellerPage/Auction/AuctionEdit.vue"),
+        component: () => import("@/views/SellerPage/VideoList/VideoEdit.vue"),
         meta: { auth: true },
       },
     ],

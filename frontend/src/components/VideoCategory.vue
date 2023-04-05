@@ -1,43 +1,54 @@
 <template>
-  <div class="button-box">
-    <button
-      v-for="(item, index) in categorys"
-      :key="index"
-      @click="clickCategory(item.value)"
+  <div id="route-root">
+    <router-link
+      :to="{
+        name: '전체',
+        params: { page: 1 },
+      }"
+      >ALL</router-link
     >
-      {{ item.title }}
-    </button>
+    <router-link
+      :to="{
+        name: 'animal',
+        params: { page: 1 },
+      }"
+      >동물</router-link
+    >
+    <router-link
+      :to="{
+        name: 'character',
+        params: { page: 1 },
+      }"
+      >인물</router-link
+    >
+    <router-link
+      :to="{
+        name: 'building',
+        params: { page: 1 },
+      }"
+      >건물</router-link
+    >
+    <router-link
+      :to="{
+        name: 'plant',
+        params: { page: 1 },
+      }"
+      >식물</router-link
+    >
+    <router-link
+      :to="{
+        name: 'etc',
+        params: { page: 1 },
+      }"
+      >기타</router-link
+    >
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {
-      categorys: [
-        { title: "ALL", value: "all" },
-        {
-          title: "동물",
-          value: "animal",
-        },
-        {
-          title: "인물",
-          value: "character",
-        },
-        {
-          title: "건물",
-          value: "building",
-        },
-        {
-          title: "식물",
-          value: "plant",
-        },
-        {
-          title: "기타",
-          value: "etc",
-        },
-      ],
-    };
+    return {};
   },
   methods: {
     clickCategory(category) {
@@ -52,17 +63,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.button-box {
-  width: 400px;
+#route-root {
+  width: 1440px;
   height: 50px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  & > button {
-    color: #343434;
-    background-color: #f4f4f4;
-    border-radius: 10px;
-    padding: 2px 10px 2px 10px;
+  /* background-color: ; */
+  align-items: flex-end;
+  justify-content: center;
+  margin: 10px;
+
+  & a {
+    width: 100px;
+    text-decoration: none;
+    color: #68dac1;
+    padding-bottom: 10px;
+    font-family: "KCC-Ganpan";
+  }
+  & a.router-link-exact-active {
+    color: #00aaf8;
+    border-bottom: 3px solid #00aaf8;
+    padding-bottom: 7px;
   }
 }
 </style>
