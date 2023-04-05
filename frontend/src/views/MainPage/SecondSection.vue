@@ -375,17 +375,18 @@ button {
   p {
     font-size: 14px;
   }
-}
-
-@media (min-width: 2500px) {
-  p {
-    font-size: 30px;
+  span {
+    font-size: 14px;
   }
 }
 
 @media (min-width: 2500px) {
   h2 {
     font-size: 50px;
+  }
+
+  p {
+    font-size: 30px;
   }
 }
 

@@ -71,7 +71,7 @@ export default {
 #f-div {
   text-align: left;
     width: 100%;
-    padding: 20% 0 5% 10%;
+    padding: 10% 0 0% 10%;
   }
 
 </style>

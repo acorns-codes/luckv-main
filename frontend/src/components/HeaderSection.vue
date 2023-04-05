@@ -95,7 +95,8 @@ p {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0% 0 0 10%;
+  padding: 0% 5% 0 10%;
+  margin: 6% 0 0 0;
 }
 
 

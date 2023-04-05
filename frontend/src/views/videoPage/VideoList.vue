@@ -87,9 +87,9 @@ span {
   display: flex;
   flex-wrap: wrap;
   & > div {
-    width: 360px;
-    height: 360px;
-    margin: 25px;
+    width: 264px;
+    height: 250px;
+    margin: 1%;
     cursor: pointer;
     & > video {
       width: inherit;
@@ -112,9 +112,11 @@ p {
 
 @media (min-width: 2500px) {
   .video-box > div {
-    width: 500px;
-    height: 400px;
+    width: 632px;
+    height: 500px;
     margin: 1%;
+    cursor: pointer
+
   }
 }
 </style>
