@@ -83,6 +83,13 @@ video {
   animation: slideInFromTop 1s ease-out;
 }
 
+@media (min-width: 2500px) {
+  .btext {
+    margin-block-start: 10%;
+  }
+}
+
+
 button {
   width: 200px;
   margin: 15px;
