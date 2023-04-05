@@ -1,7 +1,7 @@
 <template>
   <section>
     <div>
-      <div>
+      <div class="kindclass">
         <h3>{{ kind.name }}</h3>
         <p>{{ kind.content }}</p>
       </div>
@@ -61,24 +61,43 @@ export default {
 <style lang="scss" scoped>
 section {
   width: 100%;
-  height: 350px;
+  height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 6% 0 0 0;
   & > div {
-    width: 1240px;
+    width: 100%;
     display: flex;
+    align-items: flex-start;
     flex-direction: column;
-    align-items: center;
+    margin: 20% 0 0 0;
     & > div:nth-child(2) {
-      width: 1440px;
+      width: 100%;
       display: flex;
       justify-content: center;
     }
   }
 }
 
-p {
-  font-size: 0.9rem;
+h3 {
+  font-size: 62px;
+  text-decoration: overline;
+  text-decoration-color: #ff9414;
+  text-decoration-thickness: 2px;
 }
+
+p {
+  font-size: 30px;
+}
+
+.kindclass {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0% 0 0 10%;
+}
+
+
+
 </style>
