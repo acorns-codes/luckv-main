@@ -110,11 +110,11 @@ p {
   font-size: 0.9rem;
 }
 
-@media (min-width: 2500px) {
+/* @media (min-width: 2500px) {
   .video-box > div {
     width: 632px;
     height: 500px;
     margin: 1%;
   }
-}
+} */
 </style>
