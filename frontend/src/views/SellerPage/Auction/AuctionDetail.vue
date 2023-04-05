@@ -43,7 +43,7 @@
 
             <tr>
               <th>카테고리</th>
-              <td colspan="3">
+              <td>
                 <v-select
                   variant="plain"
                   required
@@ -54,8 +54,6 @@
                   readonly
                 ></v-select>
               </td>
-            </tr>
-            <tr>
               <th>경매 상태</th>
               <td>
                 <v-text-field
@@ -64,11 +62,22 @@
                   readonly
                 ></v-text-field>
               </td>
+            </tr>
+            <tr>
               <th>경매 시작가</th>
               <td>
                 <v-text-field
                   variant="plain"
                   v-model="this.auctionData.payStart"
+                  suffix="원"
+                  readonly
+                ></v-text-field>
+              </td>
+              <th>최고가</th>
+              <td>
+                <v-text-field
+                  variant="plain"
+                  v-model="this.auctionData.payMax"
                   suffix="원"
                   readonly
                 ></v-text-field>
@@ -225,6 +234,7 @@ export default {
         this.startDay = this.auctionData.startDay.split(" ");
         this.lastDay = this.auctionData.lastDay.split(" ");
         this.auctionData.payStart = this.$globalFuc(this.auctionData.payStart);
+        this.auctionData.payMax = this.$globalFuc(this.auctionData.payMax);
       } catch (error) {
         console.log(error);
       }

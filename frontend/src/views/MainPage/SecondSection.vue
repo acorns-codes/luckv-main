@@ -1,58 +1,59 @@
 <template>
   <section>
     <div id="f-div">
-      <h2 style="font-size: 70px;">마감이 임박한 동영상입니다.</h2>
-      <p style="font-size: 30px;">마감이 얼마 남지 않은 동영상입니다.</p>
-      <p style="font-size: 30px;">합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!</p>
+      <h2 style="font-size: 70px">마감이 임박한 동영상입니다.</h2>
+      <p style="font-size: 30px">마감이 얼마 남지 않은 동영상입니다.</p>
+      <p style="font-size: 30px">
+        합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!
+      </p>
     </div>
-      <div class="container">
+    <div class="container">
+      <div>
+        <h2>{{ deadlineData.title }}</h2>
+        <p>{{ deadlineData.content }}</p>
+        <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
         <div>
-          <h2>{{ deadlineData.title }}</h2>
-          <p>{{ deadlineData.content }}</p>
-          <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
-          <div>
-            <p>시작가</p>
-            <p>{{ $globalFuc(deadlineData.payStart) }} 원</p>
-          </div>
-          <div>
-            <p style="background-color: red">최고가</p>
-            <p style="color: red">{{ $globalFuc(this.recvList.bidding) }} 원</p>
-          </div>
-          <div class="dday-box">
-            <div>
-              <span>{{ this.days }}</span>
-              <span>DAY</span>
-            </div>
-            <div>
-              <span>{{ this.hours }}</span>
-              <span>HOURS</span>
-            </div>
-            <div>
-              <span>{{ this.minutes }}</span>
-              <span>MINS</span>
-            </div>
-            <div>
-              <span>{{ this.seconds }}</span>
-              <span>SECS</span>
-            </div>
-          </div>
-          <v-btn
-            variant="flat"
-            color="#FF9414"
-            @click="modal = true && getInfo(deadlineData.ano)"
-          >
-            입찰
-          </v-btn>
+          <p>시작가</p>
+          <p>{{ $globalFuc(deadlineData.payStart) }} 원</p>
         </div>
-        <div class="video-box">
-          <video
-            muted
-            loop
-            @mouseover="playVideo"
-            @mouseleave="stopVideo"
-            :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
-          ></video>
+        <div>
+          <p style="background-color: red">최고가</p>
+          <p style="color: red">{{ $globalFuc(this.recvList.bidding) }} 원</p>
         </div>
+        <div class="dday-box">
+          <div>
+            <span>{{ this.days }}</span>
+            <span>DAY</span>
+          </div>
+          <div>
+            <span>{{ this.hours }}</span>
+            <span>HOURS</span>
+          </div>
+          <div>
+            <span>{{ this.minutes }}</span>
+            <span>MINS</span>
+          </div>
+          <div>
+            <span>{{ this.seconds }}</span>
+            <span>SECS</span>
+          </div>
+        </div>
+        <v-btn
+          variant="flat"
+          color="#FF9414"
+          @click="modal = true && getInfo(deadlineData.ano)"
+        >
+          입찰
+        </v-btn>
+      </div>
+      <div class="video-box">
+        <video
+          muted
+          loop
+          @mouseover="playVideo"
+          @mouseleave="stopVideo"
+          :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
+        ></video>
       </div>
     <v-dialog v-model="modal" width="auto">
       <v-card>
@@ -246,20 +247,19 @@ section {
   display: flex;
   justify-content: center;
   & > div {
-    width: 1240px;
-    padding: 90px;
-    display: flex;
-    flex-direction: column;
-    text-align: end;
     & > p {
       letter-spacing: -1px;
     }
   }
 }
 
+#f-div {
+  text-align: left;
+}
+
 .container {
   display: flex;
-  justify-content: flex-end;
+  text-align: end;
   & > div:nth-child(1) {
     width: 725px;
     display: flex;

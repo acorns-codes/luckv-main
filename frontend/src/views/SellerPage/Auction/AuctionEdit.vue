@@ -7,8 +7,21 @@
           <v-table class="table-box">
             <thead>
               <tr>
+                <th>동영상</th>
+                <td colspan="3">
+                  <div class="video-box">
+                    <video
+                      controls
+                      @mouseover="playVideo"
+                      @mouseleave="stopVideo"
+                      :src="`${videoSrc}/videoplay?ano=${this.auctionData.ano}`"
+                    ></video>
+                  </div>
+                </td>
+              </tr>
+              <tr>
                 <th>제목</th>
-                <td>
+                <td colspan="3">
                   <v-text-field
                     variant="plain"
                     v-model="this.auctionData.title"
@@ -19,7 +32,7 @@
               </tr>
               <tr class="content">
                 <th>내용</th>
-                <td>
+                <td colspan="3">
                   <v-textarea
                     rows="10"
                     variant="plain"
@@ -41,20 +54,15 @@
                     item-value="value"
                   ></v-select>
                 </td>
+                <th>경매 상태</th>
+                <td>
+                  <v-text-field
+                    v-model="this.auctionData.status"
+                    variant="plain"
+                    readonly
+                  ></v-text-field>
+                </td>
               </tr>
-              <!-- <tr>
-                    <th>동영상</th>
-                    <td>
-                      <v-file-input
-                        variant="plain"
-                        prepend-icon="mdi-video"
-                        v-model="video"
-                        :rules="videoRules"
-                        required
-                      ></v-file-input>
-                    </td>
-                  </tr> -->
-
               <tr>
                 <th>경매 시작가</th>
                 <td>
@@ -62,9 +70,16 @@
                     variant="plain"
                     v-model="this.auctionData.payStart"
                     suffix="원"
-                    :rules="payStartRules"
                     readonly
-                    required
+                  ></v-text-field>
+                </td>
+                <th>최고가</th>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.auctionData.payMax"
+                    suffix="원"
+                    readonly
                   ></v-text-field>
                 </td>
               </tr>
@@ -75,21 +90,15 @@
                     v-model="this.startDay[0]"
                     variant="plain"
                     type="date"
-                    :rules="StartDaytRules"
-                    required
                     readonly
                   ></v-text-field>
                 </td>
-              </tr>
-              <tr>
                 <th>경매 시작 시간</th>
                 <td>
                   <v-text-field
                     variant="plain"
                     v-model="this.startDay[1]"
                     type="time"
-                    :rules="startTimetRules"
-                    required
                     readonly
                   ></v-text-field>
                 </td>
@@ -101,28 +110,22 @@
                     v-model="this.lastDay[0]"
                     variant="plain"
                     type="date"
-                    :rules="lastDaytRules"
-                    required
                     readonly
                   ></v-text-field>
                 </td>
-              </tr>
-              <tr>
                 <th>경매 마감 시간</th>
                 <td>
                   <v-text-field
                     variant="plain"
                     v-model="this.lastDay[1]"
                     type="time"
-                    :rules="lastTimetRules"
-                    required
                     readonly
                   ></v-text-field>
                 </td>
               </tr>
+              <tr></tr>
             </thead>
           </v-table>
-
           <v-btn type="submit" color="success" variant="elevated" class="mt-2"
             >수정</v-btn
           >
@@ -152,12 +155,6 @@ export default {
         //   /^[a-z0-9@.]{2,150}$/g.test(v) ||
         //   "내용은 2자 이상 150자 이하로 작성해주세요.",
       ],
-      videoRules: [(v) => !!v || "비디오 등록은 필수 사항입니다."],
-      payStartRules: [(v) => !!v || "경매 시작가는 필수 입력 사항입니다."],
-      StartDaytRules: [(v) => !!v || "시작 날짜는 필수 입력 사항입니다."],
-      startTimetRules: [(v) => !!v || "시작 시간는 필수 입력 사항입니다."],
-      lastDaytRules: [(v) => !!v || "마감 날짜는 필수 입력 사항입니다."],
-      lastTimetRules: [(v) => !!v || "마감 시간는 필수 입력 사항입니다."],
       categorys: [
         {
           title: "동물",
@@ -184,6 +181,7 @@ export default {
   },
 
   mounted() {
+    this.videoSrc = process.env.VUE_APP_API_URL;
     // 상세 내역 불러오기
     this.getAuction();
     // console.log(this.$store.state.sessionStorageData);
@@ -202,6 +200,7 @@ export default {
         this.startDay = this.auctionData.startDay.split(" ");
         this.lastDay = this.auctionData.lastDay.split(" ");
         this.auctionData.payStart = this.$globalFuc(this.auctionData.payStart);
+        this.auctionData.payMax = this.$globalFuc(this.auctionData.payMax);
       } catch (error) {
         console.log(error);
       }
@@ -226,6 +225,13 @@ export default {
         });
         console.log(editdata);
         console.log(res);
+        if (res.data.data) {
+          alert("게시물 수정이 완료되었습니다!");
+          this.$router.push({
+            name: "auctionDetail",
+            params: { page: 1 },
+          });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -269,11 +275,14 @@ export default {
 }
 
 .video-box {
-  width: 400px;
-  height: 300px;
-  background-color: antiquewhite;
-  margin: 0 auto;
-  margin-bottom: 30px;
+  width: 520px;
+  height: 360px;
+  margin: 10px;
+  & > video {
+    width: inherit;
+    height: inherit;
+    object-fit: cover;
+  }
 }
 
 button {
