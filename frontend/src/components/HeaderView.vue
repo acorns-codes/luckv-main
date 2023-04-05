@@ -175,6 +175,7 @@ export default {
   width: 100%;
   top: 0px;
   transition: background-color 0.5s ease-in-out;
+  z-index: 1;
 }
 #root.short {
   position: fixed;

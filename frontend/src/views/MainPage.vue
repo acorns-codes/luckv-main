@@ -2,6 +2,10 @@
   <FirstSection />
   <SecondSection />
   <!-- <ThirdSection /> -->
+  <div id="f-div">
+      <h2 style="font-size: 70px">다양한 분야의 동영상을 만나보세요</h2>
+      <p style="font-size: 30px">개성이 가득한 다양한 분야의 동영상을 먼저 선점할 수 있는 기회를노려보세요!</p>
+    </div>
   <HeaderSection :kind="kind[0]" />
   <HeaderSection :kind="kind[1]" />
   <HeaderSection :kind="kind[2]" />
@@ -61,3 +65,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+#f-div {
+  text-align: left;
+    width: 100%;
+    padding: 20% 0 5% 10%;
+  }
+
+</style>

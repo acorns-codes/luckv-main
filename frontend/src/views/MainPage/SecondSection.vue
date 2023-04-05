@@ -1,59 +1,62 @@
 <template>
   <section>
-    <div id="f-div">
-      <h2 style="font-size: 70px">마감이 임박한 동영상입니다.</h2>
-      <p style="font-size: 30px">마감이 얼마 남지 않은 동영상입니다.</p>
-      <p style="font-size: 30px">
-        합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!
-      </p>
-    </div>
-    <div class="container">
-      <div>
-        <h2>{{ deadlineData.title }}</h2>
-        <p>{{ deadlineData.content }}</p>
-        <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
-        <div>
-          <p>시작가</p>
-          <p>{{ $globalFuc(deadlineData.payStart) }} 원</p>
-        </div>
-        <div>
-          <p style="background-color: red">최고가</p>
-          <p style="color: red">{{ $globalFuc(this.recvList.bidding) }} 원</p>
-        </div>
-        <div class="dday-box">
-          <div>
-            <span>{{ this.days }}</span>
-            <span>DAY</span>
-          </div>
-          <div>
-            <span>{{ this.hours }}</span>
-            <span>HOURS</span>
-          </div>
-          <div>
-            <span>{{ this.minutes }}</span>
-            <span>MINS</span>
-          </div>
-          <div>
-            <span>{{ this.seconds }}</span>
-            <span>SECS</span>
-          </div>
-        </div>
-        <v-btn
-          variant="flat"
-          color="#FF9414"
-          @click="modal = true && getInfo(deadlineData.ano)"
-        >
-          입찰
-        </v-btn>
+      <div id="f-div">
+        <h2 style="font-size: 70px">마감이 임박한 동영상입니다.</h2>
+        <p style="font-size: 30px">마감이 얼마 남지 않은 동영상입니다.</p>
+        <p style="font-size: 30px">
+          합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!
+        </p>
       </div>
-      <div class="video-box">
-        <video
-          muted
-          loop
-          @mouseover="playVideo"
-          @mouseleave="stopVideo"
-          :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
-        ></video>
+      <div class="container">
+        <div class="video-box">
+          <video
+            muted
+            loop
+            @mouseover="playVideo"
+            @mouseleave="stopVideo"
+            :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
+          ></video>
+        </div>
+        <div>
+          <h2>{{ deadlineData.title }}</h2>
+          <p>{{ deadlineData.content }}</p>
+          <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
+          <div style="align-items: center;">
+            <p style="width: 37%; padding: 2% 8%;">시작가</p>
+            <p>{{ $globalFuc(deadlineData.payStart) }} 원</p>
+          </div>
+          <div style="align-items: center;">
+            <p style="background-color: red; width: 37%; padding: 2% 8%;" >최고가</p>
+            <p style="color: red">{{ $globalFuc(this.recvList.bidding) }} 원</p>
+          </div>
+          <div class="dday-box" style="justify-content: center;">
+            <div>
+              <span>{{ this.days }}</span>
+              <span>DAY</span>
+            </div>
+            <div>
+              <span>{{ this.hours }}</span>
+              <span>HOURS</span>
+            </div>
+            <div>
+              <span>{{ this.minutes }}</span>
+              <span>MINS</span>
+            </div>
+            <div>
+              <span>{{ this.seconds }}</span>
+              <span>SECS</span>
+            </div>
+          </div>
+          <v-btn class="abtn"
+            variant="flat"
+            color="#5f9ea0"
+            @click="modal = true && getInfo(deadlineData.ano)"
+          >
+            <p style="color: white;
+              border-radius: 5px;
+              padding: 4px 5px 0 5px;">입찰</p>
+          </v-btn>
+        </div>
       </div>
     <v-dialog v-model="modal" width="auto">
       <v-card>
@@ -89,6 +92,7 @@ export default {
       minutes: 0,
       seconds: 0,
       modal: false,
+      isScrolled: false
     };
   },
 
@@ -244,9 +248,11 @@ export default {
 <style lang="scss" scoped>
 section {
   width: 100%;
-  height: 630px;
-  display: flex;
-  justify-content: center;
+    /* height: 1440px; */
+    display: flex;
+    justify-content: center;
+    margin-block: 15% 2%;
+    flex-direction: column;
   & > div {
     & > p {
       letter-spacing: -1px;
@@ -256,13 +262,17 @@ section {
 
 #f-div {
   text-align: left;
+    width: 100%;
+    padding: 0 0 5% 10%;
 }
 
 .container {
-  display: flex;
-  text-align: end;
-  & > div:nth-child(1) {
-    width: 725px;
+  width: 100%;
+    display: flex;
+    text-align: end;
+    padding: 0 10% 0;
+  & > div:nth-child(2) {
+    width: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -279,9 +289,9 @@ section {
 
     & > div {
       display: flex;
-      width: 50%;
-      padding: 5px;
-      margin-bottom: 5px;
+      width: 80%;
+      padding: 3%;
+      // margin-bottom: 5%;
       justify-content: space-between;
       border-bottom: 1px solid #343434;
 
@@ -290,10 +300,9 @@ section {
         color: white;
         border-radius: 5px;
         padding: 4px 5px 0 5px;
-        font-size: 0.8rem;
       }
       & > p:not(:first-of-type) {
-        width: 120px;
+        width: 100%;
       }
     }
   }
@@ -305,22 +314,38 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 -4px 0.75rem;
     font-size: 1.5rem;
     font-weight: bold;
 
-    & > span:nth-child(1) {
-      width: 48px;
-      height: 60px;
-      margin: 0 1px;
-      background-color: bisque;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 4px;
+   
+      @media (min-width: 500px) {
+        & > span:nth-child(1) {
+        width: 48px;
+        height: 60px;
+        margin: 0 1px;
+        background-color: bisque;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        font-size: 1.5rem;
+
+        }
+      }
+      @media (min-width: 2500px) {
+        & > span:nth-child(1) {
+        width: 88px;
+        height: 120px;
+        margin: 0 1px;
+        background-color: bisque;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        font-size: 3rem;
+      }
     }
     & > span:last-child {
-      font-size: 0.75rem;
       font-weight: 600;
       line-height: 1;
       margin-top: 0.25rem;
@@ -329,8 +354,7 @@ section {
 }
 
 .video-box {
-  width: 420px;
-  height: 360px;
+  width: 100%;
   & > video {
     width: inherit;
     height: inherit;
@@ -338,7 +362,33 @@ section {
   }
 }
 button {
-  width: 200px;
-  margin: 15px;
+  width: 80%;
+  margin: 5%;
+  padding: 4%;
 }
+
+.abtn {
+  display: flex;
+}
+
+@media (min-width: 500px) {
+  p {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 2500px) {
+  p {
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 2500px) {
+  h2 {
+    font-size: 50px;
+  }
+}
+
+
+
 </style>

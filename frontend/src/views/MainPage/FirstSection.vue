@@ -5,13 +5,20 @@
     <div></div>
   </section> -->
   <section>
-    <div>
+    <div class="btext">
       <h1>저작권을 판매하고 수익을 얻으세요</h1>
       <p>
         나만의 동영상을 최고가로 판매하고, 다양한 사람들이 사용할 수 있도록
         구독서비스를 제공해보세요<br />
         저작권을 사고 판매하는 다양한 서비스를 만나보세요
       </p>
+      <div v-if="!isUserLogin">
+        <router-link to="/signup">
+          <v-btn>
+          회원가입 바로가기
+          </v-btn>
+        </router-link>
+      </div>
     </div>
     <div>
       <video :src="src" muted autoplay loop></video>
@@ -76,6 +83,16 @@ video {
   animation: slideInFromTop 1s ease-out;
 }
 
+button {
+  width: 200px;
+  margin: 15px;
+  background-color: #5f9ea0;
+}
+a {
+  color : white;
+
+  text-decoration: none;
+}
 
 @keyframes slideInFromTop {
   0% {
