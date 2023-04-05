@@ -115,8 +115,6 @@ p {
     width: 632px;
     height: 500px;
     margin: 1%;
-    cursor: pointer
-
   }
 }
 </style>
