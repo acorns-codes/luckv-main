@@ -1,15 +1,10 @@
 <template>
   <div id="root">
+    <div id="info-box">
+      <h2 class="test_obj hover-event">Subscription Video</h2>
+    </div>
     <div id="page-root">
-      <div class="button-box">
-        <button
-          v-for="(item, index) in categories"
-          :key="index"
-          @click="this.video(item.url, this.$route.params.page - 1)"
-        >
-          {{ item.title }}
-        </button>
-      </div>
+      <VideoCategory :category="category" />
       <VideoList :videoList="this.videoList" />
       <div class="page-box">
         <button @click="movetopreviouspage">
@@ -27,41 +22,23 @@
 
 <script>
 import VideoList from "@/views/videoPage/VideoList.vue";
+import VideoCategory from "@/components/VideoCategory.vue";
+
 export default {
-  components: { VideoList },
+  components: { VideoList, VideoCategory },
   data() {
     return {
       videoList: "",
       cnt: "",
       defaultCnt: 10,
       page: "",
-      categories: [
-        { title: "ALL", value: "", url: "" },
-        {
-          title: "동물",
-          value: "animal",
-          url: "vcate=animal",
-        },
-        {
-          title: "인물",
-          value: "character",
-          url: "vcate=character",
-        },
-        {
-          title: "건물",
-          value: "building",
-          url: "vcate=building",
-        },
-        {
-          title: "식물",
-          value: "plant",
-          url: "vcate=plant",
-        },
-        {
-          title: "기타",
-          value: "etc",
-          url: "vcate=etc",
-        },
+      category: [
+        "구독전체",
+        "subanimal",
+        "subcharacter",
+        "subbuilding",
+        "subplant",
+        "subetc",
       ],
     };
   },
@@ -74,6 +51,19 @@ export default {
       } else {
         return Math.ceil(this.cnt / 10);
         // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
+      }
+    },
+  },
+  watch: {
+    $route(to, form) {
+      if (to.path !== form.path) {
+        console.log(this.$route, "주소오오오");
+        console.log(this.$route.name, "이르르름");
+        let path = this.$route.name === "구독전체" ? "" : this.$route.name;
+        console.log(path);
+        this.video(path, this.$route.params.page - 1);
+        console.log("to", to);
+        console.log("form", form);
       }
     },
   },
@@ -97,7 +87,7 @@ export default {
       try {
         const res = await this.$axios({
           methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionAll?${category}&page=${page}&kind=구독`,
+          url: `${process.env.VUE_APP_API_URL}/auctionAll?kind=구독&page=${page}&vcate=${category}`,
         });
         this.videoList = res.data.data.auctionList;
         this.cnt = res.data.data.count;
@@ -139,10 +129,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 #root {
+  padding-top: 100px;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #page-root {
@@ -171,5 +164,46 @@ export default {
 }
 .page-box {
   display: flex;
+}
+
+#info-box {
+  width: 100%;
+  height: 500px;
+  background-image: url("https://img.freepik.com/free-vector/background-seamless-pattern-vector-with-cute-memphis_53876-105506.jpg?w=1380&t=st=1680682686~exp=1680683286~hmac=49cd1539c8c42f4866a0f4e4d5f60c229160fb12995a949caf2a77b26592d1e2");
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > h2 {
+    font-family: "ghanachoco";
+    font-size: 5rem;
+  }
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+.test_obj {
+  position: relative;
+  animation: fadeInUp 1s;
+}
+.hover-event {
+  --duration: 0.44s;
+  --move-hover: -4px;
+  transform: translateY(var(--y)) translateZ(0);
+  transition: transform var(--duration) ease, box-shadow var(--duration) ease;
+  &:hover {
+    --y: var(--move-hover);
+    --shadow: var(--shadow-hover);
+    span {
+      --m: calc(var(--font-size) * -1);
+    }
+  }
 }
 </style>
