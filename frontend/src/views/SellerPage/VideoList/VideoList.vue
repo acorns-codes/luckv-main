@@ -1,16 +1,7 @@
 <template>
   <div class="mypage">
     <div>
-      <div class="button-box">
-        <button
-          v-for="(item, index) in categorys"
-          :key="index"
-          style="margin: 10px"
-          @click="getVideo(item.title, this.$route.params.page - 1)"
-        >
-          {{ item.title }}
-        </button>
-      </div>
+      <div class="button-box"></div>
       <VideoItem :auctionList="auctionList" />
     </div>
     <!-- 페이징 -->
@@ -64,8 +55,19 @@ export default {
       }
     },
   },
+  watch: {
+    $route(to, form) {
+      if (to.path !== form.path) {
+        this.getVideo(this.$route.name, this.$route.params.page - 1);
+        console.log(this.$route.name, "주소오오오");
+      }
+    },
+  },
+
   mounted() {
-    this.getVideo("경매", this.$route.params.page - 1);
+    // const path = this.$route.path === ""
+    console.log(this.$route);
+    this.getVideo(this.$route.name, this.$route.params.page - 1);
   },
   methods: {
     async getVideo(category, page) {
@@ -84,17 +86,16 @@ export default {
       }
     },
 
-    //이전페이지 기능
+    // 이전페이지 기능
     movetopreviouspage() {
       if (this.$route.params.page == 1) {
         alert("첫번째 페이지입니다!");
       } else {
         let pp = parseInt(this.$route.params.page) - 1;
         this.$router.push({
-          name: "sellerauction",
+          name: this.$route.name,
           params: { page: pp },
         });
-        this.getQna(this.$route.params.page - 2);
       }
     },
     // 다음페이지 기능
@@ -104,10 +105,9 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) + 1;
         this.$router.push({
-          name: "sellerauction",
+          name: this.$route.name,
           params: { page: pp },
         });
-        this.getQna(this.$route.params.page);
       }
     },
   },

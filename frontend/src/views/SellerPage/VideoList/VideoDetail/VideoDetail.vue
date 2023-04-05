@@ -215,6 +215,7 @@ export default {
   computed() {},
 
   mounted() {
+    console.log(this.$route);
     this.videoSrc = process.env.VUE_APP_API_URL;
     // 상세 내역 불러오기
     this.getAuction();

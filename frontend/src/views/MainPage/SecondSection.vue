@@ -233,7 +233,8 @@ export default {
       console.log(x);
     },
     closeModal() {
-      this.modal = true;
+      this.modal = false;
+      this.closeSocket();
       this.getVideo();
     },
   },

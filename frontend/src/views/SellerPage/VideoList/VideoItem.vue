@@ -59,7 +59,7 @@ export default {
       console.log(ano);
       console.log("상세");
       this.$router.push({
-        name: "auctionDetail",
+        name: "videoDetail",
         params: { ano: ano },
       });
     },

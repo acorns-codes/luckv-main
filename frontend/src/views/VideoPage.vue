@@ -1,15 +1,10 @@
 <template>
   <div id="root">
+    <div id="info-box">
+      <h2 class="test_obj hover-event">Auction Video</h2>
+    </div>
     <div id="page-root">
-      <div class="button-box">
-        <button
-          v-for="(item, index) in categorys"
-          :key="index"
-          @click="this.video(item.url, this.$route.params.page - 1)"
-        >
-          {{ item.title }}
-        </button>
-      </div>
+      <VideoCategory />
       <VideoList :videoList="this.videoList" @video="video" />
       <div class="page-box">
         <button @click="movetopreviouspage">
@@ -27,8 +22,9 @@
 
 <script>
 import VideoList from "@/views/videoPage/VideoList.vue";
+import VideoCategory from "@/components/VideoCategory.vue";
 export default {
-  components: { VideoList },
+  components: { VideoCategory, VideoList },
   data() {
     return {
       videoList: "",
@@ -77,12 +73,23 @@ export default {
       }
     },
   },
+  watch: {
+    $route(to, form) {
+      if (to.path !== form.path) {
+        console.log(this.$route, "주소오오오");
+        console.log(this.$route.name, "이르르름");
+        let path = this.$route.name === "전체" ? "" : this.$route.name;
+        console.log(path);
+        this.video(path, this.$route.params.page - 1);
+        console.log("to", to);
+        console.log("form", form);
+      }
+    },
+  },
   mounted() {
+    console.log(this.$route);
     // 비디오 목록 받아오는 함수 실행
     this.video("", this.$route.params.page - 1);
-  },
-  watch: {
-    $route: "video",
   },
   methods: {
     // 비디오 리스트 받아오기
@@ -91,7 +98,7 @@ export default {
       try {
         const res = await this.$axios({
           methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionAll?${category}&page=${page}&kind=경매`,
+          url: `${process.env.VUE_APP_API_URL}/auctionAll?kind=경매&page=${page}&vcate=${category}`,
         });
         console.log(res);
         this.videoList = res.data.data.auctionList;
@@ -134,10 +141,13 @@ export default {
 
 <style lang="scss" scoped>
 #root {
+  padding-top: 50px;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #page-root {
@@ -146,22 +156,51 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-
-.button-box {
-  width: 400px;
-  height: 50px;
+#info-box {
+  width: 100%;
+  height: 500px;
+  background-image: url("https://img.freepik.com/free-vector/flat-design-geometric-shapes-background_23-2148366514.jpg?w=1800&t=st=1680679389~exp=1680679989~hmac=dbe31b85c57b58440593c4b55a6a63bd47fa50b94f7d672f97ddc6ecc0f536f4");
+  background-size: cover;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  & > button {
-    color: #343434;
-    background-color: #f4f4f4;
-    border-radius: 10px;
-    padding: 2px 10px 2px 10px;
+  & > h2 {
+    font-family: "ghanachoco";
+    font-size: 5rem;
   }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+
+.test_obj {
+  position: relative;
+  animation: fadeInUp 1s;
 }
 
 .page-box {
   display: flex;
+}
+
+.hover-event {
+  --duration: 0.44s;
+  --move-hover: -4px;
+  transform: translateY(var(--y)) translateZ(0);
+  transition: transform var(--duration) ease, box-shadow var(--duration) ease;
+  &:hover {
+    --y: var(--move-hover);
+    --shadow: var(--shadow-hover);
+    span {
+      --m: calc(var(--font-size) * -1);
+    }
+  }
 }
 </style>

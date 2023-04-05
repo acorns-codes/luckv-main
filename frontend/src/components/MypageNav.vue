@@ -28,14 +28,32 @@
             :to="{ name: 'mypageEdit', params: { mno: sessionData.mno } }"
             >회원정보수정</router-link
           >
-          <router-link
-            :to="{
-              name: 'sellerauction',
-              params: { page: 1 },
-            }"
-            >동영상 목록</router-link
-          >
-          
+          <div id="video-list">
+            <button @click="listOn">동영상 목록</button>
+            <div>
+              <router-link
+                :to="{
+                  name: '경매',
+                  params: { page: 1 },
+                }"
+                >경매</router-link
+              >
+              <router-link
+                :to="{
+                  name: '무료',
+                  params: { page: 1 },
+                }"
+                >무료</router-link
+              >
+              <router-link
+                :to="{
+                  name: '구독',
+                  params: { page: 1 },
+                }"
+                >구독</router-link
+              >
+            </div>
+          </div>
           <router-link to="/postauction">동영상 등록</router-link>
         </div>
       </div>
@@ -52,7 +70,16 @@ export default {
   data() {
     return {
       sessionData: JSON.parse(sessionStorage.getItem("login")),
+      list: false,
     };
+  },
+  methods: {
+    listOn() {
+      this.$router.push({
+        name: "경매",
+        params: { page: 1 },
+      });
+    },
   },
 };
 </script>
@@ -94,6 +121,21 @@ export default {
   }
   a.router-link-exact-active {
     font-weight: bold;
+  }
+}
+
+#video-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  & > button {
+    font-size: 1.3rem;
+    padding: 5px;
+  }
+  & > div > a {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.1rem;
   }
 }
 </style>
