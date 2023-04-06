@@ -21,7 +21,7 @@ const routes = [
         component: () => import("@/views/AuctionPage"),
       },
       {
-        path: "/animal/:page",
+        path: "/:page/animal",
         name: "animal",
         component: () => import("@/views/AuctionPage"),
       },
