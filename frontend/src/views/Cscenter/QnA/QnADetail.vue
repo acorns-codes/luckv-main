@@ -5,7 +5,10 @@
         <h2>QnA</h2>
       </div>
       <!-- 작성자만 보일 수 있도록 설정해야 함 -->
-      <div class="btn-box">
+      <div
+        class="btn-box"
+        v-if="this.$store.state.sessionStorageData.mid === this.detaillData.id"
+      >
         <v-btn size="small" color="#eee" @click="editBtn"> 수정 </v-btn>
         <v-btn size="small" color="#eee" @click="deleteBtn"> 삭제 </v-btn>
       </div>

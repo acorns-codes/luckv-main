@@ -1,6 +1,10 @@
 <template>
   <LoginForm v-if="this.$store.state.isClicked" />
-  <div id="root" :class="{ short: isHeaderSmall }" :style="{ backgroundColor: headers.backgroundColor }">
+  <div
+    id="root"
+    :class="{ short: isHeaderSmall }"
+    :style="{ backgroundColor: headers.backgroundColor }"
+  >
     <div id="header" :class="{ short: isHeaderSmall }">
       <router-link to="/">
         <h1>

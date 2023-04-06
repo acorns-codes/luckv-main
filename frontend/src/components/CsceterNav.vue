@@ -1,35 +1,31 @@
 <template>
-  <div id="root">
-    <div id="cscenter-root">
-      <div class="main-container">
-        <h1>고객센터</h1>
-        <div>
-          <router-link
-            :to="{
-              name: 'notice',
-              params: { page: 1 },
-            }"
-            >공지사항</router-link
-          >
-          <router-link
-            :to="{
-              name: 'qna',
-              params: { page: 1 },
-            }"
-            >QnA</router-link
-          >
-          <router-link
-            :to="{
-              name: 'faq',
-              params: { page: 1 },
-            }"
-            >FAQ</router-link
-          >
-        </div>
-      </div>
-      <router-view />
+  <div class="main-container">
+    <h1>고객센터</h1>
+    <div>
+      <router-link
+        :to="{
+          name: 'notice',
+          params: { page: 1 },
+        }"
+        >공지사항</router-link
+      >
+      <router-link
+        :to="{
+          name: 'qna',
+          params: { page: 1 },
+        }"
+        >QnA</router-link
+      >
+      <router-link
+        :to="{
+          name: 'faq',
+          params: { page: 1 },
+        }"
+        >FAQ</router-link
+      >
     </div>
   </div>
+  <router-view />
 </template>
 
 <script>
@@ -41,19 +37,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-#cscenter-root {
-  width: 1440px;
-  height: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 .main-container {
   width: 300px;
   display: flex;
@@ -61,6 +44,7 @@ export default {
   justify-content: center;
   padding: 40px;
   & > div {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -77,7 +61,7 @@ export default {
     padding: 5px;
   }
 
-  a.router-link-exact-active {
+  a.router-link-active {
     font-weight: bold;
   }
 }

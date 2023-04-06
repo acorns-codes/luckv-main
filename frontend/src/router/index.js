@@ -128,6 +128,7 @@ const routes = [
     path: "/cscenter",
     name: "cscenter",
     component: () => import("@/views/CscenterPage.vue"),
+
     children: [
       // !! 공지사항  !! //
       // 공지사항 목록
