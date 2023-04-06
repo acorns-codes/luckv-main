@@ -17,17 +17,12 @@
 <script>
 import FirstSection from "./MainPage/FirstSection.vue";
 import SecondSection from "./MainPage/SecondSection.vue";
-// import ThirdSection from "./MainPage/ThirdSection.vue";
 import HeaderSection from "@/components/HeaderSection.vue";
-
-// import SignUpForm from "./Login/SignUpForm.vue";
 export default {
   name: "MainPage",
   components: {
     FirstSection,
     SecondSection,
-    // ThirdSection,
-
     HeaderSection,
   },
   data() {
@@ -55,14 +50,6 @@ export default {
         },
       ],
     };
-  },
-  methods: {
-    // LoginFormOpen() {
-    //   this.isClicked = !this.isClicked;
-    // },
-    // LoginFormClose() {
-    //   this.isClicked = false;
-    // },
   },
 };
 </script>

@@ -3,18 +3,6 @@
     <div id="cscenter-root">
       <CsceterNavVue />
     </div>
-
-    <v-sheet
-      v-if="this.$route.name === 'cscenter'"
-      class="card-box"
-      elevation="4"
-    >
-      <div>
-        <h2>CScenter</h2>
-        <p>언제나 LuckV를 이용해주셔서 감샇반디ㅏ</p>
-        <p>이용중 불편사항이 있으시면 언제든 말씀해주세요!</p>
-      </div>
-    </v-sheet>
   </div>
 </template>
 
@@ -23,8 +11,22 @@ import CsceterNavVue from "@/components/CsceterNav.vue";
 
 export default {
   components: { CsceterNavVue },
+  // watch: {
+  //   $route(to, form) {
+  //     if (to.path !== form.path)
+  //       this.$router.push({
+  //         name: "notice",
+  //         params: { page: 1 },
+  //       });
+  //   },
+  // },
+
   mounted() {
     console.log(this.$route.name);
+    this.$router.push({
+      name: "notice",
+      params: { page: 1 },
+    });
   },
 };
 </script>
@@ -36,7 +38,6 @@ export default {
   height: 100%;
   display: flex;
   justify-content: center;
-  flex-direction: column;
 }
 #cscenter-root {
   width: 1440px;
@@ -46,6 +47,14 @@ export default {
   justify-content: space-between;
 }
 
+.cs-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 110px;
+}
 .card-box {
   width: 600px;
   height: 250px;

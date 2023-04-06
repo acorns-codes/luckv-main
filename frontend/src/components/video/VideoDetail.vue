@@ -93,8 +93,8 @@
             <p>사용 후 출처를 남겨주시면 감사하겠습니다.</p>
           </div>
           <v-btn color="#FF9414" size="x-large" @click="videoDownload"
-            >다운로드</v-btn
-          >
+            >다운로드
+          </v-btn>
         </template>
         <template v-else>
           <div class="last-box">
@@ -143,11 +143,11 @@ export default {
       ],
     };
   },
-  // created() {
-  //   this.videoSrc = process.env.VUE_APP_API_URL;
-  //   // 소켓 연결 시도
-  //   this.connect();
-  // },
+  created() {
+    this.videoSrc = process.env.VUE_APP_API_URL;
+    // 소켓 연결 시도
+    this.connect();
+  },
   mounted() {
     // 비디오 주소 미리 할당
     this.videoSrc = process.env.VUE_APP_API_URL;
@@ -271,32 +271,38 @@ export default {
     // video 다운로드
     async videoDownload() {
       console.log("비디오 다운로드");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          responseType: "blob", // 응답데이터 타입 정의
-          url: `${process.env.VUE_APP_API_URL}/videoDownload/${this.videoData.ano}`,
-        });
-        console.log(res);
-        const fileName = `video_${res.request.responseURL.substr(
-          res.request.responseURL.lastIndexOf("/") + 1
-        )}`;
-        console.log(fileName);
-        const blob = new Blob([res.data]);
-        console.log(blob);
+      console.log(this.$store.state.sessionStorageData.subYn);
+      if (this.$store.state.sessionStorageData.subYn === "Y") {
+        console.log("구독회원");
+        try {
+          const res = await this.$axios({
+            method: "GET",
+            responseType: "blob", // 응답데이터 타입 정의
+            url: `${process.env.VUE_APP_API_URL}/videoDownload/${this.videoData.ano}`,
+          });
+          console.log(res);
+          const fileName = `video_${res.request.responseURL.substr(
+            res.request.responseURL.lastIndexOf("/") + 1
+          )}`;
+          console.log(fileName);
+          const blob = new Blob([res.data]);
+          console.log(blob);
 
-        const fileObjectUrl = window.URL.createObjectURL(blob);
-        console.log(fileObjectUrl);
+          const fileObjectUrl = window.URL.createObjectURL(blob);
+          console.log(fileObjectUrl);
 
-        const fileLink = document.createElement("a");
-        fileLink.href = fileObjectUrl;
+          const fileLink = document.createElement("a");
+          fileLink.href = fileObjectUrl;
 
-        fileLink.setAttribute("download", `${fileName}.mp4`);
-        document.body.appendChild(fileLink);
+          fileLink.setAttribute("download", `${fileName}.mp4`);
+          document.body.appendChild(fileLink);
 
-        fileLink.click();
-      } catch (error) {
-        console.log(error);
+          fileLink.click();
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        alert("구독회원만 다운로드를 받을 수 있습니다!");
       }
     },
 

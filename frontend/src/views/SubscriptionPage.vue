@@ -2,6 +2,7 @@
   <div id="root">
     <div id="info-box">
       <h2 class="test_obj hover-event">Subscription Video</h2>
+      <button @click="sub">JOIN UP FOR MEMBERSHIP</button>
     </div>
     <div id="page-root">
       <VideoCategory :category="category" />
@@ -120,6 +121,27 @@ export default {
         this.video("", this.$route.params.page);
       }
     },
+    // 구독신청
+    async sub() {
+      if (!confirm("구독을 신청하시겠습니까?")) {
+        alert("구독 신청이 완료되지 못했습니다!");
+      } else {
+        try {
+          const res = await this.$axios({
+            method: "POST",
+            url: `${process.env.VUE_APP_API_URL}/videoSubYn`,
+            data: { mno: this.$store.state.sessionStorageData.mno },
+          });
+          console.log(res);
+          if (res.data.data) {
+            alert("구독 신청이 완료되었습니다!");
+            this.$store.commit("storeSubAuth", "Y");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
   },
 };
 </script>
@@ -153,9 +175,19 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   & > h2 {
     font-family: "ghanachoco";
     font-size: 5rem;
+  }
+  & > button {
+    color: #ffb22d;
+    font-weight: bold;
+    font-size: 1.3rem;
+    letter-spacing: 5px;
+  }
+  & > button:hover {
+    text-decoration: underline;
   }
 }
 @keyframes fadeInUp {

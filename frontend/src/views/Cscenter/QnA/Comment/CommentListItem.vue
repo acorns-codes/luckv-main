@@ -13,7 +13,7 @@
       </div>
 
       <!-- 작성자만 수정 삭제 버튼 보일수 있게 수정  -->
-      <div>
+      <div v-if="this.$store.state.sessionStorageData.mno === 'A'">
         <v-btn
           variant="plain"
           size="x-small"
