@@ -111,6 +111,9 @@ p {
 }
 
  @media (min-width: 2500px) {
+  .video-box {
+    width:81%;
+  }
   .video-box > div {
     width: 632px;
     height: 500px;
