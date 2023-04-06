@@ -27,7 +27,7 @@
       <router-link to="/">Home</router-link>
       <router-link
         :to="{
-          name: '전체',
+          name: 'all',
           params: { page: 1 },
         }"
         >Auction</router-link
@@ -41,14 +41,14 @@
       >
       <router-link
         :to="{
-          name: '구독전체',
+          name: 'subscription',
           params: { page: 1 },
         }"
         >Subscription</router-link
       >
       <router-link
         :to="{
-          name: 'notice',
+          name: 'cscenter',
           params: { page: 1 },
         }"
         >CScenter</router-link
@@ -180,10 +180,6 @@ export default {
     color: #bcddff;
   }
 }
-#nav a.router-link-exact-active {
-  color: #ffffff;
-  font-weight: bold;
-}
 
 #root {
   position: fixed;
@@ -212,5 +208,10 @@ h1 span {
   100% {
     top: -3px;
   }
+}
+
+#nav a.router-link-active {
+  color: #ffffff;
+  font-weight: bold;
 }
 </style>

@@ -92,6 +92,11 @@ export default {
       }
     },
   },
+  watch: {
+    $route(to, form) {
+      if (to.path !== form.path) this.getQna(this.$route.params.page - 1);
+    },
+  },
   // 페이지가 켜질 때 실행
   mounted() {
     this.getQna(this.$route.params.page - 1);
@@ -213,11 +218,6 @@ export default {
     }
   }
 }
-
-.page-box {
-  display: flex;
-}
-
 .event:hover {
   /* font-weight: bold; */
   background-color: #eee;

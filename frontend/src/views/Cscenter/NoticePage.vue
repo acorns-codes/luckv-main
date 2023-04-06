@@ -123,13 +123,10 @@ export default {
       if (to.path !== form.path) this.getNotice(this.$route.params.page - 1);
     },
   },
-
-  created() {
+  // 페이지가 켜질 때 실행
+  mounted() {
     this.getNotice(this.$route.params.page - 1);
   },
-
-  // 페이지가 켜질 때 실행
-  mounted() {},
   methods: {
     // 공지사항 불러오기
     async getNotice(page) {
@@ -227,11 +224,6 @@ export default {
   }
 }
 
-.page-box {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-}
 .event:hover {
   /* font-weight: bold; */
   background-color: #eee;

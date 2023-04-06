@@ -1,15 +1,10 @@
 <template>
   <div id="root">
+    <div id="info-box">
+      <h2 class="test_obj hover-event">Free Video</h2>
+    </div>
     <div id="page-root">
-      <div class="button-box">
-        <button
-          v-for="(item, index) in categorys"
-          :key="index"
-          @click="this.video(item.url, this.$route.params.page - 1)"
-        >
-          {{ item.title }}
-        </button>
-      </div>
+      <VideoCategory :category="category" />
       <VideoList :videoList="this.videoList" />
       <div class="page-box">
         <button @click="movetopreviouspage">
@@ -27,42 +22,22 @@
 
 <script>
 import VideoList from "@/components/video/VideoList.vue";
-// import VideoCategory from "@/components/video/VideoCategory.vue";
+import VideoCategory from "@/components/video/VideoCategory.vue";
 export default {
-  components: { VideoList },
+  components: { VideoList, VideoCategory },
   data() {
     return {
       videoList: "",
       cnt: "",
       defaultCnt: 10,
       page: "",
-      categorys: [
-        { title: "ALL", value: "", url: "" },
-        {
-          title: "동물",
-          value: "animal",
-          url: "vcate=animal",
-        },
-        {
-          title: "인물",
-          value: "character",
-          url: "vcate=character",
-        },
-        {
-          title: "건물",
-          value: "building",
-          url: "vcate=building",
-        },
-        {
-          title: "식물",
-          value: "plant",
-          url: "vcate=plant",
-        },
-        {
-          title: "기타",
-          value: "etc",
-          url: "vcate=etc",
-        },
+      category: [
+        "무료전체",
+        "freeanimal",
+        "freecharacter",
+        "freebuilding",
+        "freeplant",
+        "freeetc",
       ],
     };
   },
@@ -78,6 +53,16 @@ export default {
       }
     },
   },
+  watch: {
+    $route(to, form) {
+      if (to.path !== form.path) {
+        let pathList = this.$route.path.split("/");
+        const path = pathList[1] === "free" ? "" : pathList[1];
+        this.video(path, this.$route.params.page - 1);
+        console.log(this.$route);
+      }
+    },
+  },
   mounted() {
     // 무료 동영상 목록 받아오는 함수 실행
     this.video("", this.$route.params.page - 1);
@@ -89,7 +74,7 @@ export default {
       try {
         const res = await this.$axios({
           methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionAll?${category}&page=${page}&kind=무료`,
+          url: `${process.env.VUE_APP_API_URL}/auctionAll?kind=무료&page=${page}&vcate=${category}`,
         });
         this.videoList = res.data.data.auctionList;
         this.cnt = res.data.data.count;
@@ -106,8 +91,9 @@ export default {
         alert("첫번째 페이지입니다!");
       } else {
         let pp = parseInt(this.$route.params.page) - 1;
+
         this.$router.push({
-          name: "freevideo",
+          name: this.$router.name,
           params: { page: pp },
         });
         this.video("", this.$route.params.page - 2);
@@ -120,7 +106,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) + 1;
         this.$router.push({
-          name: "freevideo",
+          name: this.$router.name,
           params: { page: pp },
         });
         this.video("", this.$route.params.page);
@@ -131,10 +117,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 #root {
+  padding-top: 100px;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #page-root {
@@ -144,20 +133,44 @@ export default {
   align-items: center;
 }
 
-.button-box {
-  width: 400px;
-  height: 50px;
+#info-box {
+  width: 100%;
+  height: 500px;
+  background-image: url("https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149017896.jpg?w=740&t=st=1680747133~exp=1680747733~hmac=76144e94899ed69380459068e9a191ed239d58ce3302d8fbc7095a3a3d9c0686");
+  background-size: cover;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  & > button {
-    color: #343434;
-    background-color: #f4f4f4;
-    border-radius: 10px;
-    padding: 2px 10px 2px 10px;
+  & > h2 {
+    font-family: "ghanachoco";
+    font-size: 5rem;
   }
 }
-.page-box {
-  display: flex;
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+}
+.test_obj {
+  position: relative;
+  animation: fadeInUp 1s;
+}
+.hover-event {
+  --duration: 0.44s;
+  --move-hover: -4px;
+  transform: translateY(var(--y)) translateZ(0);
+  transition: transform var(--duration) ease, box-shadow var(--duration) ease;
+  &:hover {
+    --y: var(--move-hover);
+    --shadow: var(--shadow-hover);
+    span {
+      --m: calc(var(--font-size) * -1);
+    }
+  }
 }
 </style>

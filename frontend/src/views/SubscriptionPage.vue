@@ -58,7 +58,7 @@ export default {
     $route(to, form) {
       if (to.path !== form.path) {
         let pathList = this.$route.path.split("/");
-        const path = pathList[1] === "1" ? "" : pathList[1];
+        const path = pathList[1] === "sub" ? "" : pathList[1];
         this.video(path, this.$route.params.page - 1);
       }
     },
@@ -101,7 +101,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) - 1;
         this.$router.push({
-          name: "subscription",
+          name: this.$router.name,
           params: { page: pp },
         });
         this.video("", this.$route.params.page - 2);
@@ -114,7 +114,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) + 1;
         this.$router.push({
-          name: "subscription",
+          name: this.$router.name,
           params: { page: pp },
         });
         this.video("", this.$route.params.page);
@@ -145,23 +145,6 @@ export default {
   height: 500px;
   border: 1px solid black;
 }
-.button-box {
-  width: 400px;
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  & > button {
-    color: #343434;
-    background-color: #f4f4f4;
-    border-radius: 10px;
-    padding: 2px 10px 2px 10px;
-  }
-}
-.page-box {
-  display: flex;
-}
-
 #info-box {
   width: 100%;
   height: 500px;
