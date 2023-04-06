@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import VideoList from "@/views/videoPage/VideoList.vue";
+import VideoList from "@/components/video/VideoList.vue";
+// import VideoCategory from "@/components/video/VideoCategory.vue";
 export default {
   components: { VideoList },
   data() {
