@@ -6,7 +6,11 @@
       variant="outlined"
       v-model="comment"
     ></v-textarea>
-    <v-btn @click="createComment">댓글달기</v-btn>
+    <v-btn
+      v-if="this.$store.state.sessionStorageData.mno === 'A'"
+      @click="createComment"
+      >댓글달기</v-btn
+    >
   </div>
 </template>
 

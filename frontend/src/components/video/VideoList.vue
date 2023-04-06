@@ -11,6 +11,10 @@
         @click="modal = true && getInfo(item.ano)"
       ></video>
     </div>
+    <div v-show="this.videoList.length === 0" class="no-video">
+      일치하는 동영상이 없습니다.
+    </div>
+
     <v-dialog v-model="modal" width="auto">
       <v-card>
         <VideoDetail :videoData="videoData" ref="videoDetail" />
@@ -119,5 +123,9 @@ p {
     margin: 1%;
     cursor: pointer;
   }
+}
+
+.no-video {
+  padding: 30px;
 }
 </style>

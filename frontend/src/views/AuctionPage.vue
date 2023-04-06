@@ -12,7 +12,6 @@
         </button>
         <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
         <button @click="movetonextpage">
-          <!-- 다음페이지로 이동 -->
           <v-icon> mdi-chevron-right </v-icon>
         </button>
       </div>

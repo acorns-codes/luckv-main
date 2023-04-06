@@ -2,7 +2,7 @@
   <div class="container">
     <h2>경매 낙찰 내역</h2>
     <div>
-      <div class="page-box">
+      <div>
         <v-table class="table-box">
           <thead>
             <tr>

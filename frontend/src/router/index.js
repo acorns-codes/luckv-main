@@ -196,7 +196,7 @@ const routes = [
     ],
   },
 
-  //  **   CScenter  **  //
+  //  **   마이페이지 **  //
   {
     path: "/mypage",
     name: "mypage",

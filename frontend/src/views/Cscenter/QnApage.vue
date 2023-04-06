@@ -139,7 +139,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) - 1;
         this.$router.push({
-          name: "csqna",
+          name: "qna",
           params: { page: pp },
         });
         this.getQna(this.$route.params.page - 2);
@@ -152,7 +152,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) + 1;
         this.$router.push({
-          name: "csqna",
+          name: "qna",
           params: { page: pp },
         });
         this.getQna(this.$route.params.page);
@@ -163,7 +163,7 @@ export default {
     qnaDetail() {
       if (this.password === this.selectedItem.qpwd) {
         this.$router.push({
-          name: "qnadetail",
+          name: "qna",
           params: { no: this.selectedItem.no },
         });
       } else {

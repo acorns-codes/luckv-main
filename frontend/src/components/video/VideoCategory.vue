@@ -81,7 +81,7 @@ export default {
     padding-bottom: 10px;
     font-family: "KCC-Ganpan";
   }
-  & a.router-link-exact-active {
+  & a.router-link-active {
     color: #00aaf8;
     border-bottom: 3px solid #00aaf8;
     padding-bottom: 7px;

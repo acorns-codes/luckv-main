@@ -110,7 +110,7 @@ export default {
       } else {
         let pp = parseInt(this.$route.params.page) - 1;
         this.$router.push({
-          name: "csfaq",
+          name: "faq",
           params: { page: pp },
         });
         this.getNotice(this.$route.params.page - 2);

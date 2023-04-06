@@ -3,7 +3,7 @@
     <template v-if="this.userData.subYn === 'Y'">
       <h2>구독 내역</h2>
       <div>
-        <div class="page-box">
+        <div>
           <v-table class="table-box">
             <thead>
               <tr>
