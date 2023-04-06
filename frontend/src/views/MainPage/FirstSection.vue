@@ -5,7 +5,7 @@
     <div></div>
   </section> -->
   <section>
-    <div class="btext">
+    <div class="btext" v-if="showBtext">
       <h1>저작권을 판매하고 수익을 얻으세요</h1>
       <p>
         나만의 동영상을 최고가로 판매하고, 다양한 사람들이 사용할 수 있도록
@@ -18,6 +18,15 @@
           회원가입 바로가기
           </v-btn>
         </router-link>
+      </div>
+    </div>
+    <div class="btext2"  v-else>
+      <h1>다양한 분야의 동영상을 만나보세요</h1>
+      <p>
+        화면을 아래로 스크롤하거나 화살표 버튼을 클릭해서 다양한 분야의 동영상을 미리 만나보세요<br />
+      </p>
+      <div  @click="arrow">
+        <img :src="require(`@/assets/images/down_arrow.svg`)"/>
       </div>
     </div>
     <div>
@@ -40,9 +49,33 @@ export default {
   data() {
     return {
       src: src,
+      showBtext: true,
     };
   },
+  created() {
+    setInterval(() => {
+      this.showBtext = !this.showBtext;
+    }, 6000);
+  },
+  computed: {
+    isUserLogin() {
+      return this.$store.getters.isLogin;
+    },
+  },
+  methods: {
+    arrow() {
+      const section = document.getElementById('f-div');
+      const offset = section.offsetTop - 40;
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      });
+
+    },
+  }
 };
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -82,12 +115,21 @@ video {
 .btext {
   animation: slideInFromTop 1s ease-out;
 }
+.btext2 {
+  animation: slideInFromTop 1s ease-out;
+  display: none;
+}
 
 @media (min-width: 2500px) {
   .btext {
     margin-block-start: 10%;
   }
+
+  .btext2 {
+    margin-block-start: 10%;
+  }
 }
+
 
 
 button {
