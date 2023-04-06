@@ -54,7 +54,6 @@ export default {
       ],
     };
   },
-
   methods: {
     LoginFormOpen() {
       this.isClicked = !this.isClicked;

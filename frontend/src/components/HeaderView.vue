@@ -197,9 +197,10 @@ export default {
 
 h1 span {
   position: relative;
-  top: 10px;
+  top: 2px;
   display: inline-block;
   animation: bounce 0.3s ease infinite alternate;
+  animation-iteration-count: 10;
   font-size: 30px;
   color: #ff9100;
 }
