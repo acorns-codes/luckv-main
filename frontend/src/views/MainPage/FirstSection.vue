@@ -55,7 +55,7 @@ export default {
   created() {
     setInterval(() => {
       this.showBtext = !this.showBtext;
-    }, 6000);
+    }, 5000);
   },
   computed: {
     isUserLogin() {
