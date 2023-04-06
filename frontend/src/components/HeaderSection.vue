@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import VideoList from "@/views/videoPage/VideoList.vue";
+import VideoList from "@/components/video/VideoList.vue";
 
 export default {
   components: { VideoList },
@@ -98,7 +98,4 @@ p {
   padding: 0% 5% 0 10%;
   margin: 6% 0 0 0;
 }
-
-
-
 </style>

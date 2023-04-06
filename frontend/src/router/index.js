@@ -13,37 +13,37 @@ const routes = [
   {
     path: "/video/:page",
     name: "all",
-    component: () => import("@/views/VideoPage"),
+    component: () => import("@/views/AuctionPage"),
     children: [
       {
         path: "/:page",
         name: "전체",
-        component: () => import("@/views/VideoPage"),
+        component: () => import("@/views/AuctionPage"),
       },
       {
         path: "/animal/:page",
         name: "animal",
-        component: () => import("@/views/VideoPage"),
+        component: () => import("@/views/AuctionPage"),
       },
       {
         path: "/character/:page",
         name: "character",
-        component: () => import("@/views/VideoPage"),
+        component: () => import("@/views/AuctionPage"),
       },
       {
         path: "/building/:page",
         name: "building",
-        component: () => import("@/views/VideoPage"),
+        component: () => import("@/views/AuctionPage"),
       },
       {
         path: "/plant/:page",
         name: "plant",
-        component: () => import("@/views/VideoPage"),
+        component: () => import("@/views/AuctionPage"),
       },
       {
         path: "/etc/:page",
         name: "etc",
-        component: () => import("@/views/FreeVideoPage"),
+        component: () => import("@/views/AuctionPage"),
       },
     ],
   },
