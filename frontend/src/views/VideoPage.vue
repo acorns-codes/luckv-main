@@ -49,11 +49,11 @@ export default {
   watch: {
     $route(to, form) {
       if (to.path !== form.path) {
-        console.log(this.$route, "주소오오오");
+        console.log(this.$route.path, "주소오오오");
         console.log(this.$route.name, "이르르름");
-        let path = this.$route.name === "전체" ? "" : this.$route.name;
-        console.log(path);
-        this.video(path, this.$route.params.page - 1);
+        let path = this.$route.path.split("/");
+        console.log(path, "pathhhhhh");
+        this.video(path[1], this.$route.params.page - 1);
         console.log("to", to);
         console.log("form", form);
       }

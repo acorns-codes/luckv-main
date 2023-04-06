@@ -41,7 +41,7 @@
       >
       <router-link
         :to="{
-          name: 'subscription',
+          name: '구독전체',
           params: { page: 1 },
         }"
         >Subscription</router-link
