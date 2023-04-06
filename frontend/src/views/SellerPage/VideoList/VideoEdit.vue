@@ -241,12 +241,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page-box {
-  /* width: 100%; */
-  flex-direction: column;
-  display: flex;
-  padding-bottom: 10px;
-}
 .container {
   display: flex;
   flex-direction: column;

@@ -175,9 +175,4 @@ export default {
     padding: 2px 10px 2px 10px;
   }
 }
-.page-box {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-}
 </style>

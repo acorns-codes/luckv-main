@@ -116,7 +116,5 @@ export default {
   cursor: pointer;
 }
 
-.page-box {
-  display: flex;
-}
+
 </style>

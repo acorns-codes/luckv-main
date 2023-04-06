@@ -154,11 +154,6 @@ export default {
   position: relative;
   animation: fadeInUp 1s;
 }
-
-.page-box {
-  display: flex;
-}
-
 .hover-event {
   --duration: 0.44s;
   --move-hover: -4px;

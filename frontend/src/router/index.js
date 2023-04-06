@@ -9,7 +9,7 @@ const routes = [
     // 메타 필드
     // $route.matched를 반복하여 라우터 레코드의 메타필드를 검사한다.
   },
-  // 비디오 전체 목록
+  //  전체 목록
   {
     path: "/video/:page",
     name: "all",
@@ -52,6 +52,38 @@ const routes = [
     path: "/freevideo/:page",
     name: "freevideo",
     component: () => import("@/views/FreeVideoPage"),
+    children: [
+      {
+        path: "/free/:page",
+        name: "무료전체",
+        component: () => import("@/views/FreeVideoPage"),
+      },
+      {
+        path: "/animal/free/:page",
+        name: "freeanimal",
+        component: () => import("@/views/FreeVideoPage"),
+      },
+      {
+        path: "/character/free/:page",
+        name: "freecharacter",
+        component: () => import("@/views/FreeVideoPage"),
+      },
+      {
+        path: "/building/free/:page",
+        name: "freebuilding",
+        component: () => import("@/views/FreeVideoPage"),
+      },
+      {
+        path: "/plant/free/:page",
+        name: "freeplant",
+        component: () => import("@/views/FreeVideoPage"),
+      },
+      {
+        path: "/etc/free/:page",
+        name: "freeetc",
+        component: () => import("@/views/FreeVideoPage"),
+      },
+    ],
   },
   // 구독 페이지
   {
@@ -60,32 +92,32 @@ const routes = [
     component: () => import("@/views/SubscriptionPage"),
     children: [
       {
-        path: "/:page",
+        path: "/sub/:page",
         name: "구독전체",
         component: () => import("@/views/SubscriptionPage"),
       },
       {
-        path: "/animal/:page",
+        path: "/animal/sub/:page",
         name: "subanimal",
         component: () => import("@/views/SubscriptionPage"),
       },
       {
-        path: "/character/:page",
+        path: "/character/sub/:page",
         name: "subcharacter",
         component: () => import("@/views/SubscriptionPage"),
       },
       {
-        path: "/building/:page",
+        path: "/building/sub/:page",
         name: "subbuilding",
         component: () => import("@/views/SubscriptionPage"),
       },
       {
-        path: "/plant/:page",
+        path: "/plant/sub/:page",
         name: "subplant",
         component: () => import("@/views/SubscriptionPage"),
       },
       {
-        path: "/etc/:page",
+        path: "/etc/sub/:page",
         name: "subetc",
         component: () => import("@/views/SubscriptionPage"),
       },
@@ -95,7 +127,7 @@ const routes = [
   {
     path: "/cscenter",
     name: "cscenter",
-    component: () => import("@/components/CsceterNav.vue"),
+    component: () => import("@/views/CscenterPage.vue"),
     children: [
       // !! 공지사항  !! //
       // 공지사항 목록

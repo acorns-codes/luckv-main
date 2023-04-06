@@ -28,19 +28,6 @@ export default {
       cnt: "",
       defaultCnt: 10,
       page: "",
-      categorys: [
-        { title: "경매", value: "auction", url: "" },
-        {
-          title: "무료",
-          value: "free",
-          url: "vcate=animal",
-        },
-        {
-          title: "구독",
-          value: "subscription",
-          url: "vcate=character",
-        },
-      ],
     };
   },
   computed: {
@@ -136,9 +123,5 @@ export default {
   /* font-weight: bold; */
   background-color: #eee;
   cursor: pointer;
-}
-
-.page-box {
-  display: flex;
 }
 </style>
