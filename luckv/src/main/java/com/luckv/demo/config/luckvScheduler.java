@@ -19,9 +19,9 @@ public class luckvScheduler {
 	@Autowired 
 	UserService userService;
 	
-//	@Scheduled(fixedRate=1000)
-//	public void statusIngUpdate() {
-//		int row = auctionService.statusIngUpdate();
-//	}
+	@Scheduled(fixedRate=1000)
+	public void statusIngUpdate() {
+		int row = auctionService.statusIngUpdate();
+	}
 	
 }
