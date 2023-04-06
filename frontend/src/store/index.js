@@ -16,6 +16,9 @@ export default createStore({
     isLogin(state) {
       return state.sessionStorageData !== "";
     },
+    checkSubAuth(state) {
+      return state.subAuth + "새로저장함";
+    },
   },
   mutations: {
     // 로그아웃 클릭 시, sessionStorage 삭제 및 data 삭제

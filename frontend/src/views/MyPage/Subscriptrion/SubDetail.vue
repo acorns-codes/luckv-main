@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <template v-if="this.userData.subYn === 'Y'">
+    <div class="sub-list" v-if="this.userData.subYn === 'Y'">
       <h2>구독 내역</h2>
       <div>
         <div>
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-    </template>
+    </div>
     <template v-else>
       <v-sheet class="card-box" elevation="4">
         <div>
@@ -63,6 +63,7 @@ export default {
   },
   mounted() {
     this.getInfo();
+    console.log("구독중인지확인", this.$store.state.subAuth);
   },
   methods: {
     // 현재 시간 구하기
@@ -98,7 +99,7 @@ export default {
         console.log(res);
 
         this.userData = res.data.data;
-        console.log(this.userData.subLastDay);
+        console.log(this.userData.subLastDay, "마감날자아아아아아아아");
         console.log(this.userData.subStartDay);
         console.log(this.userData);
       } catch (error) {
@@ -107,6 +108,12 @@ export default {
     },
     // 구독신청
     async sub() {
+      const newData = {
+        mno: this.$store.state.sessionStorageData.mno,
+        subStartDay: this.getDate(),
+        subLastDay: this.userData.subLastDay,
+      };
+      console.log(newData.subLastDay);
       if (!confirm("구독을 신청하시겠습니까?")) {
         alert("구독 신청이 완료되지 못했습니다!");
       } else {
@@ -114,11 +121,9 @@ export default {
           const res = await this.$axios({
             method: "POST",
             url: `${process.env.VUE_APP_API_URL}/videoSubYn`,
-            data: {
-              mno: this.$store.state.sessionStorageData.mno,
-              subStartday: this.getDate,
-            },
+            data: newData,
           });
+          console.log(newData);
           console.log(res);
           if (res.data.data) {
             alert("구독 신청이 완료되었습니다!");
@@ -166,6 +171,7 @@ export default {
   }
 
   & > div {
+    width: 100%;
     padding-bottom: 10px;
   }
 }

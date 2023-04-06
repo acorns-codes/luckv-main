@@ -149,7 +149,7 @@ export default {
     this.videoSrc = process.env.VUE_APP_API_URL;
     // 상세 내역 불러오기
     this.getAttend();
-    // console.log(this.$store.state.sessionStorageData);
+    console.log("구독중인지확인", this.$store.state.subAuth);
   },
   methods: {
     // 각 경매의 상세페이지 받아오기
@@ -216,11 +216,7 @@ export default {
   & > div {
     width: 100%;
     justify-content: center;
-
-    /* flex-direction: column; */
     display: flex;
-    /* align-items: center; */
-
     padding-bottom: 10px;
   }
 }

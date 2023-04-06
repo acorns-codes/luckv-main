@@ -3,7 +3,7 @@
   <!-- 댓글 쓰기 창도 아래 컴포넌트에 따로 생성.-->
   <div>
     <!-- <PrCommentCreate :contentId="contentId" :reload="reload"/> -->
-    <CommentCreate />
+    <CommentCreate v-if="this.$store.state.sessionStorageData.auth === 'A'" />
   </div>
   <!-- </div> -->
 </template>
@@ -22,6 +22,5 @@ export default {
       //   commentObj : data.Comment.filter(item => item.content_id === this.contentId)
     };
   },
-
 };
 </script>

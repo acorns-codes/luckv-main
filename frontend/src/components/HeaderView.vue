@@ -67,6 +67,7 @@ export default {
   components: {
     LoginForm,
   },
+
   data() {
     return {
       isHeaderSmall: false,
@@ -89,6 +90,10 @@ export default {
 
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
+    this.$store.commit(
+      "storeSubAuth",
+      this.$store.state.sessionStorageData.subYn
+    );
   },
   computed: {
     isUserLogin() {

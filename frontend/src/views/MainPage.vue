@@ -25,8 +25,19 @@ export default {
     SecondSection,
     HeaderSection,
   },
+  computed() {
+    this.$store.state.subAuth = this.test;
+    console.log(this.$store.state.subAuth);
+  },
+  mounted() {
+    console.log(this.test, "구독 테스트");
+    console.log("구독중스토어획인", this.$store.state.subAuth);
+    console.log("세션값확인", this.$store.state.sessionStorageData);
+    console.log("게터!!", this.$store.getters.checkSubAuth);
+  },
   data() {
     return {
+      test: "",
       kind: [
         {
           name: "NEW",

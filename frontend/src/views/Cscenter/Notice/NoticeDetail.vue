@@ -17,7 +17,7 @@
         </thead>
       </v-table>
       <!-- 관리자만 보이게 해야함 -->
-      <div >
+      <div v-show="this.$store.state.sessionStorageData.auth === 'A'">
         <v-btn color="#eee" @click="edit"> 수정 </v-btn>
       </div>
     </div>

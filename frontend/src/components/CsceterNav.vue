@@ -61,7 +61,7 @@ export default {
     padding: 5px;
   }
 
-  a.router-link-active {
+  .router-link-active {
     font-weight: bold;
   }
 }
