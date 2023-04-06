@@ -19,6 +19,7 @@ export default {
   methods: {
     // 구독신청
     async sub() {
+      console.log(this.$store.state.subAuth)
       if (!confirm("구독을 신청하시겠습니까?")) {
         alert("구독 신청이 완료되지 못했습니다!");
       } else {

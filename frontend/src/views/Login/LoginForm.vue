@@ -110,9 +110,9 @@ export default {
             this.$store.state.sessionStorageData
           );
           // 전역으로 사용할 구독 권한
-          console.log("구독권한아아아ㅏㄴㅇ", res.data.data.subYn);
-          this.$store.commit("storeSubAuth", res.data.data.subYn);
-          console.log(this.$store.state.sessionStorageData.auth);
+          // console.log("구독권한아아아ㅏㄴㅇ", res.data.data.subYn);
+          // this.$store.commit("storeSubAuth", res.data.data.subYn);
+          // console.log(this.$store.state.sessionStorageData.auth);
           alert(`${res.data.data.name}님 환영합니다!`);
           this.$store.state.isClicked = false;
           this.$router.go();
