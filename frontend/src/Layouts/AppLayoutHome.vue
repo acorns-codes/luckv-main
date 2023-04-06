@@ -1,5 +1,5 @@
 <template>
-  <button class="sub-btn-box" @click="sub">구독</button>
+  <button v-if="isUserLogin" class="sub-btn-box" @click="sub">구독</button>
   <div>
     <HeaderLayout />
     <slot />
@@ -11,6 +11,11 @@ import HeaderLayout from "./HeaderLayout.vue";
 export default {
   name: "AppLayoutHome",
   components: { HeaderLayout },
+  computed: {
+    isUserLogin() {
+      return this.$store.getters.isLogin;
+    },
+  },
   methods: {
     // 구독신청
     async sub() {

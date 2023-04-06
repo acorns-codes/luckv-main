@@ -46,8 +46,8 @@ public class AuctionController {
 	
 		        // 페이지 설정
 		        int sn = auction.getPage();   // 현재 페이지
-		        int start = sn * 10 + 0; // 첫 페이지
-		        int end = (sn + 1) * 10; // 끝 페이지
+		        int start = sn * 12 + 0; // 첫 페이지
+		        int end = (sn + 1) * 12; // 끝 페이지
 
 		        auction.setStart(start);
 		        auction.setEnd(end);		    	
@@ -69,8 +69,8 @@ public class AuctionController {
 
 		        // 페이지 설정
 		        int sn = auction.getPage();   // 현재 페이지
-		        int start = sn * 12 + 0; // 첫 페이지
-		        int end = (sn + 1) * 12; // 끝 페이지
+		        int start = sn * 10 + 0; // 첫 페이지
+		        int end = (sn + 1) * 10; // 끝 페이지
 
 		        auction.setStart(start);
 		        auction.setEnd(end);
