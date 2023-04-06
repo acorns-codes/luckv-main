@@ -1,6 +1,6 @@
 <template>
   <LoginForm v-if="this.$store.state.isClicked" />
-  <div id="root" :class="{ short: isHeaderSmall }">
+  <div id="root" :class="{ short: isHeaderSmall }" :style="{ backgroundColor: headers.backgroundColor }">
     <div id="header" :class="{ short: isHeaderSmall }">
       <router-link to="/">
         <h1>
@@ -67,8 +67,22 @@ export default {
     return {
       isHeaderSmall: false,
       sessionData: this.$store.state.sessionStorageData,
+      headers: {
+        backgroundColor: "",
+      },
     };
   },
+  created() {
+    this.$router.beforeEach((to, from, next) => {
+      if (to.path === "/") {
+        this.headers.backgroundColor = "";
+      } else {
+        this.headers.backgroundColor = "cadetblue";
+      }
+      next();
+    });
+  },
+
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
   },
@@ -170,6 +184,7 @@ export default {
   color: #ffffff;
   font-weight: bold;
 }
+
 #root {
   position: fixed;
   width: 100%;
