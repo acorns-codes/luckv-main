@@ -124,7 +124,7 @@ export default {
 }
 
 #page-root {
-  width: 1440px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
