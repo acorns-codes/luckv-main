@@ -22,11 +22,11 @@
           <p>{{ deadlineData.content }}</p>
           <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
           <div style="align-items: center;">
-            <p style="width: 37%; padding: 2% 8%;">시작가</p>
+            <p style="width: 37%; padding: 2% 8%; display: flex; justify-content: center;">시작가</p>
             <p>{{ $globalFuc(deadlineData.payStart) }} 원</p>
           </div>
           <div style="align-items: center;">
-            <p style="background-color: red; width: 37%; padding: 2% 8%;" >최고가</p>
+            <p style="background-color: red; width: 37%; padding: 2% 8%; display: flex; justify-content: center;" >최고가</p>
             <p style="color: red">{{ $globalFuc(this.recvList.bidding) }} 원</p>
           </div>
           <div class="dday-box" style="justify-content: center;">
@@ -386,6 +386,10 @@ button {
   }
 
   p {
+    font-size: 30px;
+  }
+
+  span {
     font-size: 30px;
   }
 }

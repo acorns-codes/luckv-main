@@ -41,7 +41,7 @@ export default {
 .sub-btn-box {
   width: 70px;
   height: 70px;
-  background-color: #eeeeee8d;
+  background-color: #ff9414;;
   font-weight: bold;
   position: fixed;
   bottom: 30px;
@@ -52,7 +52,7 @@ export default {
   box-shadow: 5px 5px 10px #b2b2b2;
 }
 .sub-btn-box:hover {
-  background-color: #eee;
+  background-color: #5f9ea0;
 }
 
 @keyframes motion {
