@@ -92,11 +92,11 @@ export default {
       }
     },
   },
-  watch: {
-    $route(to, form) {
-      if (to.path !== form.path) this.getQna(this.$route.params.page - 1);
-    },
-  },
+  // watch: {
+  //   $route(to, form) {
+  //     if (to.path !== form.path) this.getQna(this.$route.params.page - 1);
+  //   },
+  // },
   // 페이지가 켜질 때 실행
   mounted() {
     this.getQna(this.$route.params.page - 1);
@@ -175,15 +175,21 @@ export default {
 
     // 비밀번호 체크
     checkPwd(no, qpwd) {
-      console.log(no);
-      if (qpwd !== null) {
-        this.dialog = true;
-        this.selectedItem = { no, qpwd }; // 데이터 담기
-      } else {
+      if (this.$store.state.sessionStorageData.auth === "A") {
         this.$router.push({
           name: "qnadetail",
           params: { no: no },
         });
+      } else {
+        if (qpwd !== null) {
+          this.dialog = true;
+          this.selectedItem = { no, qpwd }; // 데이터 담기
+        } else {
+          this.$router.push({
+            name: "qnadetail",
+            params: { no: no },
+          });
+        }
       }
     },
     // 비밀번호 확인 모달 닫기

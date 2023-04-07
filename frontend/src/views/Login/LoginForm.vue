@@ -111,7 +111,7 @@ export default {
             this.$store.state.sessionStorageData
           );
           alert(`${res.data.data.name}님 환영합니다!`);
-          this.$store.state.isClicked = false;
+          this.$router.go();
         }
       } catch (error) {
         console.log(error);

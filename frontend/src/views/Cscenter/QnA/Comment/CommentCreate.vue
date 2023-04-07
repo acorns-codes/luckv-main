@@ -6,11 +6,7 @@
       variant="outlined"
       v-model="comment"
     ></v-textarea>
-    <v-btn
-      v-if="this.$store.state.sessionStorageData.mno === 'A'"
-      @click="createComment"
-      >댓글달기</v-btn
-    >
+    <v-btn @click="createComment">댓글달기</v-btn>
   </div>
 </template>
 
@@ -43,7 +39,11 @@ export default {
           data: commnetData,
         });
         console.log(res);
-        this.$router.go();
+        if (res.data.data) {
+          console.log("댓글수정완료");
+          alert("댓글 수정 완료!");
+          this.$router.go();
+        }
       } catch (error) {
         console.log(error);
       }

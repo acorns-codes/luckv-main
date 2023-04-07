@@ -49,7 +49,9 @@ export default {
     $route(to, form) {
       if (to.path !== form.path) {
         let pathList = this.$route.path.split("/");
+        console.log(pathList);
         const path = pathList[1] === "1" ? "" : pathList[1];
+        console.log(path);
         this.video(path, this.$route.params.page - 1);
       }
     },

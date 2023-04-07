@@ -28,7 +28,6 @@
                 ></v-text-field>
               </td>
             </tr>
-
             <tr class="content">
               <th>내용</th>
               <td colspan="3">
@@ -43,7 +42,7 @@
 
             <tr>
               <th>카테고리</th>
-              <td>
+              <td colspan="3">
                 <v-select
                   variant="plain"
                   required
@@ -54,76 +53,107 @@
                   readonly
                 ></v-select>
               </td>
-              <th>경매 상태</th>
-              <td>
-                <v-text-field
-                  v-model="this.auctionData.status"
-                  variant="plain"
-                  readonly
-                ></v-text-field>
-              </td>
             </tr>
-            <tr>
-              <th>경매 시작가</th>
-              <td>
-                <v-text-field
-                  variant="plain"
-                  v-model="this.auctionData.payStart"
-                  suffix="원"
-                  readonly
-                ></v-text-field>
-              </td>
-              <th>최고가</th>
-              <td>
-                <v-text-field
-                  variant="plain"
-                  v-model="this.auctionData.payMax"
-                  suffix="원"
-                  readonly
-                ></v-text-field>
-              </td>
-            </tr>
+            <template v-if="this.auctionData.kind !== '무료'">
+              <template v-if="this.auctionData.kind === '경매'">
+                <tr>
+                  <th>경매 상태</th>
+                  <td colspan="3">
+                    <v-text-field
+                      v-model="this.auctionData.status"
+                      variant="plain"
+                      readonly
+                    ></v-text-field>
+                  </td>
+                </tr>
 
-            <tr>
-              <th>경매 시작 날짜</th>
-              <td>
-                <v-text-field
-                  v-model="this.startDay[0]"
-                  variant="plain"
-                  type="date"
-                  readonly
-                ></v-text-field>
-              </td>
-              <th>경매 시작 시간</th>
-              <td>
-                <v-text-field
-                  variant="plain"
-                  v-model="this.startDay[1]"
-                  type="time"
-                  readonly
-                ></v-text-field>
-              </td>
-            </tr>
-            <tr>
-              <th>경매 마감 날짜</th>
-              <td>
-                <v-text-field
-                  v-model="this.lastDay[0]"
-                  variant="plain"
-                  type="date"
-                  readonly
-                ></v-text-field>
-              </td>
-              <th>경매 마감 시간</th>
-              <td>
-                <v-text-field
-                  variant="plain"
-                  v-model="this.lastDay[1]"
-                  type="time"
-                  readonly
-                ></v-text-field>
-              </td>
-            </tr>
+                <tr>
+                  <th>경매 시작가</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="this.auctionData.payStart"
+                      suffix="원"
+                      readonly
+                    ></v-text-field>
+                  </td>
+
+                  <th>최고가</th>
+                  <td>
+                    <v-text-field
+                      variant="plain"
+                      v-model="this.auctionData.payMax"
+                      suffix="원"
+                      readonly
+                    ></v-text-field>
+                  </td>
+                </tr>
+              </template>
+              <tr>
+                <th>
+                  {{
+                    this.auctionData.kind === "경매"
+                      ? "경매 시작 날짜"
+                      : "게시 시작 날짜"
+                  }}
+                </th>
+                <td>
+                  <v-text-field
+                    v-model="this.startDay[0]"
+                    variant="plain"
+                    type="date"
+                    readonly
+                  ></v-text-field>
+                </td>
+                <th>
+                  {{
+                    this.auctionData.kind === "경매"
+                      ? "경매 시작 날짜"
+                      : "게시 시작 시간"
+                  }}
+                </th>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.startDay[1]"
+                    type="time"
+                    readonly
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  {{
+                    this.auctionData.kind === "경매"
+                      ? "경매 시작 날짜"
+                      : "게시 마감 날짜"
+                  }}
+                </th>
+                <td>
+                  <v-text-field
+                    v-model="this.lastDay[0]"
+                    variant="plain"
+                    type="date"
+                    readonly
+                  ></v-text-field>
+                </td>
+                <th>
+                  {{
+                    this.auctionData.kind === "경매"
+                      ? "경매 시작 시간"
+                      : "게시 마감 시간"
+                  }}
+                </th>
+                <td>
+                  <v-text-field
+                    variant="plain"
+                    v-model="this.lastDay[1]"
+                    type="time"
+                    readonly
+                  ></v-text-field>
+                </td>
+              </tr>
+            </template>
           </thead>
         </v-table>
         <v-dialog

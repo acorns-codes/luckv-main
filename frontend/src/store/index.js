@@ -10,6 +10,7 @@ export default createStore({
     userData: "",
     socket: "",
     subAuth: "",
+    subData: "",
   },
   getters: {
     // 로그인 확인

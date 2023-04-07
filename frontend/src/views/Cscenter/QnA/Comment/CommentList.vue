@@ -1,11 +1,10 @@
 <template>
+  <!-- 댓글 목록 -->
   <CommentListItem />
-  <!-- 댓글 쓰기 창도 아래 컴포넌트에 따로 생성.-->
+  <!-- 댓글 등록 -->
   <div>
-    <!-- <PrCommentCreate :contentId="contentId" :reload="reload"/> -->
     <CommentCreate v-if="this.$store.state.sessionStorageData.auth === 'A'" />
   </div>
-  <!-- </div> -->
 </template>
 <script>
 import CommentListItem from "./CommentListItem.vue";
@@ -18,9 +17,7 @@ export default {
     CommentList: String,
   },
   data() {
-    return {
-      //   commentObj : data.Comment.filter(item => item.content_id === this.contentId)
-    };
+    return {};
   },
 };
 </script>

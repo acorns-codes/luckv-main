@@ -124,22 +124,28 @@ export default {
     // 구독신청
     async sub() {
       console.log(this.$store.state.subAuth);
-      if (!confirm("구독을 신청하시겠습니까?")) {
-        alert("구독 신청이 완료되지 못했습니다!");
+      if (this.$store.state.subAuth === "Y") {
+        alert("이미 구독중입니다!");
+      } else if (this.$store.state.sessionStorageData.auth !== "B") {
+        alert("구매자 회원만 구독이 가능합니다!");
       } else {
-        try {
-          const res = await this.$axios({
-            method: "POST",
-            url: `${process.env.VUE_APP_API_URL}/videoSubYn`,
-            data: { mno: this.$store.state.sessionStorageData.mno },
-          });
-          console.log(res);
-          if (res.data.data) {
-            alert("구독 신청이 완료되었습니다!");
-            this.$store.commit("storeSubAuth", "Y");
+        if (!confirm("구독을 신청하시겠습니까?")) {
+          alert("구독 신청이 완료되지 못했습니다!");
+        } else {
+          try {
+            const res = await this.$axios({
+              method: "POST",
+              url: `${process.env.VUE_APP_API_URL}/videoSubYn`,
+              data: { mno: this.$store.state.sessionStorageData.mno },
+            });
+            console.log(res);
+            if (res.data.data) {
+              alert("구독 신청이 완료되었습니다!");
+              this.$store.commit("storeSubAuth", "Y");
+            }
+          } catch (error) {
+            console.log(error);
           }
-        } catch (error) {
-          console.log(error);
         }
       }
     },

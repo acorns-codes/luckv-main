@@ -18,7 +18,6 @@
         <template v-if="this.videoData.kind === '경매'">
           <div>
             <p>시작가</p>
-
             <p>{{ $globalFuc(this.videoData.payStart) }} 원</p>
           </div>
           <div>
@@ -40,7 +39,6 @@
             </p>
           </div>
           <div></div>
-
           <v-dialog v-model="dialog" persistent width="500">
             <template v-slot:activator="{ props }">
               <v-btn color="#FF9414" size="x-large" v-bind="props">
@@ -85,7 +83,6 @@
             </v-card>
           </v-dialog>
         </template>
-
         <template v-else-if="this.videoData.kind == '무료'">
           <div class="last-box">
             <h3>안내사항</h3>
@@ -133,13 +130,16 @@ export default {
       minutes: 0,
       seconds: 0,
       priceRule: [
+        (v) => (v == null || v == "" ? "금액은 필수 입력사항입니다." : true),
+        (v) => (/^[0-9]+/g.test(v) ? true : "숫자만입력해주세요."),
         (v) =>
-          (/^[0-9]+/g.test(v) || "숫자만 입력해주세요") &&
-          (!!v || "금액은 필수 입력사항입니다.") &&
-          (this.videoData.payStart < !!v ||
-            "시작가보다 높게 입찰금액을 입력하셔야합니다.") &&
-          (this.recvList.bidding < !!v ||
-            "최고가보다 높게 입찰금액을 입력하셔야합니다."),
+          this.videoData.payStart > v
+            ? "시작가보다 높게 입찰금액을 입력하셔야합니다."
+            : true,
+        (v) =>
+          this.recvList.bidding > v
+            ? "최고가보다 높게 입찰금액을 입력하셔야합니다."
+            : true,
       ],
     };
   },
@@ -149,6 +149,7 @@ export default {
     this.connect();
   },
   mounted() {
+    console.log(this.videoData.payStart, "시작가!!!");
     // 비디오 주소 미리 할당
     this.videoSrc = process.env.VUE_APP_API_URL;
     console.log(this.videoData.ano);
@@ -160,6 +161,7 @@ export default {
     console.log(this.videoData.ano);
     // dday 게산 함수
     this.getRemainingTime();
+    console.log(this.$route.name);
   },
   methods: {
     // 소켓 연결
@@ -210,6 +212,7 @@ export default {
     },
     // 소켓으로 데이터 보내기
     sendMessage() {
+      console.log(this.recvList.bidding, "뭐지???");
       if (this.price === "") {
         alert("입찰 금액을 입력해주세요");
         this.price = "";
@@ -245,6 +248,7 @@ export default {
         });
         console.log(res);
         this.$store.commit("getUserData", res.data);
+        alert("입찰에 성공하였습니다!");
       } catch (error) {
         console.log(error);
       }
@@ -272,7 +276,10 @@ export default {
     async videoDownload() {
       console.log("비디오 다운로드");
       console.log(this.$store.state.sessionStorageData.subYn);
-      if (this.$store.state.sessionStorageData.subYn === "Y") {
+      if (
+        this.$store.state.sessionStorageData.subYn === "Y" ||
+        this.$route.name === "freevideo"
+      ) {
         console.log("구독회원");
         try {
           const res = await this.$axios({
@@ -315,7 +322,6 @@ export default {
         }
         return item;
       }
-
       let x = setInterval(() => {
         const lastDayMs = new Date(this.videoData.lastDay).getTime();
         // console.log(lastDayMs);
@@ -323,11 +329,9 @@ export default {
         const today = new Date().getTime();
         // console.log(today);
         // console.log(lastDayMs, today);
-
         // dday 산출 값
         const time = lastDayMs - today;
         // console.log(time, "dday의 ms");
-
         // dday 산출을 위해 필요한 값
         const oneDay = 24 * 60 * 60 * 1000;
         const oneHour = 60 * 60 * 1000;
