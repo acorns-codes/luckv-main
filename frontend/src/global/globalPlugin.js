@@ -4,7 +4,9 @@
 export default {
   install(Vue) {
     Vue.config.globalProperties.$globalFuc = function money(price) {
-      let money = new Number(price);
+      console.log(typeof price, "타입확인");
+      let pprice = price === undefined ? 0 : price;
+      let money = new Number(pprice);
       return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
     Vue.config.globalProperties.$totalPage = function totalpage(cnt) {

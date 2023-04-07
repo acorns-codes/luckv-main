@@ -51,7 +51,7 @@
           </v-btn>
         </template>
         <v-card>
-          <h3>공지사항 등록</h3>
+          <h3 style="padding: 10px">공지사항 등록</h3>
           <v-card-text>
             <v-container>
               <v-row>
@@ -120,7 +120,10 @@ export default {
   },
   watch: {
     $route(to, form) {
-      if (to.path !== form.path) this.getNotice(this.$route.params.page - 1);
+      if (to.path !== form.path) {
+        this.getNotice(this.$route.params.page - 1);
+        console.log("와치");
+      }
     },
   },
   // 페이지가 켜질 때 실행
@@ -193,10 +196,13 @@ export default {
             "Content-type": "application/json",
           },
           method: "POST",
-          url: "${process.env.VUE_APP_API_URL}/insertNotice",
+          url: `${process.env.VUE_APP_API_URL}/insertNotice`,
           data: noticeData,
         });
         console.log(res);
+        if (res.data.data) {
+          this.getNotice(0);
+        }
         console.log(noticeData);
       } catch (error) {
         console.log(error);

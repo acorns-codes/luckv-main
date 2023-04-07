@@ -272,7 +272,13 @@ export default {
         console.log(resVideo);
         if (resVideo.data.data) {
           alert("새로운 경매가 등록되었습니다!");
-          this.$router.go();
+          this.$router.push({
+            name:
+              this.kind === "A" ? "경매" : this.kind === "B" ? "무료" : "구독",
+            params: {
+              page: 1,
+            },
+          });
         }
       } catch (error) {
         console.log(error);

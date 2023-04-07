@@ -21,13 +21,13 @@ export default {
   //   },
   // },
 
-  mounted() {
-    console.log(this.$route.name);
-    this.$router.push({
-      name: "notice",
-      params: { page: 1 },
-    });
-  },
+  // mounted() {
+  //   console.log(this.$route.name);
+  //   this.$router.push({
+  //     name: "notice",
+  //     params: { page: 1 },
+  //   });
+  // },
 };
 </script>
 

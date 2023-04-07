@@ -48,12 +48,13 @@ export default {
       userPassword: "",
     };
   },
-  mounted(){
+
+  mounted() {
     // 스크롤을 막을 HTML 태그 선택
-    if(this.$store.state.isClicked == true) {
-      const html = document.querySelector('html');
+    if (this.$store.state.isClicked == true) {
+      const html = document.querySelector("html");
       // HTML 태그에 스크롤을 막는 CSS 속성 추가
-      html.style.overflow = 'hidden';
+      html.style.overflow = "hidden";
     }
   },
   methods: {
@@ -65,10 +66,10 @@ export default {
       });
     },
     close() {
-      const html = document.querySelector('html');
+      const html = document.querySelector("html");
       // HTML 태그에 스크롤을 막는 CSS 속성 추가
-      html.style.overflow = 'auto';
-      this.$store.state.isClicked = false
+      html.style.overflow = "auto";
+      this.$store.state.isClicked = false;
     },
     required(v) {
       return !!v || "빈칸을 채워주세요!";
@@ -109,12 +110,7 @@ export default {
             "readSessionStorage",
             this.$store.state.sessionStorageData
           );
-          // 전역으로 사용할 구독 권한
-          // console.log("구독권한아아아ㅏㄴㅇ", res.data.data.subYn);
-          // this.$store.commit("storeSubAuth", res.data.data.subYn);
-          // console.log(this.$store.state.sessionStorageData.auth);
           alert(`${res.data.data.name}님 환영합니다!`);
-          this.$store.state.isClicked = false;
           this.$router.go();
         }
       } catch (error) {

@@ -52,7 +52,7 @@ export default {
     return {
       title: "",
       content: "",
-      categoty: "",
+      category: "",
       categories: [
         {
           title: "경매",
@@ -91,6 +91,7 @@ export default {
           alert("새로운 FAQ가 등록되었습니다!");
           this.$router.push({
             name: "faq",
+            params: { page: 1 },
           });
         } else {
           alert("FAQ를 등록할 수 없습니다!");

@@ -10,11 +10,15 @@ export default createStore({
     userData: "",
     socket: "",
     subAuth: "",
+    subData: "",
   },
   getters: {
     // 로그인 확인
     isLogin(state) {
       return state.sessionStorageData !== "";
+    },
+    checkSubAuth(state) {
+      return state.subAuth + "새로저장함";
     },
   },
   mutations: {

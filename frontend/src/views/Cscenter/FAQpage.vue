@@ -157,7 +157,7 @@ export default {
   }
 }
 .panels-container {
-  width: 960px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

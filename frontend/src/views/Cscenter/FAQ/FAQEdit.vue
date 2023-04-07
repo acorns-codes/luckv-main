@@ -20,7 +20,9 @@
             <td>
               <v-select
                 variant="plain"
-                :items="categoryList"
+                :items="categories"
+                item-title="title"
+                item-value="value"
                 v-model="this.FAQList.category"
               ></v-select>
             </td>
@@ -47,7 +49,20 @@ export default {
   data() {
     return {
       FAQList: "",
-      categoryList: ["A", "B", "C", "D", "E", "F"],
+      categories: [
+        {
+          title: "경매",
+          value: "auction",
+        },
+        {
+          title: "입찰",
+          value: "bidding",
+        },
+        {
+          title: "기타",
+          value: "etc",
+        },
+      ],
     };
   },
   created() {
@@ -85,12 +100,13 @@ export default {
           data: editData,
         });
         if (res.data.data) {
-          alert("FAQ가 수정되었습니다!");
+          alert("새로운 FAQ가 등록되었습니다!");
           this.$router.push({
             name: "faq",
+            params: { page: 1 },
           });
         } else {
-          alert("FAQ를 수정할 수 없습니다!");
+          alert("FAQ를 등록할 수 없습니다!");
         }
         console.log(res);
       } catch (error) {
