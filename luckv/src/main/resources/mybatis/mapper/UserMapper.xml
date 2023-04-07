@@ -84,6 +84,7 @@
 			sub_yn = 'N',
 			sub_last_day = null,
 			sub_start_day = null
+
 		where mno = #{mno}
 	</update>
 	
