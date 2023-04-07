@@ -35,7 +35,7 @@ public class QuestionController {
 		        // 페이지 설정
 		        int sn = question.getPage();   // 현재 페이지
 		        int start = sn * 10 + 0; // 첫 페이지
-		        int end = (sn + 1) * 10; // 끝 페이지
+		        int end = 10; // 끝 페이지
 
 		        question.setStart(start);
 		        question.setEnd(end);

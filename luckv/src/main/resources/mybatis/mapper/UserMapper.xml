@@ -82,6 +82,7 @@
 			user 
 		set 
 			sub_yn = 'N',
+			sub_start_day = null,
 			sub_last_day = null
 		where mno = #{mno}
 	</update>
