@@ -55,10 +55,10 @@ public class AttendController {
     // 정의한 SocketVO를 1) 인자값, 2) 반환값으로 사용합니다.
     public Attend SocketHandler(@DestinationVariable int ano, Attend attend) {
         // 반환
-    	System.out.println("확인=======" +  attend);
-        return attend;
+
+    	return attend;
     }
-    
+     
     // room 입장시 send로 반환할 메세지
     @SubscribeMapping("/send/{ano}")
     	public Attend handleSubscripton(@DestinationVariable int ano) {
