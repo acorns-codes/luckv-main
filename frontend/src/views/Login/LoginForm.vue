@@ -72,7 +72,7 @@ export default {
     },
     required(v) {
       return !!v || "빈칸을 채워주세요!";
-    },
+    },                   
     // 로그인 확인
     async login() {
       try {
