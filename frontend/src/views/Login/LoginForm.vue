@@ -37,9 +37,9 @@
     </div>
   </div>
 </template>
-np
 
 <script>
+import { apiSignIn } from "@/api/user";
 export default {
   data() {
     return {
@@ -82,35 +82,19 @@ export default {
           mid: this.userId,
           pwd: this.userPassword,
         };
-        const res = await this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          // url: "http://localhost:80/login",
-          url: `${process.env.VUE_APP_API_URL}/login`,
-          data: userData,
-        });
-        console.log(res);
-        if (res.data.statusCode !== 200) {
-          console.log("로그인불가");
-          alert(`${res.data.responseMessage}`);
-          this.$router.go();
-        } else {
-          console.log("로그인성공");
-          console.log(res.data);
-          this.$store.commit("getUserId", res.data.data.mid);
+        const res = await apiSignIn(userData);
+        if (res) {
+          this.$store.commit("getUserId", res.data.mid);
           // 로그인 성공이면 받아온 data를 json 화 하여 sessionStorageData에 저장
-          this.$store.commit(
-            "setSessionStorage",
-            JSON.stringify(res.data.data)
-          );
+          this.$store.commit("setSessionStorage", JSON.stringify(res.data));
           // 세션에 저장된 데이터를 다시 객체화 시켜 저장
           this.$store.commit(
             "readSessionStorage",
             this.$store.state.sessionStorageData
           );
-          alert(`${res.data.data.name}님 환영합니다!`);
+          alert(`${res.data.name}님 환영합니다!`);
+          this.$router.go();
+        } else {
           this.$router.go();
         }
       } catch (error) {

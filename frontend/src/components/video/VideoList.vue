@@ -34,12 +34,14 @@ export default {
   data() {
     return {
       videoData: "",
+      dday: "",
       modal: false,
     };
   },
-  mounted() {
-    console.log(this.videoList);
-    this.videoSrc = process.env.VUE_APP_API_URL;
+  computed: {
+    videoSrc() {
+      return this.$store.state.videoSrc;
+    },
   },
   methods: {
     // 각 동영상 상세 정보 불러오기

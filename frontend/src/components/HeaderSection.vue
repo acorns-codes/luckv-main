@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { apiGetVideo } from "@/api/video";
 import VideoList from "@/components/video/VideoList.vue";
 
 export default {
@@ -26,9 +27,7 @@ export default {
 
   created() {},
   mounted() {
-    console.log(this.api);
     this.getVideo(this.kind.api);
-    this.videoSrc = process.env.VUE_APP_API_URL;
   },
   methods: {
     // 마우스오버시, 영상재생
@@ -42,16 +41,11 @@ export default {
     },
     // 동영상 불러오기
     async getVideo(api) {
-      console.log("비디오");
       try {
-        const res = await this.$axios({
-          methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/${api}`,
-        });
-
-        this.videoList = res.data.data;
+        const res = await apiGetVideo(api);
+        this.videoList = res.data;
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
   },

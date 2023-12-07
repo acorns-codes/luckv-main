@@ -9,6 +9,13 @@ const routes = [
     // 메타 필드
     // $route.matched를 반복하여 라우터 레코드의 메타필드를 검사한다.
   },
+  {
+    path: "/kakaologin",
+    name: "kakaologin",
+    component: () => import("@/views/Login/KakaoLogin.vue"),
+    // 메타 필드
+    // $route.matched를 반복하여 라우터 레코드의 메타필드를 검사한다.
+  },
   //  전체 목록
   {
     path: "/video/:page",

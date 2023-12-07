@@ -4,7 +4,7 @@
       <section>
         <div class="video-box">
           <video
-            :src="`${videoSrc}/videoplay?ano=${this.videoData.ano}`"
+            :src="`${this.videoSrc}/videoplay?ano=${this.videoData.ano}`"
             controls
           ></video>
         </div>
@@ -143,15 +143,18 @@ export default {
       ],
     };
   },
+  computed: {
+    videoSrc() {
+      return this.$store.state.videoSrc;
+    },
+  },
   created() {
-    this.videoSrc = process.env.VUE_APP_API_URL;
     // 소켓 연결 시도
     this.connect();
   },
   mounted() {
     console.log(this.videoData.payStart, "시작가!!!");
     // 비디오 주소 미리 할당
-    this.videoSrc = process.env.VUE_APP_API_URL;
     console.log(this.videoData.ano);
     // 소켓 연결 시도
     setTimeout(() => {

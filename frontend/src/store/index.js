@@ -3,6 +3,7 @@ import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
+    videoSrc: process.env.VUE_APP_API_URL,
     userId: "",
     isClicked: false,
     accessToken: "",

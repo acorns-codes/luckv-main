@@ -35,3 +35,5 @@ app.use(vuetify);
 // 레이아웃 사용
 app.use(VueCookies);
 // VueCookies 사용 설정
+
+// window.kakao.init("c202a818679e4b825185b8378a55f7c6");

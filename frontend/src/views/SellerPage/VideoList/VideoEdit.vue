@@ -179,9 +179,12 @@ export default {
       ],
     };
   },
-
+  computed: {
+    videoSrc() {
+      return this.$store.state.videoSrc;
+    },
+  },
   mounted() {
-    this.videoSrc = process.env.VUE_APP_API_URL;
     // 상세 내역 불러오기
     this.getAuction();
     // console.log(this.$store.state.sessionStorageData);

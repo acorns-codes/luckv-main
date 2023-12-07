@@ -14,23 +14,22 @@
       </p>
       <div v-if="!isUserLogin">
         <router-link to="/signup">
-          <v-btn>
-          회원가입 바로가기
-          </v-btn>
+          <v-btn> 회원가입 바로가기 </v-btn>
         </router-link>
       </div>
     </div>
-    <div class="btext2"  v-else>
+    <div class="btext2" v-else>
       <h1>다양한 분야의 동영상을 만나보세요</h1>
       <p>
-        화면을 아래로 스크롤하거나 화살표 버튼을 클릭해서 다양한 분야의 동영상을 미리 만나보세요<br />
+        화면을 아래로 스크롤하거나 화살표 버튼을 클릭해서 다양한 분야의 동영상을
+        미리 만나보세요<br />
       </p>
-      <div  @click="arrow">
-        <img :src="require(`@/assets/images/down_arrow.svg`)"/>
+      <div @click="arrow">
+        <img :src="require(`@/assets/images/down_arrow.svg`)" />
       </div>
     </div>
     <div>
-      <video :src="src" muted autoplay loop></video>
+      <video preload="auto" :src="src" muted autoplay loop></video>
     </div>
   </section>
   <!-- 
@@ -64,18 +63,15 @@ export default {
   },
   methods: {
     arrow() {
-      const section = document.getElementById('f-div');
+      const section = document.getElementById("f-div");
       const offset = section.offsetTop - 40;
       window.scrollTo({
         top: offset,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
-
     },
-  }
+  },
 };
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -130,15 +126,13 @@ video {
   }
 }
 
-
-
 button {
   width: 200px;
   margin: 15px;
   background-color: #5f9ea0;
 }
 a {
-  color : white;
+  color: white;
 
   text-decoration: none;
 }

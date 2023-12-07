@@ -74,7 +74,7 @@
 
 <script>
 // import { registerUser } from "@/api/idnex";
-
+import { apiSignUp, apiIdCheck } from "@/api/user";
 export default {
   data() {
     return {
@@ -169,17 +169,8 @@ export default {
           return;
         } else {
           // 회원가입
-          const res = await this.$axios({
-            headers: {
-              "Content-type": "application/json",
-            },
-            method: "POST",
-            url: `${process.env.VUE_APP_API_URL}/addMember`,
-            data: userData,
-          });
-          console.log(res);
-          console.log("회원가입완료");
-          if (res.data.data) {
+          const res = await apiSignUp(userData);
+          if (res.data) {
             alert("회원가입에 성공했습니다!");
             this.$router.push({
               path: "/",
@@ -193,13 +184,9 @@ export default {
     },
     // 아이디 중복 체크
     async idCheck() {
-      const res = await this.$axios({
-        method: "POST",
-        url: `${process.env.VUE_APP_API_URL}/getId`,
-        data: { mid: this.id },
-      });
-      console.log(res);
-      if (!res.data.data) {
+      const req = { mid: this.id };
+      const res = await apiIdCheck(req);
+      if (!res.data) {
         return;
       } else {
         alert("중복된 아이디입니다!");

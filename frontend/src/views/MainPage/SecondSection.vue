@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="deadlineData">
     <div id="f-div">
       <h2 style="font-size: 70px">마감이 임박한 동영상입니다.</h2>
       <p style="font-size: 30px">마감이 얼마 남지 않은 동영상입니다.</p>
@@ -78,7 +78,7 @@
         </v-btn>
       </div>
     </div>
-    <v-dialog v-model="modal" width="auto">
+    <v-dialog v-model="modal" width="1080">
       <v-card>
         <VideoDetail :videoData="videoData" />
         <v-card-actions>
@@ -103,6 +103,7 @@ export default {
       recvList: "", //소켓에서 담긴 데이터
       videoData: "",
       deadlineData: "",
+      dday: "",
       ddayList: "",
       current: 0,
       previous: 0,
@@ -115,15 +116,17 @@ export default {
       isScrolled: false,
     };
   },
-
+  computed: {
+    videoSrc() {
+      return this.$store.state.videoSrc;
+    },
+  },
   created() {
     this.getVideo();
   },
   mounted() {
-    this.videoSrc = process.env.VUE_APP_API_URL;
     // 소켓 연결 시도
     setTimeout(() => {
-      console.log(this.deadlineData.ano);
       this.connect(this.deadlineData.ano);
     }, 1000);
     this.getRemainingTime();
@@ -131,16 +134,14 @@ export default {
   methods: {
     // 각 동영상 상세 정보 불러오기
     async getInfo(ano) {
-      console.log("비디오");
       try {
         const res = await this.$axios({
           methods: "GET",
           url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${ano}`,
         });
         this.videoData = res.data.data;
-        console.log(this.videoData);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     connect(ano) {
@@ -204,18 +205,21 @@ export default {
 
     // 동영상 불러오기
     async getVideo() {
-      console.log("비디오");
       try {
         const res = await this.$axios({
           methods: "GET",
           url: `${process.env.VUE_APP_API_URL}/auctionDeadline`,
         });
-        this.deadlineData = res.data.data[0];
-        console.log(res.data);
-        this.dday = res.data.data[0].lastDay;
-        // console.log(this.dday);
+        console.log(res, "여기나와바");
+        if (res.data.data.length > 0) {
+          console.log(res.data.data, "요기~!");
+          this.deadlineData = res.data.data[0];
+          // console.log(res.data);
+          this.dday = res.data.data[0].lastDay;
+          // console.log(this.dday);
+        }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
 

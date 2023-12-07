@@ -4,7 +4,7 @@
 export default {
   install(Vue) {
     Vue.config.globalProperties.$globalFuc = function money(price) {
-      console.log(typeof price, "타입확인");
+      // console.log(typeof price, "타입확인");
       let pprice = price === undefined ? 0 : price;
       let money = new Number(pprice);
       return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

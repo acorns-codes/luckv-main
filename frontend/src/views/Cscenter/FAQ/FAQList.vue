@@ -33,7 +33,6 @@ export default {
     };
   },
   methods: {
-
     editFAQ(fno) {
       this.$router.push({
         name: "editfaq",
