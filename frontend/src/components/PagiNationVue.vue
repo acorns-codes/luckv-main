@@ -37,9 +37,10 @@
         </button>
       </li>
       <li v-else>
-        <button type="button"><i class="fas fa-angle-right"></i></button>
+        <button type="button" class="paging">
+          <v-icon> mdi-chevron-right </v-icon>
+        </button>
       </li>
-
       <li @click="goPage(navMax)" class="arrow" v-if="!(navMax <= pageNum)">
         <button type="button" class="paging">
           <v-icon> mdi-chevron-double-right </v-icon>

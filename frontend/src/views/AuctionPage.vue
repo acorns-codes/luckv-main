@@ -11,6 +11,7 @@
         @goPage="goPage"
         :pageNum="pageInfo.page"
         :pageSize="pageInfo.rowCnt"
+        :totalCount="pageInfo.totalPageCnt"
         :totalPageCount="pageInfo.totalPageCnt"
       />
     </div>
