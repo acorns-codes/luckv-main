@@ -16,7 +16,11 @@ export default createStore({
   getters: {
     // 로그인 확인
     isLogin(state) {
-      return state.sessionStorageData !== "";
+      if (state.sessionStorageData) {
+        return true;
+      } else {
+        return false;
+      }
     },
     checkSubAuth(state) {
       return state.subAuth + "새로저장함";

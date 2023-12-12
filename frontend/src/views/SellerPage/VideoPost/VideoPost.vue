@@ -227,7 +227,7 @@ export default {
             payStart: "",
             startDay: "",
             lastDay: `${this.lastDay} ${this.lastTime}:00`,
-            status: "",
+            status: "판매중",
             kind:
               this.kind == "A" ? "경매" : this.kind == "B" ? "무료" : "구독",
           };
@@ -249,12 +249,11 @@ export default {
               console.log("동영상 업로드");
               console.log(this.video);
               const formdata = new FormData();
-              // console.log(formdata, "확인1");
+              console.log(formdata, "확인1");
               formdata.append("file", this.video[0]);
               // console.log("확인2", formdata);
               const resVideo = await apiUploadVideo(formdata);
-              console.log(resVideo);
-              if (resVideo.data) {
+              if (resVideo) {
                 alert("새로운 경매가 등록되었습니다!");
                 this.$router.push({
                   name:
@@ -263,7 +262,7 @@ export default {
                       : this.kind === "B"
                       ? "무료"
                       : "구독",
-                  params: {
+                  query: {
                     page: 1,
                   },
                 });
@@ -274,7 +273,7 @@ export default {
           }
         }
       } catch (error) {
-        console.error(error);
+        console.errorgi(error);
       }
     },
   },

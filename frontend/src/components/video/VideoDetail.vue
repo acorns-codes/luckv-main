@@ -273,35 +273,29 @@ export default {
     // video 다운로드
     async videoDownload() {
       console.log("비디오 다운로드");
-      console.log(this.$store.state.sessionStorageData.subYn);
-      if (
-        this.$store.state.sessionStorageData.subYn === "Y" ||
-        this.$route.name === "freevideo"
-      ) {
-        console.log("구독회원");
-        try {
-          const res = await this.$axios({
-            method: "GET",
-            responseType: "blob", // 응답데이터 타입 정의
-            url: `${process.env.VUE_APP_API_URL}/video/download/${this.videoData.ano}`,
-          });
-          console.log(res);
-          const fileName = `video_${res.request.responseURL.substr(
-            res.request.responseURL.lastIndexOf("/") + 1
-          )}`;
-          console.log(fileName);
-          const blob = new Blob([res.data]);
-          const fileObjectUrl = window.URL.createObjectURL(blob);
-          const fileLink = document.createElement("a");
-          fileLink.href = fileObjectUrl;
-          fileLink.setAttribute("download", `${fileName}.mp4`);
-          document.body.appendChild(fileLink);
-          fileLink.click();
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        alert("구독회원만 다운로드를 받을 수 있습니다!");
+      if (this.$store.state.subAuth == "N" && this.videoData.kind == "구독") {
+        return alert("구독회원만 다운받을 수 있습니다.");
+      }
+      try {
+        const res = await this.$axios({
+          method: "GET",
+          responseType: "blob", // 응답데이터 타입 정의
+          url: `${process.env.VUE_APP_API_URL}/video/download/${this.videoData.ano}`,
+        });
+        console.log(res);
+        const fileName = `video_${res.request.responseURL.substr(
+          res.request.responseURL.lastIndexOf("/") + 1
+        )}`;
+        console.log(fileName);
+        const blob = new Blob([res.data]);
+        const fileObjectUrl = window.URL.createObjectURL(blob);
+        const fileLink = document.createElement("a");
+        fileLink.href = fileObjectUrl;
+        fileLink.setAttribute("download", `${fileName}.mp4`);
+        document.body.appendChild(fileLink);
+        fileLink.click();
+      } catch (error) {
+        console.log(error);
       }
     },
 

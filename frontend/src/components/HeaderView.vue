@@ -97,6 +97,14 @@ export default {
       return this.$store.getters.isLogin;
     },
   },
+  watch: {
+    isUserLogin: {
+      handler(vlaue) {
+        console.log(vlaue, "로그인확인~!");
+      },
+      immediate: true,
+    },
+  },
   methods: {
     handleScroll() {
       const scrollPosition = window.pageYOffset;

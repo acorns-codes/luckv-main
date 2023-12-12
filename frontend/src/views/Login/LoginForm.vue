@@ -93,9 +93,9 @@ export default {
             this.$store.state.sessionStorageData
           );
           alert(`${res.data.name}님 환영합니다!`);
-          // this.$router.go();
+          this.$router.go();
         } else {
-          // this.$router.go();
+          this.$router.go();
         }
       } catch (error) {
         console.log(error);

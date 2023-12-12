@@ -2,7 +2,7 @@
   <div class="mypage">
     <div>
       <div class="button-box"></div>
-      <VideoItem :auctionList="auctionList" />
+      <VideoItem :auctionList="auctionList" :type="type" />
     </div>
     <!-- 페이징 -->
     <Pagination

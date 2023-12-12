@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h2>경매 동영상 목록</h2>
+      <h2>{{ type }} 동영상 목록</h2>
     </div>
     <v-table>
       <thead>
@@ -19,7 +19,7 @@
             class="event"
             @click="auctionDetail(item.ano)"
           >
-            <td>{{ index + 1 }}</td>
+            <td>{{ item.ano }}</td>
             <td>{{ item.title }}</td>
             <td>
               {{
@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  props: ["auctionList"],
+  props: ["auctionList", "type"],
   data() {
     return {
       itemsPerPage: 5,

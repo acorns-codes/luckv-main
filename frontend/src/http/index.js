@@ -9,7 +9,6 @@ http.interceptors.request.use(
   (config) => {
     const headerConfig = {
       "Access-Control-Allow-Origin": "*",
-      "Content-type": "application/json",
       Accept: "*/*",
     };
     config.headers = Object.assign(config.headers, headerConfig);
