@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,17 +32,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.luckv.demo.dto.Auction;
-import com.luckv.demo.dto.Video;
-import com.luckv.demo.response.DefaultRes;
-import com.luckv.demo.response.ResponseMessage;
-import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.VideoService;
+import com.luckv.demo.vo.Video;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 @RestController
 @RequiredArgsConstructor
 public class VideoController {
@@ -52,14 +49,12 @@ public class VideoController {
 
 
 	// 동영상파일 업로드
-    @PostMapping("/videoUpload")
-    public ResponseEntity videoUpload( Video video,
+    @PostMapping("/video/upload")
+    public Map<String,Object> videoUpload(@ModelAttribute Video video,
                            @RequestParam MultipartFile file,
                            HttpServletRequest request) throws IOException {
-        log.info("request={}",request);
-        log.info("itemName={}", video.getAno());
-        log.info("multipartFile={}",file);
-        	
+        
+    	Map<String,Object> obj = new HashMap<>();
         String originalFileName = file.getOriginalFilename(); // 파일 원본이름 알아오기
         
         
@@ -77,35 +72,38 @@ public class VideoController {
             String fullPath = fileDir + savedFileName; // 파일생성
             
             //스프링이 제공하는 기능
-            log.info("파일 저장 fullPath={}",fullPath);
             file.transferTo(new File(fullPath)); // 파일 서버로 전송
             
             boolean b = videoService.videoUpload(video);
             
-            if(b) {
-                return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_VIDEO, b), HttpStatus.OK);
-            }
-        }      
-        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_VIDEO), HttpStatus.OK);
+            if(!b) {
+	        	obj.put("res","OK");
+	        	obj.put("msg","NOT_CREATED_VIDEO");
+	        	return obj;
+	        }
+           
+	        obj.put("res","OK");
+        	obj.put("msg","SUCCESS");
+        }
+        return obj;
+           
        }
     
-    
-    
-    
-  
-    
-    
-    
     // 동영상 다운로드 
-    @GetMapping("/videoDownload/{ano}")
-    public ResponseEntity<Video> fileDownload(@PathVariable int ano,
+    @GetMapping("/video/download/{ano}")
+    public Map<String,Object> fileDownload(@PathVariable int ano,
                              HttpServletResponse response) throws IOException {
         
-    	    	
+    	Map<String,Object> obj = new HashMap<>();      	
     	Video video = videoService.videoDownload(ano);
+    	if(video == null) {
+    		obj.put("res","OK");
+    		obj.put("msg","NOT_DOWNLOAD_VIDEO");
+    		return obj;
+    	}
+    	
         File f = new File(fileDir, video.getVideoFile());
 
-        
         
         // file 다운로드 설정
         response.setContentType("application/download");
@@ -120,17 +118,15 @@ public class VideoController {
         fis.close();
         os.close();
         
+        obj.put("res","OK");
+    	obj.put("msg","SUCCESS");
+    	return obj;
 
-        if(video != null ) {
-            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DOWNLOAD_VIDEO), HttpStatus.OK);
-        }
-        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DOWNLOAD_VIDEO), HttpStatus.OK);
-       
     }
     
     
     // 동영상 스트리밍
-    @GetMapping("/videoplay")
+    @GetMapping("/video/play")
     public ResponseEntity<List<ResourceRegion>> video(int ano, @RequestHeader HttpHeaders httpHeaders) throws IOException {
     	Video video = videoService.videoPlay(ano);
     	

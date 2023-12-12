@@ -2,139 +2,185 @@ package com.luckv.demo.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luckv.demo.dto.Question;
-import com.luckv.demo.response.DefaultRes;
-import com.luckv.demo.response.ResponseMessage;
-import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.QuestionService;
+import com.luckv.demo.vo.Auction;
+import com.luckv.demo.vo.PageInfo;
+import com.luckv.demo.vo.Question;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class QuestionController {
-	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	private final QuestionService questionService;
 	
 		 
 		// QnA 페이징처리
-		  @GetMapping("/questionPage")
-		    public ResponseEntity questionPage(Question question) {
+		  @GetMapping("/question/page")
+		    public Map<String,Object> questionPage(Question question) {
 			  
-			  	
-		        // 페이지 설정
-		        int sn = question.getPage();   // 현재 페이지
-		        int start = sn * 10 + 0; // 첫 페이지
-		        int end = 10; // 끝 페이지
+			  Map<String,Object> obj = new HashMap<>();
+			  
+			// 페이징 작업 세팅
+		        PageInfo pageInfoVO = new PageInfo();
+		        pageInfoVO.setPage(question.getPage());
+		        pageInfoVO.setRowCnt(question.getRowCnt());
 
-		        question.setStart(start);
-		        question.setEnd(end);
-		        
-		        HashMap<String, Object>  questions = new HashMap<>();
-			  	questions.put("count", questionService.questionCount(question));
-			  	questions.put("questionList", questionService.questionPage(question));
-		        
-			  	
-		        try {
-					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, questions), HttpStatus.OK);
-				} catch (Exception e) {
-					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-					}
+		        // 리스트 찾을때 페이징 처리 - offset값 세팅 (page * rowCnt)
+		        if(question.getPage()<=1){ question.setPage(0);}
+		        else{question.setPage(question.getPage()-1);}
+		        question.setPage(question.getPage()*question.getRowCnt());
+		        List<Question> list = questionService.questionPage(question);
+
+		        // 토탈페이지 정보 잘라내기
+		        pageInfoVO.setTotalPageCnt(list.get(list.size()-1)
+		                .getTotalPageCnt());
+		        list.remove(list.size() - 1);
+
+		        obj.put("res","OK");
+		        obj.put("msg","SUCCESS");
+		        obj.put("list", list);
+		        obj.put("pageInfo", pageInfoVO);
+		        return obj;
+
 		    }
 		  
 
 		   // QnA 등록
-		  @PostMapping("/insertQuestion")
-		    public ResponseEntity insertQuestion(@RequestBody Question question) {
-		        
+		  @PostMapping("/insert/question")
+		    public Map<String,Object> insertQuestion(@RequestBody Question question) {
+			  	Map<String,Object> obj = new HashMap<>();
 		        boolean b = questionService.insertQuestion(question);
-		        
-		        if(b) {
-		            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+		        if(!b) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_CREATED_BOARD");
+		        	return obj;
 		        }
-		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;	        
 		    }
 		    
 		    // QnA 상세
-		    @GetMapping("/questionDetail")
-		    public ResponseEntity questionDetail(Question question) {
-		    	Question questions= questionService.questionDetail(question);
+		    @GetMapping("/question/detail")
+		    public Map<String,Object> questionDetail(Question question) {
 		    	
-		    	return questions != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, questions), HttpStatus.OK)
-				:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+		    	Map<String,Object> obj = new HashMap<>();
+		    	Question questions= questionService.questionDetail(question);
+		    	if(questions == null) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_READ_BOARD");
+		        	return obj;
+		        }
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	obj.put("data", questions);
+	        	return obj;
+		    	
 		    }
 		    
 		    // QnA 수정
-		    @PostMapping("questionUpdate")
-		    public ResponseEntity questionUpdate(@RequestBody Question question) {  
+		    @PostMapping("/question/update")
+		    public Map<String,Object> questionUpdate(@RequestBody Question question) {  
+		    	Map<String,Object> obj = new HashMap<>();
 		    	boolean b = questionService.questionUpdate(question);
 
-				  if(b) {
-			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BOARD, b), HttpStatus.OK);
-			        }
-			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
+		    	if(!b) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_UPDATE_BOARD");
+		        	return obj;
+		        }
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;	        
 		    }
 
 		    // QnA 삭제
-		    @GetMapping("questionDelete")
-		    public ResponseEntity questionDelete(int qno) {  
+		    @GetMapping("/question/delete")
+		    public Map<String,Object> questionDelete(int qno) {  
+		    	Map<String,Object> obj = new HashMap<>();
 		    	boolean b = questionService.questionDelete(qno);
-				  if(b) {
-			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
-			        }
-			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);
+		    	
+		    	if(!b) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_DELETE_BOARD");
+		        	return obj;
+		        }
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;	        
+				
 		    }
 
 		    
 		    //  QnA 댓글작성
-		    @PostMapping("/qnaAnswer")
-		    public ResponseEntity<String> qnaAnswer(@RequestBody Question question) {
+		    @PostMapping("/question/answer")
+		    public Map<String,Object> qnaAnswer(@RequestBody Question question) {
+		    	Map<String,Object> obj = new HashMap<>();
 		    	boolean b =  questionService.qnaAnswer(question);
-
-		        if(b) {
-		            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+		    	
+		    	if(!b) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_CREATED_BOARD");
+		        	return obj;
 		        }
-		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;	        
 		       
 		    }
 		    
 		    //  QnA 댓글수정 
-		    @PostMapping("/qnaAnswerUpdate")
-		    public ResponseEntity<String> qnaAnswerUpdate(@RequestBody Question question) {
+		    @PostMapping("/question/answer/update")
+		    public Map<String,Object> qnaAnswerUpdate(@RequestBody Question question) {
+		    	Map<String,Object> obj = new HashMap<>();
 		        boolean b = questionService.qnaAnswerUpdate(question);
-				  if(b) {
-			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BOARD, b), HttpStatus.OK);
-			        }
-			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
+		        
+		        if(!b) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_UPDATE_BOARD");
+		        	return obj;
+		        }
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;	        
+
 		    }
 		    
 		    //  QnA 댓글
-		    @GetMapping("/qnaAnswerList")
-		    public ResponseEntity<List<Question>> qnaAnswerList(int qno) {
-		    List<Question> question =  questionService.qnaAnswerList(qno);
-		    return question != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, question), HttpStatus.OK)
-					:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
+		    @GetMapping("/question/answer/list")
+		    public Map<String,Object> qnaAnswerList(int qno) {
+		    	Map<String,Object> obj = new HashMap<>();
+		    	List<Question> question =  questionService.qnaAnswerList(qno);
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	obj.put("data", question);
+	        	return obj;
 
 		    }
 		    
 		 // QnA 댓글삭제
-		    @GetMapping("/qnaAnswerDelete")
-		    public ResponseEntity<String> qnaAnswerDelete(Question question) {  
+		    @GetMapping("/question/answer/delete")
+		    public Map<String,Object> qnaAnswerDelete(Question question) {  
+		    	Map<String,Object> obj = new HashMap<>();
 		    	boolean b = questionService.qnaAnswerDelete(question);
-				  if(b) {
-			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
-			        }
-			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);	        
+		    	
+		    	if(!b) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_DELETE_BOARD");
+		        	return obj;
+		        }
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;
+				
 		    }
 		    
 }

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AuctionDao.AuctionMapper">
+
+    <!-- 동영상 전체 리스트 -->
+    <select id="auctionList"  parameterType="Auction"  resultType="Auction">
+	 	SELECT  
+			a.ano, /*경매 번호*/
+			seller, /*판매자 회원번호*/
+			s.mid as sellerNm, /*판매자 아이디*/ 
+			title,  /*판매 제목*/
+			content, /*판매내용*/
+			vcate, /*카테고리*/
+			pay_start, /*판매 시작가*/
+			start_day, /*판매 시작일*/
+			last_day, /*판매 종료일*/
+			att.bidding as pay_max, /*최고가*/
+			status, /*판매 상태*/
+			kind, /*동영상 판매 형태*/
+			a.reg_dt,
+			a.udt_dt
+		FROM auction a
+		LEFT JOIN `user` s ON  a.seller = s.mno
+		LEFT JOIN video v ON a.ano = v.ano 
+		LEFT JOIN (
+			SELECT 
+				ano, 
+				MAX(bidding) AS bidding 
+			FROM attend  
+			GROUP BY ano) att ON att.ano = a.ano            
+		WHERE 1 = 1  	
+	  	<if test="kind  != null  and kind  != ''">
+	        AND kind = #{kind} /*동영상 판매 형태*/
+	    </if>
+	  	<if test="kind  != '무료'">
+	        AND status = '판매중'
+	    </if>
+	  	<if test="vcate  != null  and vcate  != ''">
+	        AND vcate = #{vcate} /*카테고리구분*/
+	    </if>
+	    <if test="sort  == 1 ">
+	   		order by a.start_day desc
+	    </if>
+	    <if test="sort  == 2 ">
+	    	order by a.last_day desc
+	    </if>
+	   LIMIT ${rowCnt} offset ${page}
+	</select>
+	
+	
+    <!-- 동영상리스트 총 개수 -->
+    <select id="auctionCount" parameterType="Auction" resultType="Auction">
+	    SELECT CEIL(count(1)/${rowCnt}) AS totalPageCnt
+	      FROM auction A
+  		where 1 = 1
+  		<if test="seller != null  and seller != ''">
+	         and seller = #{seller}
+	    </if>
+	    <if test="seller == null  and seller == ''">
+	         and status = '판매중'
+	    </if>
+	    <if test="kind  != null  and kind  != ''">
+	        and kind = #{kind} /*동영상 판매 형태*/
+	    </if>
+	    <if test="vcate != null  and vcate  != ''">
+	        and vcate  =  #{vcate} /*카테고리구분*/
+	    </if>
+
+    </select>
+    
+    <!-- 내 등록 동영상리스트 페이징처리 -->
+    <select id="auctionPage"  parameterType="Auction"  resultType="Auction">
+	  select 
+	  		ano, /*경매 번호*/
+        	seller, /*판매자 회원번호*/
+    		title,  /*판매 제목*/
+    		vcate, /*카테고리*/
+    		pay_start, /*판매 시작가*/
+    		start_day, /*판매 시작일*/
+    		last_day, /*판매 종료일*/
+    		status, /*판매 상태*/
+    		kind /*동영상 판매종류*/
+        from auction
+	  where 1 = 1
+	  	and seller = #{seller}
+	  	<if test="kind  != null  and kind  != ''">
+	        and kind = #{kind} /*동영상 판매 형태*/
+	    </if>
+	   order by ano desc
+	   LIMIT ${rowCnt} offset ${page}
+	</select>
+	
+    <!-- 동영상 작성 -->
+    <insert id="insertAuction"  parameterType="Auction">
+        insert into 
+        	auction (
+        		seller, /*판매자 회원번호*/
+        		title,  /*판매 제목*/
+        		content, /*판매 내용*/
+        		vcate, /*카테고리*/
+        		pay_start, /*판매 시작가*/
+        		start_day, /*판매 시작일*/
+        		last_day, /*판매 종료일*/
+        		status, /*판매 상태*/
+        		kind /*동영상 판매종류*/
+	        ) values (
+	        	#{seller},
+	        	#{title},
+	        	#{content},
+	        	#{vcate},
+	        	#{payStart},
+	        	<if test="kind  == '경매'">
+	        		date_format(#{startDay}, '%Y-%m-%d %H:%i:%s'),
+	    		</if>
+	        	<if test="kind  == '구독'">
+	        		now(),
+	    		</if>
+	    		<if test="kind  == '무료'">
+	        		null,
+	    		</if>		        	
+	        	date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'),
+	        	#{status},
+	        	#{kind}	        	
+	        )
+    </insert>
+    
+
+      <!-- 동영상 수정 -->
+		<update id="auctionUpdate" parameterType="Auction">
+		  UPDATE 
+		  	auction
+		  SET 
+			title = #{title}, /*판매 제목*/
+       		content = #{content},  /*판매 내용*/
+       		vcate = #{vcate}, /*카테고리*/
+       		udt_dt = CURRENT_TIMESTAMP
+		  WHERE ano = #{ano}
+		  AND seller = #{seller}
+		</update>
+		
+		
+		<!-- 경매에서구독으로 변경 -->
+		<update id="auctionChange" parameterType="Auction">
+		  UPDATE 
+		  	auction
+		  SET 
+		 	start_day = CURRENT_TIMESTAMP(), /*구독 시작일*/
+        	last_day = date_format(#{lastDay}, '%Y-%m-%d %H:%i:%s'), /*구독중지기간*/
+			kind = '구독', /*판매 제목*/
+			pay_start = null,
+			udt_dt = CURRENT_TIMESTAMP
+		  WHERE ano = #{ano}
+		  AND seller = #{seller}
+		  AND kind = '경매'
+		</update>
+       
+       <!-- 동영상상세 -->
+        <select id="auctionDetail"  parameterType="Integer" resultType="Auction">
+       		select 
+		  		a.ano, /*경매 번호*/
+	        	seller, /*판매자 회원번호*/
+	        	s.mid as sellerNm, /*판매자 아이디*/ 
+	    		title,  /*판매 제목*/
+	    		content, /*판매내용*/
+	    		vcate, /*카테고리*/
+	    		pay_start, /*판매 시작가*/
+	    		start_day, /*판매 시작일*/
+	    		last_day, /*판매 종료일*/
+	    		att.bidding as pay_max, /*최고가*/
+	    		status, /*판매 상태*/
+	    		kind /*동영상 판매종류*/
+        from auction a
+		  	left join user s on  a.seller = s.mno
+		  	left join video v on a.ano = v.ano
+		  	left join (SELECT ano, MAX(bidding) as bidding
+           FROM attend  GROUP BY ano) att on att.ano = a.ano         
+   	   where a.ano = #{ano}
+       </select>
+       
+       <!-- 동영상 삭제 -->
+       <delete id="auctionDelete" parameterType="Auction">
+	       delete from 
+	       	auction
+	       where ano = #{ano}
+	       and kind = '무료'
+       </delete>
+       
+       
+       
+       <!-- 상태변경 -->
+       <update id="statusIngUpdate">
+		 update 
+		 	auction 
+		set 
+			status =
+      case 
+	      when  timestampdiff(second, now(), last_day) <![CDATA[<=]]> 0
+		  then '판매종료'
+		  when Timestampdiff(second, now(), start_day) <![CDATA[<=]]> 0
+		  then '판매중'
+		  when kind = '무료'
+		  then null	  
+		end;
+		</update>
+		
+
+</mapper>

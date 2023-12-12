@@ -1,23 +1,13 @@
 package com.luckv.demo.service;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckv.demo.dto.Attend;
-import com.luckv.demo.dto.Auction;
-import com.luckv.demo.mapper.AttendMapper;
-import com.luckv.demo.mapper.FrequentlyMapper;
+import com.luckv.demo.dao.AttendDao;
+import com.luckv.demo.vo.Attend;
+import com.luckv.demo.vo.Auction;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,32 +16,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AttendService {
 	
-	private final  AttendMapper  attendMapper;
+	private final  AttendDao  attendDao;
 	
 	// 입찰 등록
 	public boolean insertAttend(Attend attend) {
-		return attendMapper.insertAttend(attend);	
-        
+		return attendDao.insertAttend(attend);	        
 	}
 	
 	
 	// 구매 목록
 	public List<Auction> attendList(Auction auction) {
-        return attendMapper.attendList(auction);
-	}
-	
-	// 구매목록 갯수
-	public int attendCount(Auction auction) {
-		return attendMapper.attendCount(auction);
-	}
-			
-	// 내 입찰 목록
-	public List<Auction> attendMy(Auction auction) {
-        return attendMapper.attendMy(auction);
+        return attendDao.attendList(auction);
 	}
 
-	// 내 입찰 목록 갯수
-	public int attendMyCount(Auction auction) {
-		return attendMapper.attendMyCount(auction);
+	// 내 입찰 목록
+	public List<Auction> attendMy(Auction auction) {
+        return attendDao.attendMy(auction);
 	}
+
+
 }

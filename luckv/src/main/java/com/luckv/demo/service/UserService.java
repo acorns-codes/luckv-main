@@ -3,8 +3,8 @@ package com.luckv.demo.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckv.demo.dto.user;
-import com.luckv.demo.mapper.UserMapper;
+import com.luckv.demo.dao.UserDao;
+import com.luckv.demo.vo.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,50 +13,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 	
-	private final UserMapper userMapper;
+	private final UserDao userDao;
 
 	// 아이디 중복확인
-    public boolean getId(user user) {
-        int n = userMapper.getId(user);
-        return n > 0;
+    public boolean getId(User user) {
+        return userDao.getId(user);
     }
 
     // 회원가입
-    public boolean addMember(user user) {
-        int n = userMapper.addMember(user);
-        return n > 0;
+    public boolean addMember(User user) {
+        return userDao.addMember(user);
     }
 
     // 로그인
-    public user login(user user) {
-        return userMapper.login(user);
+    public User login(User user) {
+        return userDao.login(user);
     }
     
     // 회원정보 조회
-    public user infoMember(int mno) {
-        return userMapper.infoMember(mno);
+    public User infoMember(int mno) {
+        return userDao.infoMember(mno);
     }
 
     // 회원정보 수정
-	public boolean updateMember(user user) {
-		int n = userMapper.updateMember(user);
-        return n > 0;
+	public boolean updateMember(User user) {
+		return userDao.updateMember(user);
 	}
 	
 	// 동영상 구독 신청
-	public boolean videoSubYn(user user) {
-		int n = userMapper.videoSubYn(user);
-        return n > 0;        
+	public boolean videoSubYn(User user) {
+		return userDao.videoSubYn(user);
 	}
 	
 	// 동영상 구독 신청
-	public boolean videoSubNot(user user) {
-		int n = userMapper.videoSubNot(user);
-        return n > 0;	        
+	public boolean videoSubNot(User user) {
+		return userDao.videoSubNot(user);
 	}
 	
-	public int videoSubAuto() {
-		return userMapper.videoSubAuto();
+	public boolean videoSubAuto() {
+		return userDao.videoSubAuto();
 	}
 		
 

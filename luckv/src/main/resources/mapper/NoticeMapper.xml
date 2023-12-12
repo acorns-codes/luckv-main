@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NoticeDao.NoticeMapper">
+
+	 <!--공지사항 조회 -->
+    <select id="noticeList"  resultType="Notice">
+        select 
+        	nno as no, /*공지사항 순번*/
+        	title, /*공지사항 제목*/
+        	create_at /*공지사항 작성일*/
+        from notice
+    		order by no desc
+    		LIMIT ${rowCnt} offset ${page}
+    </select>
+    
+    <!-- 공지사항 총 개수 -->
+    <select id="noticeCount" parameterType="Notice" resultType="Notice">
+    	select CEIL(count(1)/${rowCnt}) AS totalPageCnt
+      	FROM notice
+    </select>
+    
+    <!-- 공지사항 작성 -->
+    <insert id="insertNotice"  parameterType="Notice">
+        insert into 
+        	notice (
+        		title, /*공지사항 제목*/
+        		content, /*공지사항 내용*/
+        		create_at, /*공지사항 작성일*/
+        		nid /*작성자*/
+	        ) values (
+	        	#{title},
+	        	#{content},
+	        	now(),
+	        	#{nid}
+	        )
+    </insert>
+    
+    <!-- 공지사항 상세보기 -->
+       <select id="noticeDetail"  parameterType="int" resultType="Notice">
+       		select
+       			 n.nno as no, /*공지사항 순번*/
+       			 n.title,  /*공지사항 제목*/
+       			 n.content, /*공지사항 내용*/
+       			 n.create_at, /*공지사항 작성일*/
+       			 u.mid /*작성자*/
+       		from notice n 
+       		left join user u on  n.nid = u.mno 
+       		where n.nno = #{nno}
+       </select>
+       
+      <!-- 공지사항 수정 -->
+		<update id="noticeUpdate" parameterType="Notice">
+		  update 
+		  	notice
+		  set 
+		  	title = #{title}, /*공지사항 제목*/
+		  	content = #{content},  /*공지사항 내용*/
+		  	update_at = now() /*공지사항 수정일*/
+		  where nno = #{no} and nid = #{nid}
+		</update>
+       
+</mapper>

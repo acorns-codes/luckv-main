@@ -2,21 +2,18 @@ package com.luckv.demo.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luckv.demo.dto.Frequently;
-import com.luckv.demo.response.DefaultRes;
-import com.luckv.demo.response.ResponseMessage;
-import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.FrequentlyService;
+import com.luckv.demo.vo.Auction;
+import com.luckv.demo.vo.Frequently;
+import com.luckv.demo.vo.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,72 +21,95 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FrequentlyController {
 	
-	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	private final FrequentlyService frequentlyService;
 	
 
-		// FaQ 페이징처리
-		  @GetMapping("/frequentlyPage")
-		    public ResponseEntity frequentlyPage(Frequently frequently) {
-			     			
-		        // 페이지 설정
-		        int sn = frequently.getPage();   // 현재 페이지
-		        int start = sn * 10 + 0; // 첫 페이지
-		        int end = 10; // 끝 페이지
+		// FaQ 리스트
+		  @GetMapping("/frequently/list")
+		    public Map<String,Object> frequentlyList(@ModelAttribute Frequently frequently) {
 
-		        frequently.setStart(start);
-		        frequently.setEnd(end);
-		        
-		        HashMap<String, Object>  frequentlys = new HashMap<>();
-				 frequentlys.put("count", frequentlyService.frequentlyCount(frequently));
-				 frequentlys.put("frequentlyList", frequentlyService.frequentlyPage(frequently));
+			  	Map<String,Object> obj = new HashMap<>();
+			  	
+			  	// 페이징 작업 세팅
+		        PageInfo pageInfoVO = new PageInfo();
+		        pageInfoVO.setPage(frequently.getPage());
+		        pageInfoVO.setRowCnt(frequently.getRowCnt());
 
-		   
-		        try {
-					return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, frequentlys), HttpStatus.OK);
-				} catch (Exception e) {
-					return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-					}
+		        // 리스트 찾을때 페이징 처리 - offset값 세팅 (page * rowCnt)
+		        if(frequently.getPage()<=1){ frequently.setPage(0);}
+		        else{frequently.setPage(frequently.getPage()-1);}
+		        frequently.setPage(frequently.getPage()*frequently.getRowCnt());
+		        List<Frequently> list = frequentlyService.frequentlyList(frequently);
+
+		        // 토탈페이지 정보 잘라내기
+		        pageInfoVO.setTotalPageCnt(list.get(list.size()-1)
+		                .getTotalPageCnt());
+		        list.remove(list.size() - 1);
+
+		        obj.put("res","OK");
+		        obj.put("msg","SUCCESS");
+		        obj.put("list", list);
+		        obj.put("pageInfo", pageInfoVO);
+		        return obj;
+
 			 }
 		  
 
 		   // FaQ 등록
-		  @PostMapping("/insertFrequently")
-		    public ResponseEntity<String> insertFrequently(@RequestBody Frequently frequently) {		       
+		  @PostMapping("/insert/frequently")
+		    public Map<String,Object> insertFrequently(@ModelAttribute Frequently frequently) {		       
+			  	Map<String,Object> obj = new HashMap<>();
 		        
-		        boolean b = frequentlyService.insertFrequently(frequently);
-		        
-		        if(b) {
-		            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+		        if(!frequentlyService.insertFrequently(frequently)) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_CREATED_BOARD");
+		        	return obj;
 		        }
-		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;
 		    }
 		    
 		    // FaQ 상세
-		    @GetMapping("/frequentlyDetail")
-		    public Frequently frequentlyDetail(int fno) {
-		        logger.info("FrequentlycController frequentlyDetail()");
-		        return frequentlyService.frequentlyDetail(fno);
+		    @GetMapping("/frequently/detail")
+		    public Map<String,Object> frequentlyDetail(int fno) {
+		    	
+		    	Map<String,Object> obj = new HashMap<>();		    	
+		    	Frequently detail =  frequentlyService.frequentlyDetail(fno);
+		    	obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	obj.put("data", detail); 
+	        	return obj;
+		    	
 		    }
 		    
 		    // FaQ 수정
-		  @PostMapping("frequentlyUpdate")
-		    public ResponseEntity<String> frequentlyUpdate(@RequestBody Frequently frequently) {  
-			  boolean b = frequentlyService.frequentlyUpdate(frequently);
-			  if(b) {
-		            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BOARD, b), HttpStatus.OK);
+		  @PostMapping("/frequently/update")
+		    public Map<String,Object> frequentlyUpdate(@ModelAttribute Frequently frequently) {  
+			  Map<String,Object> obj = new HashMap<>();
+			  if(!frequentlyService.frequentlyUpdate(frequently)) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_UPDATE_BOARD");
+		        	return obj;
 		        }
-		        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_UPDATE_BOARD, b), HttpStatus.OK);
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;
 		    }
 
 		    // FaQ 삭제
-		    @GetMapping("frequentlyDelete")
-		    public ResponseEntity<String> frequentlyDelete(int fno) {  	        
-		        boolean b = frequentlyService.frequentlyDelete(fno);
-				  if(b) {
-			            return  new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_BOARD, b), HttpStatus.OK);
-			        }
-			        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_DELETE_BOARD, b), HttpStatus.OK);
+		    @GetMapping("/frequently/delete")
+		    public Map<String,Object> frequentlyDelete(int fno) {  	        
+		    	Map<String,Object> obj = new HashMap<>();
+		        
+		        if(!frequentlyService.frequentlyDelete(fno)) {
+		        	obj.put("res","OK");
+		        	obj.put("msg","NOT_DELETE_BOARD");
+		        	return obj;
+		        }
+		        obj.put("res","OK");
+	        	obj.put("msg","SUCCESS");
+	        	return obj;
 		    }
 		    
 }

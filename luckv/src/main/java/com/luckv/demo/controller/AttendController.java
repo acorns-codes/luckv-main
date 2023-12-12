@@ -2,51 +2,33 @@ package com.luckv.demo.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luckv.demo.dto.Attend;
-import com.luckv.demo.dto.Auction;
-import com.luckv.demo.mapper.AttendMapper;
-import com.luckv.demo.response.DefaultRes;
-import com.luckv.demo.response.ResponseMessage;
-import com.luckv.demo.response.StatusCode;
 import com.luckv.demo.service.AttendService;
 import com.luckv.demo.service.AuctionService;
+import com.luckv.demo.vo.Attend;
+import com.luckv.demo.vo.Auction;
+import com.luckv.demo.vo.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@Controller
 public class AttendController {
 
-	public final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	private final AttendService  attendService;
 	private final AuctionService auctionService;
-//
-//	@RequestMapping("/insertAttend")	
-//	public ResponseEntity insertAttend(int ano) {
-//		
-//        
-//		Auction auction = auctionService.auctionDetail(ano);
-//    	
-//    	return auction != null? new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, auction), HttpStatus.OK)
-//		:  new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-//	}
+
 	// /receive를 메시지를 받을 endpoint로 설정합니다.
     @MessageMapping("/attend/{ano}")
     // /send로 메시지를 반환합니다.
@@ -55,7 +37,6 @@ public class AttendController {
     // 정의한 SocketVO를 1) 인자값, 2) 반환값으로 사용합니다.
     public Attend SocketHandler(@DestinationVariable int ano, Attend attend) {
         // 반환
-
     	return attend;
     }
      
@@ -73,62 +54,79 @@ public class AttendController {
         return attend;
        }
     	// 입찰 등록
-	  @PostMapping("/insertAttend")
-	    public ResponseEntity insertAuction(@RequestBody Attend attend) {
+	  @PostMapping("/attend/insert")
+	    public Map<String,Object> insertAuction(@ModelAttribute Attend attend) {
 	        
-	        boolean b = attendService.insertAttend(attend);
+		  	Map<String,Object> obj = new HashMap<>();
 	        
-	        if(b) {
-	            return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_BOARD, b), HttpStatus.OK);
+	        if(!attendService.insertAttend(attend)) {
+	        	obj.put("res","OK");
+	        	obj.put("msg","NOT_CREATED_BOARD");
+	        	return obj;
 	        }
-	        return  new ResponseEntity(DefaultRes.res(StatusCode.BAD_REQUEST, ResponseMessage.NOT_CREATED_BOARD, b), HttpStatus.OK);
+	        obj.put("res","OK");
+        	obj.put("msg","SUCCESS");
+        	return obj;
 	    }
 	    
 	
 		// 구매목록
-	  @GetMapping("/attendList")
-	    public ResponseEntity attendList(Auction auction) {		  	
-		  	
-	        // 페이지 설정
-	        int sn = auction.getPage();   // 현재 페이지
-	        int start = sn * 10 + 0; // 첫 페이지
-	        int end = 10; // 끝 페이지
+	  @GetMapping("/attend/list")
+	    public Map<String,Object> attendList(@ModelAttribute Auction auction) {		  	
+		  	Map<String,Object> obj = new HashMap<>();
 
-	        auction.setStart(start);
-	        auction.setEnd(end);
-	        
-	        HashMap<String, Object>  attends = new HashMap<>();
-	        attends.put("count", attendService.attendCount(auction));
-		  	attends.put("auctionList", attendService.attendList(auction));
+		 // 페이징 작업 세팅
+	        PageInfo pageInfoVO = new PageInfo();
+	        pageInfoVO.setPage(auction.getPage());
+	        pageInfoVO.setRowCnt(auction.getRowCnt());
 
-	        try {
-				return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, attends), HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-				}
-		 }
+	        // 리스트 찾을때 페이징 처리 - offset값 세팅 (page * rowCnt)
+	        if(auction.getPage()<=1){ auction.setPage(0);}
+	        else{auction.setPage(auction.getPage()-1);}
+	        auction.setPage(auction.getPage()*auction.getRowCnt());
+	        List<Auction> list = attendService.attendList(auction);
+
+	        // 토탈페이지 정보 잘라내기
+	        pageInfoVO.setTotalPageCnt(list.get(list.size()-1)
+	                .getTotalPageCnt());
+	        list.remove(list.size() - 1);
+
+	        obj.put("res","OK");
+	        obj.put("msg","SUCCESS");
+	        obj.put("list", list);
+	        obj.put("pageInfo", pageInfoVO);
+	        return obj;
+	  	}
 	  
 	  	// 내 입찰목록
-		@GetMapping("/attendMy")
-		  public ResponseEntity attendMy(Auction auction) {		  	
-			  	
-	        // 페이지 설정
-	        int sn = auction.getPage();   // 현재 페이지
-	        int start = sn * 10 + 0; // 첫 페이지
-	        int end = 10; // 끝 페이지
+		@GetMapping("/attend/my")
+		  public Map<String,Object> attendMy(@ModelAttribute Auction auction) {		  	
+			  
+			
+			Map<String,Object> obj = new HashMap<>();
+			
+			 // 페이징 작업 세팅
+	        PageInfo pageInfoVO = new PageInfo();
+	        pageInfoVO.setPage(auction.getPage());
+	        pageInfoVO.setRowCnt(auction.getRowCnt());
 
-	        auction.setStart(start);
-	        auction.setEnd(end);
-	        
-	        HashMap<String, Object>  attends = new HashMap<>();
-	        attends.put("count", attendService.attendMyCount(auction));
-		  	attends.put("auctionList", attendService.attendMy(auction));
+	        // 리스트 찾을때 페이징 처리 - offset값 세팅 (page * rowCnt)
+	        if(auction.getPage()<=1){ auction.setPage(0);}
+	        else{auction.setPage(auction.getPage()-1);}
+	        auction.setPage(auction.getPage()*auction.getRowCnt());
+	        List<Auction> list = attendService.attendMy(auction);
 
-	        try {
-				return new ResponseEntity(DefaultRes.res(StatusCode.OK, ResponseMessage.READ_BOARD, attends), HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.NOT_READ_BOARD), HttpStatus.OK);
-				}
+	        // 토탈페이지 정보 잘라내기
+	        pageInfoVO.setTotalPageCnt(list.get(list.size()-1)
+	                .getTotalPageCnt());
+	        list.remove(list.size() - 1);
+
+	        obj.put("res","OK");
+	        obj.put("msg","SUCCESS");
+	        obj.put("list", list);
+	        obj.put("pageInfo", pageInfoVO);
+	        return obj;
+
 		 }
 	  
 }

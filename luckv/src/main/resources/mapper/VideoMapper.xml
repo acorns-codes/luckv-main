@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="VideoDao.VideoMapper">
+
+	<!-- 동영상등록 -->
+
+	<insert id="videoUpload"  parameterType="Auction">
+	<selectKey resultType="Integer" keyProperty="ano" order="BEFORE" >
+        select ano from auction order by ano desc limit 1
+    </selectKey> 
+        insert into 
+        	video (
+        		ano, /*경매 게시글 번호*/
+        		video_file /*동영상 이름*/
+	        ) values (
+	        	#{ano},
+	        	#{videoFile}
+	        )
+    </insert>
+	
+	<!--동영상 다운로드 -->
+    <select id="videoDownload" parameterType="Integer" resultType="Video">
+        select 
+        	ano, /*경매 게시글 번호*/
+        	video_file /*동영상 이름*/
+        from video 
+        	where ano = #{ano}
+    </select>
+    
+    <!--동영상 스트리밍 -->
+    <select id="videoPlay" parameterType="Integer" resultType="Video">
+        select 
+        	ano, /*경매 게시글 번호*/
+        	video_file /*동영상 이름*/
+        from video 
+        	where ano = #{ano}
+    </select>
+    
+</mapper>
