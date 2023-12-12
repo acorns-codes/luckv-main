@@ -8,6 +8,7 @@
 
 <script>
 import HeaderLayout from "./HeaderLayout.vue";
+import { apiPostVideo } from "@/api/user";
 export default {
   name: "AppLayoutHome",
   components: { HeaderLayout },
@@ -28,14 +29,13 @@ export default {
         if (!confirm("구독을 신청하시겠습니까?")) {
           alert("구독 신청이 완료되지 못했습니다!");
         } else {
+          const req = {
+            mno: this.$store.state.sessionStorageData.mno,
+          };
           try {
-            const res = await this.$axios({
-              method: "POST",
-              url: `${process.env.VUE_APP_API_URL}/videoSubYn`,
-              data: { mno: this.$store.state.sessionStorageData.mno },
-            });
+            const res = await apiPostVideo(req);
             console.log(res);
-            if (res.data.data) {
+            if (res.data) {
               alert("구독 신청이 완료되었습니다!");
               this.$store.commit("storeSubAuth", "Y");
             }

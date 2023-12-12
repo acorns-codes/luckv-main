@@ -12,24 +12,31 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(item, index) in auctionList"
-          :key="index"
-          class="event"
-          @click="auctionDetail(item.ano)"
-        >
-          <td>{{ index + 1 }}</td>
-          <td>{{ item.title }}</td>
-          <td>
-            {{
-              item.kind === "경매"
-                ? item.status
-                : item.status === "판매중"
-                ? "게시중"
-                : "게시완료"
-            }}
-          </td>
-        </tr>
+        <template v-if="auctionList.length > 0">
+          <tr
+            v-for="(item, index) in auctionList"
+            :key="index"
+            class="event"
+            @click="auctionDetail(item.ano)"
+          >
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.title }}</td>
+            <td>
+              {{
+                item.kind === "경매"
+                  ? item.status
+                  : item.status === "판매중"
+                  ? "게시중"
+                  : "게시완료"
+              }}
+            </td>
+          </tr>
+        </template>
+        <template v-else>
+          <tr style="height: 200px">
+            <td colspan="3">동영상이 없습니다.</td>
+          </tr>
+        </template>
       </tbody>
     </v-table>
   </div>
@@ -52,7 +59,7 @@ export default {
   methods: {
     postAuction() {
       this.$router.push({
-        name: "/postauction",
+        name: "postauction",
       });
     },
     auctionDetail(ano) {

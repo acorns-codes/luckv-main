@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { apiGetAttendList } from "@/api/attend";
 import AttendItem from "./AttendItem.vue";
 
 export default {
@@ -48,14 +49,15 @@ export default {
   methods: {
     async getList(page) {
       console.log("참여내역 불러오기");
+      const req = {
+        buyer: this.$store.state.sessionStorageData.mno,
+        page: page,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/attendList?buyer=${this.$store.state.sessionStorageData.mno}&page=${page}`,
-        });
+        const res = await apiGetAttendList(req);
         console.log(res);
-        this.attendList = res.data.data.auctionList;
-        this.cnt = res.data.data.count;
+        this.attendList = res.data.auctionList;
+        this.cnt = res.data.count;
         console.log(this.cnt);
         console.log(this.attendList);
       } catch (error) {
@@ -115,6 +117,5 @@ export default {
   background-color: #eee;
   cursor: pointer;
 }
-
-
 </style>
+@/api/attend

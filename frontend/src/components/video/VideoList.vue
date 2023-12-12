@@ -3,7 +3,7 @@
     <div v-for="item in videoList" :key="item">
       <div></div>
       <video
-        :src="`${videoSrc}/videoplay?ano=${item.ano}`"
+        :src="`${videoSrc}/video/play?ano=${item.ano}`"
         muted
         loop
         @mouseover="playVideo"
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { apiGetAuctionDeatil } from "@/api/video";
 import VideoDetail from "@/components/video/VideoDetail.vue";
 export default {
   props: ["videoList"],
@@ -47,14 +48,14 @@ export default {
     // 각 동영상 상세 정보 불러오기
     async getInfo(ano) {
       console.log("비디오");
+      const req = {
+        ano: ano,
+      };
       try {
-        const res = await this.$axios({
-          methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${ano}`,
-        });
-        this.videoData = res.data.data;
+        const res = await apiGetAuctionDeatil(req);
+        this.videoData = res.data;
         console.log(this.videoData);
-        this.dday = res.data.data.lastDay;
+        this.dday = res.data.lastDay;
         console.log(this.dday);
       } catch (e) {
         console.log(e);
@@ -74,7 +75,7 @@ export default {
     closeModal() {
       this.modal = false;
       this.$refs.videoDetail.closeSocket();
-      this.$emit("video", "", this.$route.params.page - 1);
+      this.$emit("video", "", this.$route.query.page - 1);
       console.log("emit확인");
     },
   },
@@ -128,6 +129,7 @@ p {
 }
 
 .no-video {
+  width: 100% !important;
   padding: 30px;
 }
 </style>

@@ -11,14 +11,12 @@
 </template>
 
 <script>
+import { apiAddAnswer } from "@/api/qna";
 export default {
   data() {
     return {
       comment: "",
     };
-  },
-  mounted() {
-    console.log(this.$route.params.no);
   },
   methods: {
     async createComment() {
@@ -30,16 +28,9 @@ export default {
         comment: this.comment,
       };
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/qnaAnswer`,
-          data: commnetData,
-        });
+        const res = await apiAddAnswer(commnetData);
         console.log(res);
-        if (res.data.data) {
+        if (res.data) {
           console.log("댓글수정완료");
           alert("댓글 수정 완료!");
           this.$router.go();

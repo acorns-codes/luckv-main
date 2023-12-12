@@ -18,114 +18,55 @@ const routes = [
   },
   //  전체 목록
   {
-    path: "/video/:page",
-    name: "all",
+    path: "/auction",
+    name: "auction",
+    redirect: {
+      name: "auctionList",
+      params: { type: "all" },
+      query: { page: 1 },
+    },
     component: () => import("@/views/AuctionPage"),
     children: [
       {
-        path: "/:page",
-        name: "전체",
-        component: () => import("@/views/AuctionPage"),
-      },
-      {
-        path: "/animal/:page",
-        name: "animal",
-        component: () => import("@/views/AuctionPage"),
-      },
-      {
-        path: "/character/:page",
-        name: "character",
-        component: () => import("@/views/AuctionPage"),
-      },
-      {
-        path: "/building/:page",
-        name: "building",
-        component: () => import("@/views/AuctionPage"),
-      },
-      {
-        path: "/plant/:page",
-        name: "plant",
-        component: () => import("@/views/AuctionPage"),
-      },
-      {
-        path: "/etc/:page",
-        name: "etc",
+        path: "/action/list/:type",
+        name: "auctionList",
+        props: true,
         component: () => import("@/views/AuctionPage"),
       },
     ],
   },
   // 무료 동영상 페이지
   {
-    path: "/freevideo/:page",
+    path: "/freevideo",
     name: "freevideo",
+    redirect: {
+      name: "freevideoList",
+      params: { type: "all" },
+      query: { page: 1 },
+    },
     component: () => import("@/views/FreeVideoPage"),
     children: [
       {
-        path: "/free/:page",
-        name: "무료전체",
-        component: () => import("@/views/FreeVideoPage"),
-      },
-      {
-        path: "/animal/free/:page",
-        name: "freeanimal",
-        component: () => import("@/views/FreeVideoPage"),
-      },
-      {
-        path: "/character/free/:page",
-        name: "freecharacter",
-        component: () => import("@/views/FreeVideoPage"),
-      },
-      {
-        path: "/building/free/:page",
-        name: "freebuilding",
-        component: () => import("@/views/FreeVideoPage"),
-      },
-      {
-        path: "/plant/free/:page",
-        name: "freeplant",
-        component: () => import("@/views/FreeVideoPage"),
-      },
-      {
-        path: "/etc/free/:page",
-        name: "freeetc",
+        path: "/freevideo/list/:type",
+        name: "freevideoList",
         component: () => import("@/views/FreeVideoPage"),
       },
     ],
   },
   // 구독 페이지
   {
-    path: "/subscription/:page",
+    path: "/subscription",
     name: "subscription",
+    redirect: {
+      name: "subscriptionList",
+      params: { type: "all" },
+      query: { page: 1 },
+    },
     component: () => import("@/views/SubscriptionPage"),
     children: [
       {
-        path: "/sub/:page",
-        name: "구독전체",
-        component: () => import("@/views/SubscriptionPage"),
-      },
-      {
-        path: "/animal/sub/:page",
-        name: "subanimal",
-        component: () => import("@/views/SubscriptionPage"),
-      },
-      {
-        path: "/character/sub/:page",
-        name: "subcharacter",
-        component: () => import("@/views/SubscriptionPage"),
-      },
-      {
-        path: "/building/sub/:page",
-        name: "subbuilding",
-        component: () => import("@/views/SubscriptionPage"),
-      },
-      {
-        path: "/plant/sub/:page",
-        name: "subplant",
-        component: () => import("@/views/SubscriptionPage"),
-      },
-      {
-        path: "/etc/sub/:page",
-        name: "subetc",
+        path: "/subscription/list/:type",
+        name: "subscriptionList",
         component: () => import("@/views/SubscriptionPage"),
       },
     ],
@@ -134,57 +75,61 @@ const routes = [
   {
     path: "/cscenter",
     name: "cscenter",
+    redirect: {
+      name: "notice",
+      query: { page: 1 },
+    },
     component: () => import("@/views/CscenterPage.vue"),
 
     children: [
       // !! 공지사항  !! //
       // 공지사항 목록
       {
-        path: "/notice/:page",
+        path: "/notice",
         name: "notice",
         component: () => import("@/views/Cscenter/NoticePage"),
       },
       // 공지사항 상세페이지
       {
-        path: "/noticedetail/:no",
+        path: "/notice/detail/:no",
         name: "noticedetail",
         component: () => import("@/views/Cscenter/Notice/NoticeDetail.vue"),
       },
       // 공지사항 수정
       {
-        path: "/noticedetail/:no/edit",
+        path: "/notice/detail/:no/edit",
         name: "noticedetailEdit",
         component: () => import("@/views/Cscenter/Notice/NoticeDetailEdit.vue"),
       },
       // ! QnA ! //
       // QnA 목록
       {
-        path: "/qna/:page",
+        path: "/qna",
         name: "qna",
         component: () => import("@/views/Cscenter/QnApage.vue"),
       },
       // QnA 상세페이지
       {
-        path: "/qnadetail/:no",
+        path: "/qna/detail/:no",
         name: "qnadetail",
         component: () => import("@/views/Cscenter/QnA/QnADetail.vue"),
       },
       // QnA 수정
       {
-        path: "/qnadetail/:no/edit",
+        path: "/qna/detail/:no/edit",
         name: "qnadetailEdit",
         component: () => import("@/views/Cscenter/QnA/QnAEdit.vue"),
       },
       // QnA 새로 등록
       {
-        path: "/postqna",
+        path: "/post/qna",
         name: "postqna",
         component: () => import("@/views/Cscenter/QnA/QnAPost.vue"),
       },
       // ! FAQ ! //
       // FAQ 목록
       {
-        path: "/faq/:page",
+        path: "/faq",
         name: "faq",
         component: () => import("@/views/Cscenter/FAQpage.vue"),
       },
@@ -211,50 +156,50 @@ const routes = [
     children: [
       // 마이페이지 - 회원정보수정
       {
-        path: "/edit/:mno",
+        path: "/mypage/edit/:mno",
         name: "mypageEdit",
         component: () => import("@/views/MyPage/MyPageEdit.vue"),
       },
       // 마이페이지 - 경매 낙찰 내역
       {
-        path: "/mydetailList/:page",
+        path: "/mypage/detailList/:page",
         name: "mydetailList",
         component: () => import("@/views/MyPage/AttendList/AttendList.vue"),
       },
       // 마이페이지 - 경매 낙찰 상세 내역
       {
-        path: "/mydetailList/detail/:ano",
+        path: "/mypage/mydetailList/detail/:ano",
         name: "mydetailListdetail",
         component: () => import("@/views/MyPage/AttendList/AttendDetail.vue"),
       },
       // 마이페이지 - 구독 내역
       {
-        path: "/mysubdetail/:mno",
+        path: "/mypage/mysubdetail/:mno",
         name: "mysubdetail",
         component: () => import("@/views/MyPage/Subscriptrion/SubDetail.vue"),
       },
       // 마이페이지(셀러) - 동영상 목록
       {
-        path: "/sellervideo",
+        path: "/mypage/sellervideo",
         name: "sellervideo",
         component: () => import("@/views/SellerPage/VideoList/VideoList.vue"),
 
         children: [
           // 동영상 목록 - 경매
           {
-            path: "/auction/:page",
+            path: "/mypage/auction",
             name: "경매",
             component: () =>
               import("@/views/SellerPage/VideoList/VideoList.vue"),
           },
           {
-            path: "/free/:page",
+            path: "/mypage/free",
             name: "무료",
             component: () =>
               import("@/views/SellerPage/VideoList/VideoList.vue"),
           },
           {
-            path: "/subscription/:page",
+            path: "/mypage/subscription",
             name: "구독",
             component: () =>
               import("@/views/SellerPage/VideoList/VideoList.vue"),
@@ -263,7 +208,7 @@ const routes = [
       },
       // 마이페이지(셀러) - 경매 상세페이지
       {
-        path: "/videodetail/:ano",
+        path: "/mypage/videodetail/:ano",
         name: "videoDetail",
         component: () =>
           import("@/views/SellerPage/VideoList/VideoDetail/VideoDetail.vue"),
@@ -271,13 +216,13 @@ const routes = [
       },
       // 마이페이지(셀러) - 동영상 등록
       {
-        path: "/postauction",
-        name: "/postauction",
+        path: "/mypage/postauction",
+        name: "postauction",
         component: () => import("@/views/SellerPage/VideoPost/VideoPost.vue"),
       },
       // 마이페이지(셀러) - 동영상 수정
       {
-        path: "/editauction/:ano",
+        path: "/mypage/editauction/:ano",
         name: "editauction",
         component: () => import("@/views/SellerPage/VideoList/VideoEdit.vue"),
         meta: { auth: true },

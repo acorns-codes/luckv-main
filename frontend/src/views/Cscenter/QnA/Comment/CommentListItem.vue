@@ -32,6 +32,11 @@
 </template>
 
 <script>
+import {
+  apiEditAnswer,
+  apiGetQnaAnswerList,
+  apiDeleteQnaAnswer,
+} from "@/api/qna";
 export default {
   name: "PrCommentListItem",
   props: {
@@ -75,15 +80,8 @@ export default {
         console.log(this.commentList.ano);
 
         try {
-          const res = await this.$axios({
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-            url: `${process.env.VUE_APP_API_URL}/qnaAnswerUpdate`,
-            data: editData,
-          });
-          if (res.data.data) {
+          const res = await apiEditAnswer(editData);
+          if (res.data) {
             alert("댓글 수정이 완료되었습니다!");
             this.getQnACommentList();
           } else {
@@ -100,18 +98,19 @@ export default {
 
     async getQnACommentList() {
       // console.log("댓글가져오기");
+      const req = {
+        qno: this.$route.params.no,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/qnaAnswerList?qno=${this.$route.params.no}`,
-        });
-        this.commentList = res.data.data;
-        console.log(res.data.data);
+        const res = await apiGetQnaAnswerList(req);
+        this.commentList = res.data;
+        console.log(res.data);
         console.log(this.commentList.ano);
       } catch (error) {
         console.log(error);
       }
     },
+
     async deleteComment(no, ano, aid) {
       console.log(ano);
       const deleteData = {
@@ -121,16 +120,8 @@ export default {
       };
       console.log(deleteData);
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/qnaAnswerDelete`,
-          params: deleteData,
-        });
-        console.log(res);
-        if (res.data.data) {
+        const res = await apiDeleteQnaAnswer(deleteData);
+        if (res.data) {
           alert("댓글이 삭제되었습니다!");
           this.getQnACommentList();
         } else {
@@ -146,13 +137,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#root {
-  margin-top: 30px;
-}
 .comment-box {
   display: flex;
   padding: 15px;
-  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+
   flex-direction: column;
 
   & > div:nth-child(1) {

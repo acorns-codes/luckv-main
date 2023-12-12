@@ -13,7 +13,7 @@
                     controls
                     @mouseover="playVideo"
                     @mouseleave="stopVideo"
-                    :src="`${videoSrc}/videoplay?ano=${this.auctionData.ano}`"
+                    :src="`${videoSrc}/video/play?ano=${this.auctionData.ano}`"
                   ></video>
                 </div>
               </td>
@@ -206,6 +206,7 @@
 </template>
 
 <script>
+import { apiGetAuctionDeatil, apiChangeAuction } from "@/api/video";
 export default {
   data() {
     return {
@@ -255,13 +256,12 @@ export default {
     // 각 경매의 상세페이지 받아오기
     async getAuction() {
       console.log("경매조회");
+      const req = {
+        ano: this.$route.params.ano,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${this.$route.params.ano}`,
-        });
-        console.log(res);
-        this.auctionData = res.data.data;
+        const res = await apiGetAuctionDeatil(req);
+        this.auctionData = res.data;
         this.startDay = this.auctionData.startDay.split(" ");
         this.lastDay = this.auctionData.lastDay.split(" ");
         this.auctionData.payStart = this.$globalFuc(this.auctionData.payStart);
@@ -292,17 +292,10 @@ export default {
         };
         console.log(editdata);
         try {
-          const res = await this.$axios({
-            headers: {
-              "Content-type": "application/json",
-            },
-            method: "POST",
-            url: `${process.env.VUE_APP_API_URL}/auctionChange`,
-            data: editdata,
-          });
+          const res = await apiChangeAuction(editdata);
           console.log(editdata);
-          console.log(res.data.data);
-          if (res.data.data) {
+          console.log(res.data);
+          if (res.data) {
             alert("구독으로 변경하였습니다!");
             this.$router.push({
               name: "sellerauction",

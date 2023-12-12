@@ -14,7 +14,7 @@
           loop
           @mouseover="playVideo"
           @mouseleave="stopVideo"
-          :src="`${videoSrc}/videoplay?ano=${deadlineData.ano}`"
+          :src="`${videoSrc}/video/play?ano=${deadlineData.ano}`"
         ></video>
       </div>
       <div>
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { apiGetAuctionDeatil, apiGetAuctionAll } from "@/api/video";
 import VideoDetail from "@/components/video/VideoDetail.vue";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
@@ -100,6 +101,12 @@ export default {
 
   data() {
     return {
+      reqModel: {
+        page: 1,
+        rowCnt: 4,
+        sort: 1,
+        kind: "경매",
+      },
       recvList: "", //소켓에서 담긴 데이터
       videoData: "",
       deadlineData: "",
@@ -134,12 +141,12 @@ export default {
   methods: {
     // 각 동영상 상세 정보 불러오기
     async getInfo(ano) {
+      const req = {
+        ano: ano,
+      };
       try {
-        const res = await this.$axios({
-          methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${ano}`,
-        });
-        this.videoData = res.data.data;
+        const res = await apiGetAuctionDeatil(req);
+        this.videoData = res.data;
       } catch (e) {
         console.error(e);
       }
@@ -205,17 +212,13 @@ export default {
 
     // 동영상 불러오기
     async getVideo() {
+      const req = this.clone(this.reqModel);
       try {
-        const res = await this.$axios({
-          methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionDeadline`,
-        });
-        console.log(res, "여기나와바");
-        if (res.data.data.length > 0) {
-          console.log(res.data.data, "요기~!");
-          this.deadlineData = res.data.data[0];
-          // console.log(res.data);
-          this.dday = res.data.data[0].lastDay;
+        const res = await apiGetAuctionAll(req);
+        if (res.list) {
+          console.log(res);
+          this.deadlineData = res.list[0];
+          this.dday = res.list[0].lastDay;
           // console.log(this.dday);
         }
       } catch (e) {
@@ -293,6 +296,7 @@ section {
 .container {
   width: 100%;
   display: flex;
+  align-items: center;
   text-align: end;
   padding: 0 10% 0;
   & > div:nth-child(2) {
@@ -376,10 +380,11 @@ section {
 }
 
 .video-box {
-  width: 100%;
+  width: 720px;
+  height: 400px;
   & > video {
-    width: inherit;
-    height: inherit;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 }

@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { apiGetFaqDetail, apiEditFaq } from "@/api/faq";
 export default {
   data() {
     return {
@@ -69,21 +70,22 @@ export default {
     this.getFAQ();
   },
   methods: {
+    // FAQ 상세 정보 불러오기
     async getFAQ() {
-      console.log("faq불러오기");
+      const req = {
+        fno: this.$route.params.fno,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/frequentlyDetail?fno=${this.$route.params.fno}`,
-        });
+        const res = await apiGetFaqDetail(req);
+        console.log(res, "faq!!!");
         this.FAQList = res.data;
         // console.log(this.FAQList);
       } catch (error) {
         console.log(error);
       }
     },
+    // FAQ 수정하기
     async editQnA() {
-      console.log("faq수정하기");
       const editData = {
         questions: this.FAQList.questions,
         asked: this.FAQList.asked,
@@ -91,15 +93,8 @@ export default {
         category: this.FAQList.category,
       };
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/frequentlyUpdate`,
-          data: editData,
-        });
-        if (res.data.data) {
+        const res = await apiEditFaq(editData);
+        if (res.data) {
           alert("새로운 FAQ가 등록되었습니다!");
           this.$router.push({
             name: "faq",

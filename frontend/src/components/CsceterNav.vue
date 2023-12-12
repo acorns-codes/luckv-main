@@ -3,23 +3,26 @@
     <h1>고객센터</h1>
     <div>
       <router-link
+        :class="{ active: type.indexOf('notice') > -1 }"
         :to="{
           name: 'notice',
-          params: { page: 1 },
+          query: { page: 1 },
         }"
         >공지사항</router-link
       >
       <router-link
+        :class="{ active: type.indexOf('qna') > -1 }"
         :to="{
           name: 'qna',
-          params: { page: 1 },
+          query: { page: 1 },
         }"
         >QnA</router-link
       >
       <router-link
+        :class="{ active: type.indexOf('faq') > -1 }"
         :to="{
           name: 'faq',
-          params: { page: 1 },
+          query: { page: 1 },
         }"
         >FAQ</router-link
       >
@@ -32,6 +35,11 @@
 export default {
   data() {
     return {};
+  },
+  computed: {
+    type() {
+      return this.$route.name;
+    },
   },
 };
 </script>
@@ -50,6 +58,9 @@ export default {
     align-items: flex-start;
     margin-bottom: 10px;
   }
+  & > div > a.active {
+    font-weight: bold;
+  }
   h1 {
     border-bottom: 1px solid #343434;
     margin-bottom: 15px;
@@ -59,10 +70,6 @@ export default {
     text-decoration: none;
     color: #343434;
     padding: 5px;
-  }
-
-  .router-link-active {
-    font-weight: bold;
   }
 }
 </style>

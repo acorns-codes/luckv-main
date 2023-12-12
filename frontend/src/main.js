@@ -7,6 +7,8 @@ import axios from "axios";
 import VueCookies from "vue-cookies";
 import "@mdi/font/css/materialdesignicons.css";
 // icon이 안나와서 import 하니까 바로 나타남
+// 공통 함수 모아놓은곳
+import mixin from "./plugins/common";
 
 import "@/styles/sass/main.scss";
 // Vuetify
@@ -26,6 +28,7 @@ const vuetify = createVuetify({
 const app = createApp(App);
 app.use(router).use(store).mount("#app");
 // [라우터 사용 설정]
+app.mixin(mixin);
 app.use(globalPlugin);
 app.config.globalProperties.$axios = axios;
 // [axios / http 통신 ]

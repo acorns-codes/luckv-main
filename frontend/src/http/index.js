@@ -26,11 +26,10 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   // 응답 데이터를 가공
   function (response) {
-    console.log(response, "응답값 보여줘");
-    // if (isApiUrl(response.config.url) && response.data.msg !== "SUCCESS") {
-    if (response.data.statusCode !== 200) {
-      if (response.data.responseMessage) {
-        return alert(response.data.responseMessage);
+    // console.log(response, "응답값 보여줘");
+    if (response.data.res !== "OK" || response.data.msg !== "SUCCESS") {
+      if (response.data.msg) {
+        return alert(response.data.msg);
       }
       return response;
     }
@@ -39,5 +38,3 @@ http.interceptors.response.use(
 );
 
 export default http;
-
-// 로그인이 되어 있을 경우 모든 요청에 headers에 Authorization 으로 accessToken을 담아서 보낸다.

@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { apiPostVideo, apiDeleteVideo, apiGetInfoMember } from "@/api/user";
 export default {
   data() {
     return {
@@ -87,17 +88,13 @@ export default {
     // 회원 정보 불러오기
     async getInfo() {
       console.log("구독 정보 불러오기");
+      const req = {
+        mno: this.sessionData.mno,
+      };
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/infoMember?mno=${this.sessionData.mno}`,
-          data: { mno: this.sessionData.mno },
-        });
+        const res = await apiGetInfoMember(req);
         console.log(res);
-        this.userData = res.data.data;
+        this.userData = res.data;
         console.log(this.userData.subLastDay, "마감날자아아아아아아아");
         console.log(this.userData.subStartDay);
         console.log(this.userData);
@@ -119,14 +116,8 @@ export default {
         alert("구독 신청이 완료되지 못했습니다!");
       } else {
         try {
-          const res = await this.$axios({
-            method: "POST",
-            url: `${process.env.VUE_APP_API_URL}/videoSubYn`,
-            data: newData,
-          });
-          console.log(newData);
-          console.log(res);
-          if (res.data.data) {
+          const res = await apiPostVideo(newData);
+          if (res.data) {
             alert("구독 신청이 완료되었습니다!");
             this.$store.commit("storeSubAuth", "Y");
             this.getInfo();
@@ -138,16 +129,13 @@ export default {
     },
     // 구독해지
     async subNot() {
+      const req = {
+        mno: this.$store.state.sessionStorageData.mno,
+      };
       try {
-        const res = await this.$axios({
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/videoSubNot`,
-          data: {
-            mno: this.$store.state.sessionStorageData.mno,
-          },
-        });
+        const res = await apiDeleteVideo(req);
         console.log(res);
-        if (res.data.data) {
+        if (res.data) {
           alert("구독 해지 신청이 완료되었습니다!");
           this.$store.commit("storeSubAuth", "N");
           this.getInfo();

@@ -34,27 +34,32 @@
               <router-link
                 :to="{
                   name: '경매',
-                  params: { page: 1 },
+                  query: { page: 1 },
                 }"
                 >경매</router-link
               >
               <router-link
                 :to="{
                   name: '무료',
-                  params: { page: 1 },
+                  query: { page: 1 },
                 }"
                 >무료</router-link
               >
               <router-link
                 :to="{
                   name: '구독',
-                  params: { page: 1 },
+                  query: { page: 1 },
                 }"
                 >구독</router-link
               >
             </div>
           </div>
-          <router-link to="/postauction">동영상 등록</router-link>
+          <router-link
+            :to="{
+              name: 'postauction',
+            }"
+            >동영상 등록</router-link
+          >
         </div>
       </div>
       <router-view />
@@ -77,7 +82,7 @@ export default {
     listOn() {
       this.$router.push({
         name: "경매",
-        params: { page: 1 },
+        query: { page: 1 },
       });
     },
   },

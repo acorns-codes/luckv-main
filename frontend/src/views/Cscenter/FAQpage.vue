@@ -6,128 +6,104 @@
       </div>
       <div class="panels-container">
         <div class="button-box">
-          <button
-            v-for="item in categories"
-            :key="item"
-            @click="getFAQ(item.url, this.$route.params.page - 1)"
-          >
-            {{ item.name }}
-          </button>
+          <template v-for="item in categories" :key="item">
+            <button
+              :class="{ active: item.value == reqModel.category }"
+              @click="reqModel.category = item.value"
+            >
+              {{ item.name }}
+            </button>
+          </template>
         </div>
         <!-- FAQ 리스트 -->
         <FAQList :FAQList="FAQList" />
-        <v-btn
-          style="margin: 20px"
-          v-show="this.$store.state.sessionStorageData.auth === 'A'"
-          color="success"
-          @click="postFAQ"
-          >FAQ등록</v-btn
-        >
-        <div class="page-box">
-          <button @click="movetopreviouspage">
-            <v-icon> mdi-chevron-left </v-icon>
-          </button>
-          <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-          <button @click="movetonextpage">
-            <!-- 다음페이지로 이동 -->
-            <v-icon> mdi-chevron-right </v-icon>
-          </button>
-        </div>
+        <Pagination
+          v-if="FAQList.length != 0"
+          @goPage="goPage"
+          :pageNum="pageInfo.page"
+          :pageSize="pageInfo.rowCnt"
+          :totalPageCount="pageInfo.totalPageCnt"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { apiGetFaqList } from "@/api/faq";
 import FAQList from "./FAQ/FAQList.vue";
+import Pagination from "@/components/PagiNationVue.vue";
 export default {
-  components: { FAQList },
+  components: { FAQList, Pagination },
   data() {
     return {
-      FAQList: "",
-      cnt: "",
-      defaultCnt: 10,
-      page: "",
+      reqModel: {
+        page: 1,
+        rowCnt: 20,
+        category: "",
+      },
+      FAQList: [],
       categories: [
         {
           name: "전체",
-          value: "all",
-          url: "",
+          value: "",
         },
         {
           name: "경매",
           value: "auction",
-          url: "category=auction",
         },
         {
           name: "입찰",
           value: "bidding",
-          url: "category=bidding",
         },
         {
           name: "기타",
           value: "etc",
-          url: "category=etc",
         },
       ],
     };
   },
-  computed: {
-    // 총 페이지 수 계산
-    totalpage() {
-      if (this.cnt == 0) {
-        // 현재 게시판 글 갯수가 0개일때 총 페이지가 0이 되는거 방지
-        return 1;
-      } else {
-        return Math.ceil(this.cnt / 10);
-        // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
-      }
-    },
+  async mounted() {
+    await this.getFAQ();
   },
-  mounted() {
-    this.getFAQ("", this.$route.params.page - 1);
+  watch: {
+    "reqModel.category": {
+      async handler() {
+        await this.getFAQ();
+      },
+    },
+    pageInfo: {
+      handler(info) {
+        this.$router.push({
+          name: "faq",
+          query: { page: info.page },
+        });
+      },
+      deep: true,
+    },
   },
   methods: {
     // FAQ 목록 불러오기
-    async getFAQ(category, page) {
-      console.log("faq불러오기");
+    async getFAQ(page) {
+      const req = this.clone(this.reqModel);
+      if (page) {
+        req.page = page;
+      }
+      for (const key in req) {
+        if (!req[key]) {
+          delete req[key];
+        }
+      }
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/frequentlyPage?${category}&page=${page}`,
-        });
-        console.log(res);
-        this.FAQList = res.data.data.frequentlyList;
-        this.cnt = res.data.data.count;
+        const res = await apiGetFaqList(req);
+        this.FAQList = res.list;
+        this.pageInfo = res.pageInfo;
       } catch (error) {
         console.log(error);
       }
     },
-    //이전페이지 기능
-    movetopreviouspage() {
-      if (this.$route.params.page == 1) {
-        alert("첫번째 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) - 1;
-        this.$router.push({
-          name: "faq",
-          params: { page: pp },
-        });
-        this.getNotice(this.$route.params.page - 2);
-      }
-    },
-    // 다음페이지 기능
-    movetonextpage() {
-      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
-        alert("마지막 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) + 1;
-        this.$router.push({
-          name: "faq",
-          params: { page: pp },
-        });
-        this.getNotice(this.$route.params.page);
-      }
+    async goPage(page) {
+      await this.getQna(page);
     },
     // 새로운 FAQ 등록
     postFAQ() {
@@ -172,7 +148,11 @@ export default {
     color: #343434;
     background-color: #f4f4f4;
     border-radius: 10px;
-    padding: 2px 10px 2px 10px;
+    padding: 3px 15px;
+  }
+  & > button.active {
+    background-color: #ff9103;
+    color: #fff;
   }
 }
 </style>

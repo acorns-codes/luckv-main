@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { apiEditQna } from "@/api/qna";
 export default {
   data() {
     return {
@@ -82,15 +83,8 @@ export default {
       };
       console.log(qnaData);
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/insertQuestion`,
-          data: qnaData,
-        });
-        if (res.data.data) {
+        const res = await apiEditQna(qnaData);
+        if (res.data) {
           alert("QnA등록에 성공하였습니다.");
           this.$router.push({
             name: "qna",

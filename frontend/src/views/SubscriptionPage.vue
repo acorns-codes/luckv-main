@@ -5,70 +5,79 @@
       <button @click="sub">JOIN UP FOR MEMBERSHIP</button>
     </div>
     <div id="page-root">
-      <VideoCategory :category="category" />
-      <VideoList :videoList="this.videoList" />
-      <div class="page-box">
-        <button @click="movetopreviouspage">
-          <v-icon> mdi-chevron-left </v-icon>
-        </button>
-        <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-        <button @click="movetonextpage">
-          <!-- 다음페이지로 이동 -->
-          <v-icon> mdi-chevron-right </v-icon>
-        </button>
-      </div>
+      <VideoCategory :type="type" :category="category" />
+      <VideoList :videoList="list" />
+      <Pagination
+        v-if="list.length != 0"
+        @goPage="goPage"
+        :pageNum="pageInfo.page"
+        :pageSize="pageInfo.rowCnt"
+        :totalPageCount="pageInfo.totalPageCnt"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { apiGetAuctionAll } from "@/api/video";
+import { apiPostVideo } from "@/api/user";
 import VideoList from "@/components/video/VideoList.vue";
 import VideoCategory from "@/components/video/VideoCategory.vue";
+import Pagination from "@/components/PagiNationVue.vue";
 
 export default {
-  components: { VideoList, VideoCategory },
+  components: { VideoList, VideoCategory, Pagination },
   data() {
     return {
-      videoList: "",
-      cnt: "",
-      defaultCnt: 10,
-      page: "",
+      reqModel: {
+        page: 1,
+        rowCnt: 20,
+        kind: "구독",
+        vcate: "all",
+      },
+      list: [],
+      type: "subscriptionList",
       category: [
-        "구독전체",
-        "subanimal",
-        "subcharacter",
-        "subbuilding",
-        "subplant",
-        "subetc",
+        {
+          name: "ALL",
+          type: "all",
+        },
+        {
+          name: "동물",
+          type: "animal",
+        },
+        {
+          name: "인물",
+          type: "character",
+        },
+        {
+          name: "건물",
+          type: "building",
+        },
+        {
+          name: "식물",
+          type: "plant",
+        },
+        {
+          name: "기타",
+          type: "etc",
+        },
       ],
     };
   },
-  computed: {
-    // 총 페이지 수 계산
-    totalpage() {
-      if (this.cnt == 0) {
-        // 현재 게시판 글 갯수가 0개일때 총 페이지가 0이 되는거 방지
-        return 1;
-      } else {
-        return Math.ceil(this.cnt / 10);
-        // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
-      }
-    },
-  },
   watch: {
-    $route(to, form) {
-      if (to.path !== form.path) {
-        let pathList = this.$route.path.split("/");
-        const path = pathList[1] === "sub" ? "" : pathList[1];
-        this.video(path, this.$route.params.page - 1);
-      }
+    $route: {
+      handler(route) {
+        const type = route.params.type;
+        this.reqModel.vcate = type;
+      },
+      immediate: true,
     },
-  },
-  mounted() {
-    this.subUser();
-    // 구독 동영상 목록 함수 실행
-    this.video("", this.$route.params.page - 1);
-    // console.log(this.$store.state.subAuth);
+    "reqModel.vcate": {
+      async handler() {
+        await this.getVideoList();
+      },
+    },
   },
   methods: {
     // 구독자 확인
@@ -79,47 +88,24 @@ export default {
       }
     },
     // 구독 동영상 목록 불러오기
-    async video(category, page) {
-      console.log("비디오");
+    async getVideoList(page) {
+      const req = this.clone(this.reqModel);
+      if (page) {
+        req.page = page;
+      }
+      if (req.vcate == "all") {
+        delete req.vcate;
+      }
       try {
-        const res = await this.$axios({
-          methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionAll?kind=구독&page=${page}&vcate=${category}`,
-        });
-        this.videoList = res.data.data.auctionList;
-        this.cnt = res.data.data.count;
-        console.log(this.videoList);
+        const res = await apiGetAuctionAll(req);
+        this.list = res.list;
+        this.pageInfo = res.pageInfo;
       } catch (e) {
         console.log(e);
       }
     },
-
-    //////// 페이징 ///////
-    //이전페이지 기능
-    movetopreviouspage() {
-      if (this.$route.params.page == 1) {
-        alert("첫번째 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) - 1;
-        this.$router.push({
-          name: this.$router.name,
-          params: { page: pp },
-        });
-        this.video("", this.$route.params.page - 2);
-      }
-    },
-    // 다음페이지 기능
-    movetonextpage() {
-      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
-        alert("마지막 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) + 1;
-        this.$router.push({
-          name: this.$router.name,
-          params: { page: pp },
-        });
-        this.video("", this.$route.params.page);
-      }
+    async goPage(page) {
+      await this.getVideoList(page);
     },
     // 구독신청
     async sub() {
@@ -132,14 +118,13 @@ export default {
         if (!confirm("구독을 신청하시겠습니까?")) {
           alert("구독 신청이 완료되지 못했습니다!");
         } else {
+          const req = {
+            mno: this.$store.state.sessionStorageData.mno,
+          };
           try {
-            const res = await this.$axios({
-              method: "POST",
-              url: `${process.env.VUE_APP_API_URL}/videoSubYn`,
-              data: { mno: this.$store.state.sessionStorageData.mno },
-            });
+            const res = await apiPostVideo(req);
             console.log(res);
-            if (res.data.data) {
+            if (res.data) {
               alert("구독 신청이 완료되었습니다!");
               this.$store.commit("storeSubAuth", "Y");
             }
@@ -149,6 +134,10 @@ export default {
         }
       }
     },
+  },
+  async created() {
+    // 비디오 목록 받아오는 함수 실행
+    await this.getVideoList();
   },
 };
 </script>

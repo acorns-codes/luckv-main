@@ -29,6 +29,7 @@
   </div>
 </template>
 <script>
+import { apiGetQnaDetail, apiDeleteQna } from "@/api/qna";
 import CommentList from "./Comment/CommentList.vue";
 export default {
   components: { CommentList },
@@ -43,12 +44,12 @@ export default {
   methods: {
     async getQnADetail() {
       console.log("내용가져오기");
+      const req = {
+        no: this.$route.params.no,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/questionDetail?no=${this.$route.params.no}`,
-        });
-        this.detaillData = res.data.data;
+        const res = await apiGetQnaDetail(req);
+        this.detaillData = res.data;
         console.log(this.detaillData);
       } catch (error) {
         console.log(error);
@@ -61,12 +62,12 @@ export default {
     },
     async deleteBtn() {
       console.log("QnA삭제");
+      const req = {
+        qno: this.$route.params.no,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/questionDelete?qno=${this.$route.params.no}`,
-        });
-        if (res.data.data) {
+        const res = await apiDeleteQna(req);
+        if (res.data) {
           alert("QnA가 삭제되었습니다!");
           this.$router.push({
             name: "qna",

@@ -8,9 +8,13 @@
       개성이 가득한 다양한 분야의 동영상을 먼저 선점할 수 있는 기회를노려보세요!
     </p>
   </div>
+  <!-- new -->
   <HeaderSection :kind="kind[0]" />
+  <!-- last -->
   <HeaderSection :kind="kind[1]" />
+  <!-- free -->
   <HeaderSection :kind="kind[2]" />
+  <!-- sub -->
   <HeaderSection :kind="kind[3]" />
 </template>
 
@@ -25,43 +29,56 @@ export default {
     SecondSection,
     HeaderSection,
   },
-  computed() {
-    this.$store.state.subAuth = this.test;
-    console.log(this.$store.state.subAuth);
-  },
-  mounted() {
-    console.log(this.test, "구독 테스트");
-    console.log("구독중스토어획인", this.$store.state.subAuth);
-    console.log("세션값확인", this.$store.state.sessionStorageData);
-    console.log("게터!!", this.$store.getters.checkSubAuth);
+  computed: {
+    test() {
+      return this.$store.state.subAuth;
+    },
   },
   data() {
     return {
-      test: "",
       kind: [
         {
           name: "NEW",
           content: "새로 등록된 경매",
-          api: "auctionNew",
+          reqModel: {
+            kind: "경매",
+            page: 1,
+            rowCnt: 4,
+            sort: 2,
+          },
         },
         {
           name: "Last Auction",
           content: "마감시간이 임박한 경매",
-          api: "auctionDeadline",
+          reqModel: {
+            kind: "경매",
+            page: 1,
+            rowCnt: 4,
+            sort: 1,
+          },
         },
         {
           name: "FREE",
           content: "무료로 제공되는 동영상",
-          api: "auctionFree",
+          reqModel: {
+            kind: "무료",
+            page: 1,
+            rowCnt: 4,
+          },
         },
         {
           name: "SUBSCRIPTION",
           content: "구독 회원들에게만 제공되는 동영상",
-          api: "auctionSubs",
+          reqModel: {
+            kind: "구독",
+            page: 1,
+            rowCnt: 4,
+          },
         },
       ],
     };
   },
+  async created() {},
 };
 </script>
 

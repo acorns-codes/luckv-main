@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { apiAddFaq } from "@/api/faq";
 export default {
   data() {
     return {
@@ -71,23 +72,16 @@ export default {
   },
   methods: {
     async postQnA() {
-      console.log("faq등록하기");
       const postData = {
         questions: this.title,
         asked: this.content,
         fid: this.$store.state.sessionStorageData.mno,
         category: this.category,
       };
+
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/insertFrequently`,
-          data: postData,
-        });
-        if (res.data.data) {
+        const res = await apiAddFaq(postData);
+        if (res.data) {
           alert("새로운 FAQ가 등록되었습니다!");
           this.$router.push({
             name: "faq",

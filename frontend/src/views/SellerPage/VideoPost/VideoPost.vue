@@ -103,6 +103,7 @@
 </template>
 
 <script>
+import { apiAddAuction, apiUploadVideo } from "@/api/video";
 export default {
   data() {
     return {
@@ -239,49 +240,41 @@ export default {
         } else {
           // 경매 등록
           console.log("동영상 업로드");
-          const res = await this.$axios({
-            headers: {
-              "Content-type": "application/json",
-            },
-            method: "POST",
-            url: `${process.env.VUE_APP_API_URL}/insertAuction`,
-            data: postData,
-          });
+          const res = await apiAddAuction(postData);
           console.log(res);
           // alert("리스트 업로드");
           console.log(this.video);
+          if (res) {
+            try {
+              console.log("동영상 업로드");
+              console.log(this.video);
+              const formdata = new FormData();
+              // console.log(formdata, "확인1");
+              formdata.append("file", this.video[0]);
+              // console.log("확인2", formdata);
+              const resVideo = await apiUploadVideo(formdata);
+              console.log(resVideo);
+              if (resVideo.data) {
+                alert("새로운 경매가 등록되었습니다!");
+                this.$router.push({
+                  name:
+                    this.kind === "A"
+                      ? "경매"
+                      : this.kind === "B"
+                      ? "무료"
+                      : "구독",
+                  params: {
+                    page: 1,
+                  },
+                });
+              }
+            } catch (error) {
+              console.error(error);
+            }
+          }
         }
       } catch (error) {
-        console.log(error);
-      }
-      try {
-        console.log("동영상 업로드");
-        console.log(this.video);
-        const formdata = new FormData();
-        // console.log(formdata, "확인1");
-        formdata.append("file", this.video[0]);
-        // console.log("확인2", formdata);
-        const resVideo = await this.$axios({
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/videoUpload`,
-          data: formdata,
-        });
-        console.log(resVideo);
-        if (resVideo.data.data) {
-          alert("새로운 경매가 등록되었습니다!");
-          this.$router.push({
-            name:
-              this.kind === "A" ? "경매" : this.kind === "B" ? "무료" : "구독",
-            params: {
-              page: 1,
-            },
-          });
-        }
-      } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

@@ -4,107 +4,114 @@
       <h2 class="test_obj hover-event">Auction Video</h2>
     </div>
     <div id="page-root">
-      <VideoCategory :category="category" />
-      <VideoList :videoList="this.videoList" @video="video" />
-      <div class="page-box">
-        <button @click="movetopreviouspage">
-          <v-icon> mdi-chevron-left </v-icon>
-        </button>
-        <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-        <button @click="movetonextpage">
-          <v-icon> mdi-chevron-right </v-icon>
-        </button>
-      </div>
+      <VideoCategory :type="type" :category="category" />
+      <VideoList :videoList="list" @video="video" />
+      <Pagination
+        v-if="list.length != 0"
+        @goPage="goPage"
+        :pageNum="pageInfo.page"
+        :pageSize="pageInfo.rowCnt"
+        :totalPageCount="pageInfo.totalPageCnt"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { apiGetAuctionAll } from "@/api/video";
 import VideoList from "@/components/video/VideoList.vue";
 import VideoCategory from "@/components/video/VideoCategory.vue";
+import Pagination from "@/components/PagiNationVue.vue";
 export default {
-  components: { VideoCategory, VideoList },
+  components: { VideoCategory, VideoList, Pagination },
   data() {
     return {
-      videoList: "",
-      cnt: "",
-      defaultCnt: 10,
-      page: "",
-      category: ["전체", "animal", "character", "building", "plant", "etc"],
+      reqModel: {
+        page: 1,
+        rowCnt: 12,
+        kind: "경매",
+        vcate: "all",
+      },
+      pageInfo: {},
+      list: {},
+      type: "auctionList",
+      category: [
+        {
+          name: "ALL",
+          type: "all",
+        },
+        {
+          name: "동물",
+          type: "animal",
+        },
+        {
+          name: "인물",
+          type: "character",
+        },
+        {
+          name: "건물",
+          type: "building",
+        },
+        {
+          name: "식물",
+          type: "plant",
+        },
+        {
+          name: "기타",
+          type: "etc",
+        },
+      ],
     };
   },
   computed: {
-    // 총 페이지 수 계산
-    totalpage() {
-      if (this.cnt == 0) {
-        // 현재 게시판 글 갯수가 0개일때 총 페이지가 0이 되는거 방지
-        return 1;
-      } else {
-        return Math.ceil(this.cnt / 10);
-        // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
-      }
+    cate() {
+      return this.$route.params.type;
     },
   },
   watch: {
-    $route(to, form) {
-      if (to.path !== form.path) {
-        let pathList = this.$route.path.split("/");
-        console.log(pathList);
-        const path = pathList[1] === "1" ? "" : pathList[1];
-        console.log(path);
-        this.video(path, this.$route.params.page - 1);
-      }
+    cate: {
+      async handler(cate) {
+        this.reqModel.vcate = cate;
+        await this.getVideoList();
+      },
+      immediate: true,
     },
-  },
-  mounted() {
-    console.log(this.$route);
-    // 비디오 목록 받아오는 함수 실행
-    this.video("", this.$route.params.page - 1);
+    pageInfo: {
+      handler(info) {
+        this.$router.push({
+          name: "auctionList",
+          params: { type: this.cate },
+          query: { page: info.page },
+        });
+      },
+      deep: true,
+    },
   },
   methods: {
     // 비디오 리스트 받아오기
-    async video(category, page) {
-      console.log("비디오");
+    async getVideoList(page) {
+      const req = this.clone(this.reqModel);
+      if (page) {
+        req.page = page;
+      }
+      if (req.vcate == "all") {
+        delete req.vcate;
+      }
       try {
-        const res = await this.$axios({
-          methods: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionAll?kind=경매&page=${page}&vcate=${category}`,
-        });
-        console.log(res);
-        this.videoList = res.data.data.auctionList;
-        this.cnt = res.data.data.count;
+        const res = await apiGetAuctionAll(req);
+        this.list = res.list;
+        this.pageInfo = res.pageInfo;
       } catch (e) {
         console.log(e);
       }
     },
-
-    //////  페이징 /////////
-    //이전페이지 기능
-    movetopreviouspage() {
-      if (this.$route.params.page == 1) {
-        alert("첫번째 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) - 1;
-        this.$router.push({
-          name: "all",
-          params: { page: pp },
-        });
-        this.video("", this.$route.params.page - 2);
-      }
+    async goPage(page) {
+      await this.getVideoList(page);
     },
-    // 다음페이지 기능
-    movetonextpage() {
-      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
-        alert("마지막 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) + 1;
-        this.$router.push({
-          name: "all",
-          params: { page: pp },
-        });
-        this.video("", this.$route.params.page);
-      }
-    },
+  },
+  async created() {
+    // 비디오 목록 받아오는 함수 실행
+    await this.getVideoList();
   },
 };
 </script>

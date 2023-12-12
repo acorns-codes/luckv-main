@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { apiGetNoticeDetail, apiEditNotice } from "@/api/notice";
 export default {
   data() {
     return {
@@ -33,22 +34,20 @@ export default {
       dialog: false,
     };
   },
-
-  mounted() {
-    console.log(this.$route.params.no);
-    let pn = this.$route.params.no;
-    console.log(pn);
-    this.getNoticeDetail();
+  computed: {
+    mno() {
+      return this.$route.params.no;
+    },
   },
   methods: {
     async getNoticeDetail() {
       console.log("내용가져오기");
+      const req = {
+        nno: this.$route.params.no,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/noticeDetail?nno=${this.$route.params.no}`,
-        });
-        this.detaillData = res.data.data;
+        const res = await apiGetNoticeDetail(req);
+        this.detaillData = res.data;
       } catch (error) {
         console.log(error);
       }
@@ -71,20 +70,18 @@ export default {
           nid: this.$store.state.userdata.mno,
         };
         console.log(this.$store.state.userdata.mno);
-        const res = await this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/noticeUpdate`,
-          data: noticeData,
-        });
+        const res = await apiEditNotice(noticeData);
         console.log(res);
         console.log(noticeData);
       } catch (error) {
         console.log(error);
       }
     },
+  },
+
+  async created() {
+    console.log(this.mno, "이거나와바");
+    await this.getNoticeDetail();
   },
 };
 </script>

@@ -5,97 +5,79 @@
       <VideoItem :auctionList="auctionList" />
     </div>
     <!-- 페이징 -->
-    <div class="page-box">
-      <button @click="movetopreviouspage">
-        <v-icon> mdi-chevron-left </v-icon>
-      </button>
-      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-      <button @click="movetonextpage">
-        <v-icon> mdi-chevron-right </v-icon>
-      </button>
-    </div>
+    <Pagination
+      v-if="auctionList.length != 0"
+      @goPage="goPage"
+      :pageNum="pageInfo.page"
+      :pageSize="pageInfo.rowCnt"
+      :totalPageCount="pageInfo.totalPageCnt"
+    />
   </div>
 </template>
 
 <script>
+import { apiGetAuctionList } from "@/api/video";
 import VideoItem from "./VideoItem.vue";
+import Pagination from "@/components/PagiNationVue.vue";
 
 export default {
-  components: { VideoItem },
+  components: { VideoItem, Pagination },
   data() {
     return {
-      auctionList: "",
-      cnt: "",
-      defaultCnt: 10,
-      page: "",
+      reqModel: {
+        seller: 0,
+        page: 1,
+        rowCnt: 20,
+        kind: "경매",
+      },
+      pageInfo: {},
+      auctionList: [],
     };
   },
   computed: {
-    // 총 페이지 수 계산
-    totalpage() {
-      if (this.cnt == 0) {
-        // 현재 게시판 글 갯수가 0개일때 총 페이지가 0이 되는거 방지
-        return 1;
-      } else {
-        return Math.ceil(this.cnt / 10);
-        // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
-      }
+    type() {
+      const name = this.$route.name;
+      return name;
     },
   },
   watch: {
-    $route(to, form) {
-      if (to.path !== form.path) {
-        this.getVideo(this.$route.name, this.$route.params.page - 1);
-        console.log(this.$route.name, "주소오오오");
-      }
+    type: {
+      async handler(type) {
+        this.reqModel.kind = type;
+        await this.getVideo();
+      },
+    },
+    pageInfo: {
+      handler(info) {
+        this.$router.push({
+          name: this.type,
+          query: { page: info.page },
+        });
+      },
+      deep: true,
     },
   },
 
   mounted() {
-    // const path = this.$route.path === ""
-    console.log(this.$route);
-    this.getVideo(this.$route.name, this.$route.params.page - 1);
+    this.getVideo();
   },
   methods: {
-    async getVideo(category, page) {
-      console.log("동영상목록 불러오기");
+    async getVideo(page) {
+      const req = this.clone(this.reqModel);
+      req.seller = this.$store.state.sessionStorageData.mno;
+      if (page) {
+        req.page = page;
+      }
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionPage?seller=${this.$store.state.sessionStorageData.mno}?page=${page}&kind=${category}`,
-        });
-
-        console.log(res.data);
-        this.auctionList = res.data.data.auctionList;
-        this.cnt = res.data.data.count;
+        const res = await apiGetAuctionList(req);
+        this.auctionList = res.list;
+        this.pageInfo = res.pageInfo;
       } catch (error) {
         console.log(error);
       }
     },
-
-    // 이전페이지 기능
-    movetopreviouspage() {
-      if (this.$route.params.page == 1) {
-        alert("첫번째 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) - 1;
-        this.$router.push({
-          name: this.$route.name,
-          params: { page: pp },
-        });
-      }
-    },
-    // 다음페이지 기능
-    movetonextpage() {
-      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
-        alert("마지막 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) + 1;
-        this.$router.push({
-          name: this.$route.name,
-          params: { page: pp },
-        });
-      }
+    async goPage(page) {
+      await this.getVideo(page);
     },
   },
 };

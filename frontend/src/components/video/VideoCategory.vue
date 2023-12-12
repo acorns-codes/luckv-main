@@ -1,47 +1,15 @@
 <template>
   <div id="route-root">
-    <router-link
-      :to="{
-        name: category[0],
-        params: { page: 1 },
-      }"
-      >ALL</router-link
-    >
-    <router-link
-      :to="{
-        name: category[1],
-        params: { page: 1 },
-      }"
-      >동물</router-link
-    >
-    <router-link
-      :to="{
-        name: category[2],
-        params: { page: 1 },
-      }"
-      >인물</router-link
-    >
-    <router-link
-      :to="{
-        name: category[3],
-        params: { page: 1 },
-      }"
-      >건물</router-link
-    >
-    <router-link
-      :to="{
-        name: category[4],
-        params: { page: 1 },
-      }"
-      >식물</router-link
-    >
-    <router-link
-      :to="{
-        name: category[5],
-        params: { page: 1 },
-      }"
-      >기타</router-link
-    >
+    <template v-for="item in category" :key="item">
+      <router-link
+        :to="{
+          name: this.type,
+          params: { type: item.type },
+          query: { page: 1 },
+        }"
+        >{{ item.name }}</router-link
+      >
+    </template>
   </div>
 </template>
 
@@ -50,17 +18,7 @@ export default {
   data() {
     return {};
   },
-  props: ["category"],
-
-  methods: {
-    clickCategory(category) {
-      //   console.log(category);
-      this.$router.push({
-        name: category,
-      });
-      //   console.log(this.$route.name);
-    },
-  },
+  props: ["category", "type"],
 };
 </script>
 

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { apiGetVideo } from "@/api/video";
+import { apiGetAuctionAll } from "@/api/video";
 import VideoList from "@/components/video/VideoList.vue";
 
 export default {
@@ -27,7 +27,7 @@ export default {
 
   created() {},
   mounted() {
-    this.getVideo(this.kind.api);
+    this.getVideo(this.kind.reqModel);
   },
   methods: {
     // 마우스오버시, 영상재생
@@ -40,10 +40,10 @@ export default {
       e.target.currentTime = 0;
     },
     // 동영상 불러오기
-    async getVideo(api) {
+    async getVideo(req) {
       try {
-        const res = await apiGetVideo(api);
-        this.videoList = res.data;
+        const res = await apiGetAuctionAll(req);
+        this.videoList = res.list;
       } catch (e) {
         console.error(e);
       }

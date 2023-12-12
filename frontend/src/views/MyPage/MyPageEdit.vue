@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { apiGetInfoMember, apiEditInfoMember } from "@/api/user";
 export default {
   mounted() {
     this.getuserInfo();
@@ -110,19 +111,15 @@ export default {
   methods: {
     //회원정보불러오기
     async getuserInfo() {
+      const req = {
+        mno: this.sessionData.mno,
+      };
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/infoMember?mno=${this.sessionData.mno}`,
-          data: { mno: this.sessionData.mno },
-        });
+        const res = await apiGetInfoMember(req);
         console.log(res);
-        this.userData = res.data.data;
+        this.userData = res.data;
         this.accountInfo = this.userData.acccount.split(":");
-        this.$store.commit("getUserData", res.data.data);
+        this.$store.commit("getUserData", res.data);
         console.log(this.$store.state.userData);
       } catch (error) {
         console.log(error);
@@ -131,19 +128,13 @@ export default {
     //회원정보수정
     async editInfo() {
       console.log("회원정보수정");
+      const req = {
+        mno: this.userData.mno,
+        ph: this.userData.ph,
+        pwd: this.userData.pwd,
+      };
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/updateMember/`,
-          data: {
-            mno: this.userData.mno,
-            ph: this.userData.ph,
-            pwd: this.userData.pwd,
-          },
-        });
+        const res = await apiEditInfoMember(req);
         console.log(res);
         this.$store.commit("getUserData", res.data);
         console.log(this.$store.state.userData);

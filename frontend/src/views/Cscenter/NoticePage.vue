@@ -12,32 +12,31 @@
             <th class="text-center">작성일</th>
           </tr>
         </thead>
-        <tbody>
-          <tr
-            v-for="item in noticeList"
-            :key="item.no"
-            class="event"
-            @click="noticeContent(item.no)"
-          >
-            <td>{{ item.no }}</td>
-            <td>
-              {{ item.title }}
-            </td>
-            <td>{{ item.createAt }}</td>
+        <tbody v-if="noticeList.length > 0">
+          <template v-for="item in noticeList" :key="item.no">
+            <tr class="event" @click="noticeContent(item.no)">
+              <td>{{ item.no }}</td>
+              <td>
+                {{ item.title }}
+              </td>
+              <td>{{ item.createAt }}</td>
+            </tr>
+          </template>
+        </tbody>
+        <tbody v-else>
+          <tr style="height: 300px">
+            <td colspan="3">게시글이 없습니다.</td>
           </tr>
         </tbody>
       </v-table>
     </div>
-    <div class="page-box">
-      <button @click="movetopreviouspage">
-        <v-icon> mdi-chevron-left </v-icon>
-      </button>
-      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-      <button @click="movetonextpage">
-        <!-- 다음페이지로 이동 -->
-        <v-icon> mdi-chevron-right </v-icon>
-      </button>
-    </div>
+    <Pagination
+      v-if="noticeList.length != 0"
+      @goPage="goPage"
+      :pageNum="pageInfo.page"
+      :pageSize="pageInfo.rowCnt"
+      :totalPageCount="pageInfo.totalPageCnt"
+    />
     <!-- 관리자만 공지사항 등록 버튼 보임-->
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent width="500">
@@ -92,88 +91,45 @@
 </template>
 
 <script>
+import { apiGetNoticeList, apiAddNotice } from "@/api/notice";
+import Pagination from "@/components/PagiNationVue.vue";
+
 export default {
+  components: { Pagination },
   data() {
     return {
+      reqModel: {
+        page: 1,
+        rowCnt: 20,
+      },
+      pageInfo: {},
       noticeList: [],
-      cnt: "",
-      defaultCnt: 10,
-      page: "",
       dialog: false,
       title: "",
       content: "",
     };
   },
-
-  // 계산 목적으로
-  computed: {
-    // 총 페이지 수 계산
-    totalpage() {
-      if (this.cnt == 0) {
-        // 현재 게시판 글 갯수가 0개일때 총 페이지가 0이 되는거 방지
-        return 1;
-      } else {
-        return Math.ceil(this.cnt / 10);
-        // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
-      }
-    },
-  },
-  watch: {
-    $route(to, form) {
-      if (to.path !== form.path) {
-        this.getNotice(this.$route.params.page - 1);
-        console.log("와치");
-      }
-    },
-  },
-  // 페이지가 켜질 때 실행
-  mounted() {
-    this.getNotice(this.$route.params.page - 1);
+  async created() {
+    await this.getNotice();
   },
   methods: {
     // 공지사항 불러오기
     async getNotice(page) {
-      console.log("공지사항 불러오기");
+      const req = this.reqModel;
+      if (page) {
+        req.page = page;
+      }
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/noticePage?page=${page}`,
-        });
-        console.log(res.data);
-        this.noticeList = res.data.data.noticeList;
-        this.cnt = res.data.data.count;
-        // console.log("cnt" + this.totalpage);
+        const res = await apiGetNoticeList(req);
+        this.noticeList = res.list;
+        this.pageInfo = res.pageInfo;
       } catch (error) {
         console.log(error);
       }
     },
-    //이전페이지 기능
-    movetopreviouspage() {
-      if (this.$route.params.page == 1) {
-        alert("첫번째 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) - 1;
-        this.$router.push({
-          name: "notice",
-          params: { page: pp },
-        });
-        this.getNotice(this.$route.params.page - 2);
-      }
+    async goPage(page) {
+      this.getNotice(page);
     },
-    // 다음페이지 기능
-    movetonextpage() {
-      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
-        alert("마지막 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) + 1;
-        this.$router.push({
-          name: "notice",
-          params: { page: pp },
-        });
-        this.getNotice(this.$route.params.page);
-      }
-    },
-
     // 상세페이지로 이동
     noticeContent(no) {
       console.log(no);
@@ -190,23 +146,24 @@ export default {
           content: this.content,
           nid: this.$store.state.sessionStorageData.mno,
         };
-        console.log(this.$store.state.userdata);
-        const res = await this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/insertNotice`,
-          data: noticeData,
-        });
-        console.log(res);
-        if (res.data.data) {
-          this.getNotice(0);
+        const res = await apiAddNotice(noticeData);
+        if (res.data) {
+          this.getNotice(1);
         }
-        console.log(noticeData);
       } catch (error) {
         console.log(error);
       }
+    },
+  },
+  watch: {
+    pageInfo: {
+      handler(info) {
+        this.$router.push({
+          name: "notice",
+          query: { page: info.page },
+        });
+      },
+      deep: true,
     },
   },
 };

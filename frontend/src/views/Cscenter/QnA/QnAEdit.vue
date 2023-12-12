@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+import { apiGetQnaDetail, apiEditQna } from "@/api/qna";
 export default {
   data() {
     return {
@@ -45,12 +46,12 @@ export default {
   methods: {
     async getQnADetail() {
       console.log("내용가져오기");
+      const req = {
+        qno: this.$route.params.no,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/questionDetail?qno=${this.$route.params.no}`,
-        });
-        this.detaillData = res.data.data;
+        const res = await apiGetQnaDetail(req);
+        this.detaillData = res.data;
       } catch (error) {
         console.log(error);
       }
@@ -64,16 +65,9 @@ export default {
       };
       console.log(editData);
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/questionUpdate`,
-          data: editData,
-        });
+        const res = await apiEditQna(editData);
         console.log(res);
-        if (res.data.data) {
+        if (res.data) {
           alert("QnA가 수정되었습니다!");
           this.$router.push({
             name: "qna",

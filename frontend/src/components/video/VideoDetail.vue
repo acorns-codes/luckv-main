@@ -4,7 +4,7 @@
       <section>
         <div class="video-box">
           <video
-            :src="`${this.videoSrc}/videoplay?ano=${this.videoData.ano}`"
+            :src="`${this.videoSrc}/video/play?ano=${this.videoData.ano}`"
             controls
           ></video>
         </div>
@@ -111,6 +111,7 @@
 </template>
 
 <script>
+import { apiAddAttend } from "@/api/attend";
 // import getRemainingTime from "@/plugins/function/functions.js";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
@@ -236,19 +237,13 @@ export default {
 
     // 입찰금액 보내기
     async bidding() {
+      const req = {
+        ano: this.videoData.ano,
+        buyer: this.$store.state.sessionStorageData.mno,
+        bidding: this.price,
+      };
       try {
-        const res = this.$axios({
-          headers: {
-            "Content-type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/insertAttend`,
-          data: {
-            ano: this.videoData.ano,
-            buyer: this.$store.state.sessionStorageData.mno,
-            bidding: this.price,
-          },
-        });
+        const res = await apiAddAttend(req);
         console.log(res);
         this.$store.commit("getUserData", res.data);
         alert("입찰에 성공하였습니다!");
@@ -288,7 +283,7 @@ export default {
           const res = await this.$axios({
             method: "GET",
             responseType: "blob", // 응답데이터 타입 정의
-            url: `${process.env.VUE_APP_API_URL}/videoDownload/${this.videoData.ano}`,
+            url: `${process.env.VUE_APP_API_URL}/video/download/${this.videoData.ano}`,
           });
           console.log(res);
           const fileName = `video_${res.request.responseURL.substr(
@@ -296,17 +291,11 @@ export default {
           )}`;
           console.log(fileName);
           const blob = new Blob([res.data]);
-          console.log(blob);
-
           const fileObjectUrl = window.URL.createObjectURL(blob);
-          console.log(fileObjectUrl);
-
           const fileLink = document.createElement("a");
           fileLink.href = fileObjectUrl;
-
           fileLink.setAttribute("download", `${fileName}.mp4`);
           document.body.appendChild(fileLink);
-
           fileLink.click();
         } catch (error) {
           console.log(error);

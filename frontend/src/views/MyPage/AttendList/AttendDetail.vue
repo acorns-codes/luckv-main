@@ -13,7 +13,7 @@
                     controls
                     @mouseover="playVideo"
                     @mouseleave="stopVideo"
-                    :src="`${videoSrc}/videoplay?ano=${this.attendData.ano}`"
+                    :src="`${videoSrc}/video/play?ano=${this.attendData.ano}`"
                   ></video>
                   <v-btn
                     prepend-icon="mdi-arrow-down-bold-circle-outline"
@@ -135,6 +135,7 @@
 </template>
 
 <script>
+import { apiGetAuctionDeatil } from "@/api/video";
 export default {
   data() {
     return {
@@ -157,13 +158,13 @@ export default {
     // 각 경매의 상세페이지 받아오기
     async getAttend() {
       console.log("경매조회");
+      const req = {
+        ano: this.$route.params.ano,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/auctionDetail?ano=${this.$route.params.ano}`,
-        });
+        const res = await apiGetAuctionDeatil(req);
         console.log(res);
-        this.attendData = res.data.data;
+        this.attendData = res.data;
         this.startDay = this.attendData.startDay.split(" ");
         this.lastDay = this.attendData.lastDay.split(" ");
         this.attendData.payStart = this.$globalFuc(this.attendData.payStart);
@@ -180,7 +181,7 @@ export default {
         const res = await this.$axios({
           method: "GET",
           responseType: "blob", // 응답데이터 타입 정의
-          url: `${process.env.VUE_APP_API_URL}/videoDownload/${this.attendData.ano}`,
+          url: `${process.env.VUE_APP_API_URL}/video/download/${this.attendData.ano}`,
         });
         console.log(res);
         const fileName = `video_${res.request.responseURL.substr(

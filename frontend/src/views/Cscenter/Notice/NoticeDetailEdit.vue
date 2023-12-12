@@ -31,6 +31,7 @@
   </div>
 </template>
 <script>
+import { apiGetNoticeDetail, apiEditNotice } from "@/api/notice";
 // import CsceterNav from "@/components/CsceterNav.vue";
 export default {
   // components: { CsceterNav },
@@ -49,12 +50,12 @@ export default {
   },
   methods: {
     async getNoticeDetail() {
+      const req = {
+        nno: this.$route.params.no,
+      };
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/noticeDetail?nno=${this.$route.params.no}`,
-        });
-        this.detaillData = res.data.data;
+        const res = await apiGetNoticeDetail(req);
+        this.detaillData = res.data;
       } catch (error) {
         console.log(error);
       }
@@ -70,15 +71,8 @@ export default {
       };
       console.log(editData);
       try {
-        const res = await this.$axios({
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          url: `${process.env.VUE_APP_API_URL}/noticeUpdate`,
-          data: editData,
-        });
-        if (res.data.data) {
+        const res = await apiEditNotice(editData);
+        if (res.data) {
           alert("게시글 수정이 완료되었습니다!");
           this.$router.push({
             name: "notice",

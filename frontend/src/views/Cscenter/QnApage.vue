@@ -13,7 +13,7 @@
             <th class="text-center">작성일</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="qnaList.length > 0">
           <tr
             v-for="item in qnaList"
             :key="item.no"
@@ -31,17 +31,21 @@
             <td>{{ item.qcreate }}</td>
           </tr>
         </tbody>
+        <tbody v-else>
+          <tr style="height: 300px">
+            <td colspan="4">게시글이 없습니다.</td>
+          </tr>
+        </tbody>
       </v-table>
     </div>
+    <Pagination
+      v-if="qnaList.length != 0"
+      @goPage="goPage"
+      :pageNum="pageInfo.page"
+      :pageSize="pageInfo.rowCnt"
+      :totalPageCount="pageInfo.totalPageCnt"
+    />
     <div class="page-box">
-      <button @click="movetopreviouspage">
-        <v-icon> mdi-chevron-left </v-icon>
-      </button>
-      <div>{{ this.$route.params.page }} / {{ totalpage }}</div>
-      <button @click="movetonextpage">
-        <!-- 다음페이지로 이동 -->
-        <v-icon> mdi-chevron-right </v-icon>
-      </button>
       <v-dialog v-model="dialog" width="500px">
         <v-card>
           <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
@@ -67,98 +71,44 @@
 </template>
 
 <script>
+import { apiGetQnaList } from "@/api/qna";
+import Pagination from "@/components/PagiNationVue.vue";
 export default {
+  components: { Pagination },
   data() {
     return {
+      reqModel: {
+        page: 1,
+        rowCnt: 20,
+      },
+      pageInfo: {},
       qnaList: [],
-      cnt: "",
-      defaultCnt: 10,
-      page: "",
       dialog: false,
       password: "",
       selectedItem: null,
     };
   },
-  // 계산 목적으로
-  computed: {
-    // 총 페이지 수 계산
-    totalpage() {
-      if (this.cnt == 0) {
-        // 현재 게시판 글 갯수가 0개일때 총 페이지가 0이 되는거 방지
-        return 1;
-      } else {
-        return Math.ceil(this.cnt / 10);
-        // (글 갯수/10)한 후 올림 연산을 통해 총 페이지 계산
-      }
-    },
-  },
-  // watch: {
-  //   $route(to, form) {
-  //     if (to.path !== form.path) this.getQna(this.$route.params.page - 1);
-  //   },
-  // },
-  // 페이지가 켜질 때 실행
-  mounted() {
-    this.getQna(this.$route.params.page - 1);
+  async mounted() {
+    await this.getQna();
   },
   methods: {
     // qna 불러오기
     async getQna(page) {
-      console.log("qna 러오기");
+      const req = this.reqModel;
+      if (page) {
+        req.page = page;
+      }
       try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/questionPage?page=${page}`,
-        });
-        console.log(res.data);
-        this.qnaList = res.data.data.questionList;
-        this.cnt = res.data.data.count;
-        this.page = this.cnt;
-        // console.log("cnt" + this.totalpage);
+        const res = await apiGetQnaList(req);
+        this.qnaList = res.list;
+        this.pageInfo = res.pageInfo;
       } catch (error) {
         console.log(error);
       }
     },
-    // qna 글 개수 가져오기
-    async getQnaCnt() {
-      console.log("qna 글 개수 가져오기");
-      try {
-        const res = await this.$axios({
-          method: "GET",
-          url: `${process.env.VUE_APP_API_URL}/questionCount`,
-        });
-        this.cnt = res.data;
-      } catch (error) {
-        console.log(error);
-      }
+    async goPage(page) {
+      await this.getQna(page);
     },
-    //이전페이지 기능
-    movetopreviouspage() {
-      if (this.$route.params.page == 1) {
-        alert("첫번째 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) - 1;
-        this.$router.push({
-          name: "qna",
-          params: { page: pp },
-        });
-        this.getQna(this.$route.params.page - 2);
-      }
-    },
-    // 다음페이지 기능
-    movetonextpage() {
-      if (this.$route.params.page == Math.ceil(this.cnt / 10)) {
-        alert("마지막 페이지입니다!");
-      } else {
-        let pp = parseInt(this.$route.params.page) + 1;
-        this.$router.push({
-          name: "qna",
-          params: { page: pp },
-        });
-        this.getQna(this.$route.params.page);
-      }
-    },
-
     // 상세페이지로 이동
     qnaDetail() {
       if (this.password === this.selectedItem.qpwd) {
@@ -202,6 +152,17 @@ export default {
       this.$router.push({
         name: "postqna",
       });
+    },
+  },
+  watch: {
+    pageInfo: {
+      handler(info) {
+        this.$router.push({
+          name: "qna",
+          query: { page: info.page },
+        });
+      },
+      deep: true,
     },
   },
 };

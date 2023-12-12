@@ -13,7 +13,8 @@
         </h1></router-link
       >
       <div v-if="!isUserLogin">
-        <router-link to="/" @click="onClicked">Login</router-link>
+        <span @click="onClicked">Login</span>
+
         <router-link to="/signup">Signup</router-link>
       </div>
       <div v-else>
@@ -31,29 +32,25 @@
       <router-link to="/">Home</router-link>
       <router-link
         :to="{
-          name: 'all',
-          params: { page: 1 },
+          name: 'auction',
         }"
         >Auction</router-link
       >
       <router-link
         :to="{
           name: 'freevideo',
-          params: { page: 1 },
         }"
         >Free</router-link
       >
       <router-link
         :to="{
           name: 'subscription',
-          params: { page: 1 },
         }"
         >Subscription</router-link
       >
       <router-link
         :to="{
-          name: 'notice',
-          params: { page: 1 },
+          name: 'cscenter',
         }"
         >CScenter</router-link
       >
@@ -135,9 +132,11 @@ export default {
   align-items: center;
   padding: 35px 50px 0px 50px;
   transition: padding 0.5s ease-in-out;
-  & a {
+  & a,
+  & > div > span {
     text-decoration: none;
     color: #f9f9f9;
+    cursor: pointer;
   }
   & > div {
     width: 170px;
@@ -195,7 +194,7 @@ export default {
   width: 100%;
   top: 0px;
   transition: background-color 0.5s ease-in-out;
-  z-index: 1;
+  z-index: 999;
 }
 #root.short {
   position: fixed;
