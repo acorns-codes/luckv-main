@@ -58,7 +58,7 @@
           <v-btn
             type="submit"
             block
-            color="success"
+            color="warning"
             variant="elevated"
             class="mt-2"
             >회원정보수정</v-btn

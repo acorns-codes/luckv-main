@@ -68,7 +68,6 @@ export default {
   data() {
     return {
       isHeaderSmall: false,
-      sessionData: this.$store.state.sessionStorageData,
       headers: {
         backgroundColor: "",
       },
@@ -94,15 +93,14 @@ export default {
   },
   computed: {
     isUserLogin() {
-      return this.$store.getters.isLogin;
+      if (this.$store.state.sessionStorageData) {
+        return true;
+      } else {
+        return false;
+      }
     },
-  },
-  watch: {
-    isUserLogin: {
-      handler(vlaue) {
-        console.log(vlaue, "로그인확인~!");
-      },
-      immediate: true,
+    sessionData() {
+      return this.$store.state.sessionStorageData;
     },
   },
   methods: {
@@ -116,19 +114,13 @@ export default {
     },
     onClicked() {
       this.$store.state.isClicked = !this.$store.state.isClicked;
-      // console.log(this.$store.state.isClicked);
     },
     logoutUser() {
-      console.log("로그아웃유저");
       this.$store.commit("clearUser");
       this.$store.state.sessionStorageData = "";
       this.$router.go();
     },
   },
-  // created() {
-  //   console.log(this.$store.state.sessionStorageData);
-  //   console.log(this.userData);
-  // },
 };
 </script>
 

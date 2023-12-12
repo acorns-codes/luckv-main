@@ -92,7 +92,7 @@
         <v-btn
           type="submit"
           block
-          color="success"
+          color="warning"
           variant="elevated"
           class="mt-2"
           >경매 등록</v-btn

@@ -6,7 +6,7 @@
     </div>
     <div id="page-root">
       <VideoCategory :type="type" :category="category" />
-      <VideoList :videoList="list" />
+      <VideoList :videoList="list" @getVideoList="getVideoList" />
       <Pagination
         v-if="list.length != 0"
         @goPage="goPage"

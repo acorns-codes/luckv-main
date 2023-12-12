@@ -216,7 +216,6 @@ export default {
       try {
         const res = await apiGetAuctionAll(req);
         if (res.list) {
-          console.log(res);
           this.deadlineData = res.list[0];
           this.dday = res.list[0].lastDay;
           // console.log(this.dday);

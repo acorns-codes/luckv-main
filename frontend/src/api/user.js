@@ -67,7 +67,6 @@ export function apiEditInfoMember(data) {
 // 구독 신청
 export function apiPostVideo(data) {
   const url = `/${baseUrl}/video/sub`;
-
   return http.post(url, data).then((response) => {
     if (response) {
       console.log(response.data);

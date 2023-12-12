@@ -61,7 +61,7 @@
           <v-btn
             type="submit"
             block
-            color="success"
+            color="warning"
             variant="elevated"
             class="mt-2"
             >회원가입</v-btn

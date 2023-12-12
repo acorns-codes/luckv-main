@@ -4,6 +4,9 @@
       <div>
         <h2>QnA</h2>
       </div>
+      <div class="post_btn">
+        <v-btn color="warning" @click="postQna"> QnA 등록 </v-btn>
+      </div>
       <v-table>
         <thead>
           <tr style="font-weight: bolder">
@@ -48,7 +51,7 @@
     <div class="page-box">
       <v-dialog v-model="dialog" width="500px">
         <v-card>
-          <v-toolbar color="success" title="비밀번호 확인"></v-toolbar>
+          <v-toolbar color="warning" title="비밀번호 확인"></v-toolbar>
           <v-card-text>
             <v-text-field
               prepend-inner-icon="mdi-lock-outline"
@@ -59,10 +62,10 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="success" width="50%" @click="dialog = false"
+            <v-btn color="warning" width="50%" @click="dialog = false"
               >닫기</v-btn
             >
-            <v-btn color="success" width="50%" @click="qnaDetail">확인</v-btn>
+            <v-btn color="warning" width="50%" @click="qnaDetail">확인</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -172,10 +175,15 @@ export default {
 .cs-center {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   width: 100%;
   padding-top: 110px;
+  & .post_btn {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 30px;
+  }
   & > div {
     width: 100%;
     & > div:nth-child(1) {

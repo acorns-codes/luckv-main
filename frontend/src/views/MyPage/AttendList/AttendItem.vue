@@ -8,7 +8,7 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody v-if="attendList.length > 0">
       <tr
         v-for="(item, index) in attendList"
         :key="index"
@@ -19,6 +19,11 @@
         <td>{{ item.title }}</td>
         <td>{{ $globalFuc(item.payMax) }}</td>
         <td>{{ item.status }}</td>
+      </tr>
+    </tbody>
+    <tbody v-else>
+      <tr style="height: 200px">
+        <td colspan="4">동영상이 없습니다.</td>
       </tr>
     </tbody>
   </v-table>

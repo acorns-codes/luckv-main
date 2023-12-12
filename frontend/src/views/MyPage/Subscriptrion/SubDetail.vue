@@ -135,7 +135,7 @@ export default {
       try {
         const res = await apiDeleteVideo(req);
         console.log(res);
-        if (res.data) {
+        if (res) {
           alert("구독 해지 신청이 완료되었습니다!");
           this.$store.commit("storeSubAuth", "N");
           this.getInfo();

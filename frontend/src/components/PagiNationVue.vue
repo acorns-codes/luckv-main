@@ -6,12 +6,7 @@
           <v-icon> mdi-chevron-double-left </v-icon>
         </button>
       </li>
-      <li
-        v-esle
-        @click="goPage(pageNum - 1)"
-        class="arrow"
-        v-if="pageNum !== 1"
-      >
+      <li @click="goPage(pageNum - 1)" class="arrow" v-if="pageNum !== 1">
         <button type="button " class="paging">
           <v-icon> mdi-chevron-left </v-icon>
         </button>

@@ -75,7 +75,7 @@ export default {
     closeModal() {
       this.modal = false;
       this.$refs.videoDetail.closeSocket();
-      this.$emit("video", "", this.$route.query.page - 1);
+      this.$emit("getVideoList", this.$route.query.page - 1);
       console.log("emit확인");
     },
   },

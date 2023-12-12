@@ -43,7 +43,7 @@
         <template v-slot:activator="{ props }">
           <v-btn
             v-show="this.$store.state.sessionStorageData.auth === 'A'"
-            color="success"
+            color="warning"
             v-bind="props"
           >
             공지사항 등록

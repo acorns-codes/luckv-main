@@ -126,7 +126,7 @@
               <tr></tr>
             </thead>
           </v-table>
-          <v-btn type="submit" color="success" variant="elevated" class="mt-2"
+          <v-btn type="submit" color="warning" variant="elevated" class="mt-2"
             >수정</v-btn
           >
         </v-form>

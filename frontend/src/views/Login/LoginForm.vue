@@ -25,7 +25,7 @@
             ></v-text-field>
             <v-btn
               block
-              color="success"
+              color="warning"
               size="large"
               type="submit"
               variant="elevated"
@@ -93,9 +93,9 @@ export default {
             this.$store.state.sessionStorageData
           );
           alert(`${res.data.name}님 환영합니다!`);
-          this.$router.go();
+          this.close();
         } else {
-          this.$router.go();
+          this.close();
         }
       } catch (error) {
         console.log(error);

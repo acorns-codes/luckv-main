@@ -5,7 +5,7 @@
     </div>
     <div id="page-root">
       <VideoCategory :type="type" :category="category" />
-      <VideoList :videoList="list" @video="video" />
+      <VideoList :videoList="list" @getVideoList="getVideoList" />
       <Pagination
         v-if="list.length != 0"
         @goPage="goPage"
@@ -33,7 +33,7 @@ export default {
         vcate: "all",
       },
       pageInfo: {},
-      list: {},
+      list: [],
       type: "auctionList",
       category: [
         {
