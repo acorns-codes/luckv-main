@@ -47,18 +47,15 @@ export default {
   methods: {
     // 각 동영상 상세 정보 불러오기
     async getInfo(ano) {
-      console.log("비디오");
       const req = {
         ano: ano,
       };
       try {
         const res = await apiGetAuctionDeatil(req);
         this.videoData = res.data;
-        console.log(this.videoData);
         this.dday = res.data.lastDay;
-        console.log(this.dday);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
 
@@ -76,7 +73,6 @@ export default {
       this.modal = false;
       this.$refs.videoDetail.closeSocket();
       this.$emit("getVideoList", this.$route.query.page - 1);
-      console.log("emit확인");
     },
   },
 };

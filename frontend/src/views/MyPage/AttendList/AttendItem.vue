@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     attendDetail(ano) {
-      console.log(ano);
       this.$router.push({
         name: "mydetailListdetail",
         params: { ano: ano },

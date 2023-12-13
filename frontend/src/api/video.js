@@ -20,7 +20,6 @@ export function apiUploadVideo(data) {
   const headers = { "Content-Type": "multipart/form-data" };
   return http.post(url, data, headers).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -33,7 +32,6 @@ export function apiAddAuction(data) {
   const url = `/${baseUrl}/insert`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -45,7 +43,6 @@ export function apiEditAuction(data) {
   const url = `/${baseUrl}/update`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -58,7 +55,6 @@ export function apiChangeAuction(data) {
   const url = `/${baseUrl}/change`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;

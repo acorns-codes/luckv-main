@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { apiEditQna } from "@/api/qna";
+import { apiAddQna } from "@/api/qna";
 export default {
   data() {
     return {
@@ -69,12 +69,8 @@ export default {
       ],
     };
   },
-  mounted() {
-    console.log(this.$store.state.sessionStorageData.mno);
-  },
   methods: {
     async postQnA() {
-      console.log("qna등록합니당");
       const qnaData = {
         title: this.title,
         content: this.content,
@@ -83,19 +79,16 @@ export default {
       };
       console.log(qnaData);
       try {
-        const res = await apiEditQna(qnaData);
-        if (res.data) {
+        const res = await apiAddQna(qnaData);
+        if (res) {
           alert("QnA등록에 성공하였습니다.");
           this.$router.push({
             name: "qna",
             params: { page: 1 },
           });
-        } else {
-          alert("QnA등록에 실패하였습니다.");
         }
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

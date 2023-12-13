@@ -13,7 +13,7 @@
                     controls
                     @mouseover="playVideo"
                     @mouseleave="stopVideo"
-                    :src="`${videoSrc}/video/play?ano=${this.auctionData.ano}`"
+                    :src="`${videoSrc}/videoplay?ano=${this.auctionData.ano}`"
                   ></video>
                 </div>
               </td>
@@ -243,19 +243,19 @@ export default {
       ],
     };
   },
-  computed() {},
+  computed: {
+    videoSrc() {
+      return process.env.VUE_APP_API_URL;
+    },
+  },
 
   mounted() {
-    console.log(this.$route);
-    this.videoSrc = process.env.VUE_APP_API_URL;
     // 상세 내역 불러오기
     this.getAuction();
-    console.log(this.$store.state.sessionStorageData);
   },
   methods: {
     // 각 경매의 상세페이지 받아오기
     async getAuction() {
-      console.log("경매조회");
       const req = {
         ano: this.$route.params.ano,
       };
@@ -267,7 +267,7 @@ export default {
         this.auctionData.payStart = this.$globalFuc(this.auctionData.payStart);
         this.auctionData.payMax = this.$globalFuc(this.auctionData.payMax);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     // 경매 수정 버튼
@@ -279,7 +279,6 @@ export default {
     },
     // 판매 종료 후 구독으로 변경
     async auctionChange() {
-      console.log("구독으로 변경");
       if (!this.valid) {
         alert("날짜를 확인해주세요!");
       } else {
@@ -290,11 +289,8 @@ export default {
           kind: this.auctionData.kind,
           lastDay: editDate,
         };
-        console.log(editdata);
         try {
           const res = await apiChangeAuction(editdata);
-          console.log(editdata);
-          console.log(res.data);
           if (res.data) {
             alert("구독으로 변경하였습니다!");
             this.$router.push({

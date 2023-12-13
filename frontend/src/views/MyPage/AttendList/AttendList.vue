@@ -39,11 +39,10 @@ export default {
       req.buyer = this.$store.state.sessionStorageData.mno;
       try {
         const res = await apiGetAttendList(req);
-        console.log(res);
         this.attendList = res.list;
         this.pageInfo = res.pageInfo;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     async goPage(page) {

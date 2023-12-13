@@ -30,7 +30,6 @@ export function apiAddNotice(data) {
   const url = `/insert/${baseUrl}`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -43,7 +42,6 @@ export function apiEditNotice(data) {
   const url = `/${baseUrl}/update`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;

@@ -124,7 +124,7 @@ export default {
         this.noticeList = res.list;
         this.pageInfo = res.pageInfo;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     async goPage(page) {
@@ -132,7 +132,6 @@ export default {
     },
     // 상세페이지로 이동
     noticeContent(no) {
-      console.log(no);
       this.$router.push({
         name: "noticedetail",
         params: { no: no },
@@ -147,11 +146,12 @@ export default {
           nid: this.$store.state.sessionStorageData.mno,
         };
         const res = await apiAddNotice(noticeData);
-        if (res.data) {
-          this.getNotice(1);
+        if (res) {
+          alert("공지사항 등록 완료");
+          await this.getNotice(1);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

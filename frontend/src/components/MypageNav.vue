@@ -69,9 +69,6 @@
 
 <script>
 export default {
-  mounted() {
-    console.log(this.$store.state.sessionStorageData.auth);
-  },
   data() {
     return {
       sessionData: JSON.parse(sessionStorage.getItem("login")),

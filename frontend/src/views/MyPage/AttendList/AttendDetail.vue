@@ -157,7 +157,6 @@ export default {
   methods: {
     // 각 경매의 상세페이지 받아오기
     async getAttend() {
-      console.log("경매조회");
       const req = {
         ano: this.$route.params.ano,
       };
@@ -170,12 +169,11 @@ export default {
         this.attendData.payStart = this.$globalFuc(this.attendData.payStart);
         this.attendData.payMax = this.$globalFuc(this.attendData.payMax);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
 
     async videoDownload() {
-      console.log("비디오 다운로드");
       console.log(this.attendData.ano);
       try {
         const res = await this.$axios({
@@ -183,16 +181,12 @@ export default {
           responseType: "blob", // 응답데이터 타입 정의
           url: `${process.env.VUE_APP_API_URL}/video/download/${this.attendData.ano}`,
         });
-        console.log(res);
         const fileName = `video_${res.request.responseURL.substr(
           res.request.responseURL.lastIndexOf("/") + 1
         )}`;
-        console.log(fileName);
         const blob = new Blob([res.data]);
-        console.log(blob);
 
         const fileObjectUrl = window.URL.createObjectURL(blob);
-        console.log(fileObjectUrl);
 
         const fileLink = document.createElement("a");
         fileLink.href = fileObjectUrl;
@@ -202,7 +196,7 @@ export default {
 
         fileLink.click();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

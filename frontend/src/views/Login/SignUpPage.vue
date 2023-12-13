@@ -162,7 +162,6 @@ export default {
             this.auth === "S" ? `${this.bank}:` + this.account : "해당없음",
         };
 
-        console.log(userData);
         if (!this.valid) {
           console.log(this.valid);
           alert("가입 형식을 지켜주세요!");
@@ -179,7 +178,7 @@ export default {
         }
         // console.log(this.valid);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     // 아이디 중복 체크

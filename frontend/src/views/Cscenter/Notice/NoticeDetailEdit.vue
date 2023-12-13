@@ -43,10 +43,7 @@ export default {
   },
 
   mounted() {
-    let pn = this.$route.params.no;
-    console.log(pn);
     this.getNoticeDetail();
-    console.log(this.$store.state.sessionStorageData.mno);
   },
   methods: {
     async getNoticeDetail() {
@@ -57,33 +54,27 @@ export default {
         const res = await apiGetNoticeDetail(req);
         this.detaillData = res.data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
-
     async editNotice() {
-      console.log("공지수정");
       const editData = {
         no: this.$route.params.no,
         title: this.detaillData.title,
         content: this.detaillData.content,
         nid: this.$store.state.sessionStorageData.mno,
       };
-      console.log(editData);
       try {
         const res = await apiEditNotice(editData);
-        if (res.data) {
+        if (res) {
           alert("게시글 수정이 완료되었습니다!");
           this.$router.push({
             name: "notice",
             params: { page: 1 },
           });
-        } else {
-          alert("게시글 수정을 할 수 없습니다!");
         }
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

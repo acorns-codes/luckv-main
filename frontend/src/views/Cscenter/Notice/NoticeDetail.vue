@@ -41,7 +41,6 @@ export default {
   },
   methods: {
     async getNoticeDetail() {
-      console.log("내용가져오기");
       const req = {
         nno: this.$route.params.no,
       };
@@ -49,7 +48,7 @@ export default {
         const res = await apiGetNoticeDetail(req);
         this.detaillData = res.data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     edit() {
@@ -61,7 +60,6 @@ export default {
       console.log("삭제버튼");
     },
     async editNoticeDetail() {
-      console.log("공지사항 수정");
       try {
         const noticeData = {
           no: this.$route.params.no,
@@ -71,16 +69,16 @@ export default {
         };
         console.log(this.$store.state.userdata.mno);
         const res = await apiEditNotice(noticeData);
-        console.log(res);
-        console.log(noticeData);
+        if (res) {
+          alert("공지 수정 완료!");
+        }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },
 
   async created() {
-    console.log(this.mno, "이거나와바");
     await this.getNoticeDetail();
   },
 };

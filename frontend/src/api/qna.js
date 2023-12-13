@@ -36,12 +36,11 @@ export function apiGetQnaDetail(data) {
   });
 }
 
-// qna 수정
+// qna 등록
 export function apiAddQna(data) {
   const url = `/insert/${baseUrl}`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -53,7 +52,6 @@ export function apiEditQna(data) {
   const url = `/${baseUrl}/update`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -90,7 +88,6 @@ export function apiAddAnswer(data) {
   const url = `/${baseUrl}/answer`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -103,7 +100,6 @@ export function apiEditAnswer(data) {
   const url = `/${baseUrl}/answer/update`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;

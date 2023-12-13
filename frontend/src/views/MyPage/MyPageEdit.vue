@@ -116,13 +116,12 @@ export default {
       };
       try {
         const res = await apiGetInfoMember(req);
-        console.log(res);
         this.userData = res.data;
         this.accountInfo = this.userData.acccount.split(":");
         this.$store.commit("getUserData", res.data);
         console.log(this.$store.state.userData);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     //회원정보수정
@@ -135,11 +134,9 @@ export default {
       };
       try {
         const res = await apiEditInfoMember(req);
-        console.log(res);
         this.$store.commit("getUserData", res.data);
-        console.log(this.$store.state.userData);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

@@ -25,7 +25,6 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   // 응답 데이터를 가공
   function (response) {
-    // console.log(response, "응답값 보여줘");
     if (response.data.res !== "OK" || response.data.msg !== "SUCCESS") {
       if (response.data.msg) {
         return alert(response.data.msg);

@@ -99,7 +99,7 @@ export default {
         this.FAQList = res.list;
         this.pageInfo = res.pageInfo;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     async goPage(page) {

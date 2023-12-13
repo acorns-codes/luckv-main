@@ -82,7 +82,6 @@ export default {
           pwd: this.userPassword,
         };
         const res = await apiSignIn(userData);
-        console.log(res, "로그인폼");
         if (res.data) {
           this.$store.commit("getUserId", res.data.mid);
           // 로그인 성공이면 받아온 data를 json 화 하여 sessionStorageData에 저장
@@ -98,7 +97,7 @@ export default {
           this.close();
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

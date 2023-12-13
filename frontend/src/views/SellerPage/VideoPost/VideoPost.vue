@@ -167,7 +167,6 @@ export default {
   methods: {
     getStatus() {
       const today = new Date().getTime();
-      console.log(today);
       let day = `${this.startDay} ${this.startTime}:00`;
       // console.log(day);
       let daytime = new Date(day).getTime();
@@ -180,8 +179,6 @@ export default {
     },
 
     async postAuction() {
-      console.log("경매등록");
-      console.log(this.startDay);
       let today = new Date().getTime();
       let startday = `${this.startDay} ${this.startTime}:00`;
       let daytime = new Date(startday).getTime();
@@ -234,24 +231,16 @@ export default {
         }
         console.log(postData);
         if (!this.valid) {
-          console.log(this.valid);
           alert("등록 형식을 지켜주세요!");
           return;
         } else {
           // 경매 등록
-          console.log("동영상 업로드");
           const res = await apiAddAuction(postData);
-          console.log(res);
           // alert("리스트 업로드");
-          console.log(this.video);
           if (res) {
             try {
-              console.log("동영상 업로드");
-              console.log(this.video);
               const formdata = new FormData();
-              console.log(formdata, "확인1");
               formdata.append("file", this.video[0]);
-              // console.log("확인2", formdata);
               const resVideo = await apiUploadVideo(formdata);
               if (resVideo) {
                 alert("새로운 경매가 등록되었습니다!");
@@ -273,7 +262,7 @@ export default {
           }
         }
       } catch (error) {
-        console.errorgi(error);
+        console.error(error);
       }
     },
   },

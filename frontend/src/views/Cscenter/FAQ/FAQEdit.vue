@@ -77,11 +77,10 @@ export default {
       };
       try {
         const res = await apiGetFaqDetail(req);
-        console.log(res, "faq!!!");
         this.FAQList = res.data;
         // console.log(this.FAQList);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     // FAQ 수정하기
@@ -103,9 +102,8 @@ export default {
         } else {
           alert("FAQ를 등록할 수 없습니다!");
         }
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

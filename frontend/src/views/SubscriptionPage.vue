@@ -82,7 +82,6 @@ export default {
   methods: {
     // 구독자 확인
     subUser() {
-      // console.log(this.$store.state.sessionStorageData.subYn);
       if (this.$store.state.sessionStorageData.subYn !== "Y") {
         alert("구독 회원을 위한 영상입니다! 사용을 원하시면 신청을 해주세요!");
       }
@@ -101,7 +100,7 @@ export default {
         this.list = res.list;
         this.pageInfo = res.pageInfo;
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     async goPage(page) {
@@ -109,7 +108,6 @@ export default {
     },
     // 구독신청
     async sub() {
-      console.log(this.$store.state.subAuth);
       if (this.$store.state.subAuth === "Y") {
         alert("이미 구독중입니다!");
       } else if (this.$store.state.sessionStorageData.auth !== "B") {
@@ -123,13 +121,12 @@ export default {
           };
           try {
             const res = await apiPostVideo(req);
-            console.log(res);
             if (res.data) {
               alert("구독 신청이 완료되었습니다!");
               this.$store.commit("storeSubAuth", "Y");
             }
           } catch (error) {
-            console.log(error);
+            console.error(error);
           }
         }
       }

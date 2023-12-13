@@ -31,7 +31,6 @@ export function apiAddFaq(data) {
   const url = `/insert/${basePath}`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -56,7 +55,6 @@ export function apiEditFaq(data) {
   const url = `/${basePath}/update`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;

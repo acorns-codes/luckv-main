@@ -188,29 +188,25 @@ export default {
   mounted() {
     // 상세 내역 불러오기
     this.getAuction();
-    // console.log(this.$store.state.sessionStorageData);
   },
   methods: {
     // 각 경매의 상세페이지 받아오기
     async getAuction() {
-      console.log("경매조회");
       const req = {
         ano: this.$route.params.ano,
       };
       try {
         const res = await apiGetAuctionDeatil(req);
-        console.log(res);
         this.auctionData = res.data;
         this.startDay = this.auctionData.startDay.split(" ");
         this.lastDay = this.auctionData.lastDay.split(" ");
         this.auctionData.payStart = this.$globalFuc(this.auctionData.payStart);
         this.auctionData.payMax = this.$globalFuc(this.auctionData.payMax);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     async editAuction() {
-      console.log("경매내역 수정");
       const editdata = {
         title: this.auctionData.title,
         content: this.auctionData.content,
@@ -229,7 +225,7 @@ export default {
           });
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

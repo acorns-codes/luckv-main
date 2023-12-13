@@ -32,30 +32,23 @@
 </template>
 
 <script>
-import {
-  apiEditAnswer,
-  apiGetQnaAnswerList,
-  apiDeleteQnaAnswer,
-} from "@/api/qna";
+import { apiEditAnswer, apiDeleteQnaAnswer } from "@/api/qna";
 export default {
   name: "PrCommentListItem",
   props: {
+    commentList: Object,
     commentItem: Object,
     reload: Function,
   },
   data() {
     return {
       name: "",
-      commentList: "",
       edit: false,
       anos: "",
     };
   },
   mounted() {
-    this.getQnACommentList();
     this.userCheck;
-    console.log(this.commentList.ano);
-    console.log(this.$store.state.sessionStorageData.mno);
   },
   methods: {
     userCheck(no) {
@@ -67,7 +60,6 @@ export default {
     async clickEdit(ano, comment) {
       this.anos = ano;
       this.edit = !this.edit;
-      console.log(this.edit);
       if (!this.edit) {
         // console.log("댓글수정");
         const editData = {
@@ -77,59 +69,33 @@ export default {
           aid: this.$store.state.sessionStorageData.mno,
         };
         // console.log(editData);
-        console.log(this.commentList.ano);
 
         try {
           const res = await apiEditAnswer(editData);
-          if (res.data) {
+          if (res) {
             alert("댓글 수정이 완료되었습니다!");
-            this.getQnACommentList();
-          } else {
-            alert("댓글 수정을 할 수 없습니다!");
+            this.$emit("getQnACommentList");
           }
-          console.log(res);
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
-      } else {
-        console.log("if문");
-      }
-    },
-
-    async getQnACommentList() {
-      // console.log("댓글가져오기");
-      const req = {
-        qno: this.$route.params.no,
-      };
-      try {
-        const res = await apiGetQnaAnswerList(req);
-        this.commentList = res.data;
-        console.log(res.data);
-        console.log(this.commentList.ano);
-      } catch (error) {
-        console.log(error);
       }
     },
 
     async deleteComment(no, ano, aid) {
-      console.log(ano);
       const deleteData = {
         no: no,
         ano: ano,
         aid: aid,
       };
-      console.log(deleteData);
       try {
         const res = await apiDeleteQnaAnswer(deleteData);
-        if (res.data) {
+        if (res) {
           alert("댓글이 삭제되었습니다!");
-          this.getQnACommentList();
-        } else {
-          alert("댓글을 삭제할 수 없습니다!");
+          this.$emit("getQnACommentList");
         }
-        this.getQnACommentList();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

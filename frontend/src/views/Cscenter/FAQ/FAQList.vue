@@ -60,7 +60,7 @@ export default {
           alert("FAQ 삭제를 실패했습니다");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

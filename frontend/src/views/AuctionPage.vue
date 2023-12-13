@@ -11,7 +11,6 @@
         @goPage="goPage"
         :pageNum="pageInfo.page"
         :pageSize="pageInfo.rowCnt"
-        :totalCount="pageInfo.totalPageCnt"
         :totalPageCount="pageInfo.totalPageCnt"
       />
     </div>
@@ -103,7 +102,7 @@ export default {
         this.list = res.list;
         this.pageInfo = res.pageInfo;
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     async goPage(page) {

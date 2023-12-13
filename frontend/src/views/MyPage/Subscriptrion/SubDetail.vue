@@ -64,13 +64,11 @@ export default {
   },
   mounted() {
     this.getInfo();
-    console.log("구독중인지확인", this.$store.state.subAuth);
   },
   methods: {
     // 현재 시간 구하기
     getDate() {
       const now = new Date();
-      console.log(now);
       const year = now.getFullYear();
       const month =
         now.getMonth() + 1 < 10 ? `0${now.getMonth() + 1}` : now.getMonth() + 1;
@@ -87,24 +85,18 @@ export default {
     },
     // 회원 정보 불러오기
     async getInfo() {
-      console.log("구독 정보 불러오기");
       const req = {
         mno: this.sessionData.mno,
       };
       try {
         const res = await apiGetInfoMember(req);
-        console.log(res);
         this.userData = res.data;
-        console.log(this.userData.subLastDay, "마감날자아아아아아아아");
-        console.log(this.userData.subStartDay);
-        console.log(this.userData);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     // 구독신청
     async sub() {
-      console.log(this.$store.state.subAuth);
       const newData = {
         mno: this.$store.state.sessionStorageData.mno,
         subStartDay: this.userData.subLastDay === null ? null : this.getDate(),
@@ -123,7 +115,7 @@ export default {
             this.getInfo();
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       }
     },
@@ -134,14 +126,13 @@ export default {
       };
       try {
         const res = await apiDeleteVideo(req);
-        console.log(res);
         if (res) {
           alert("구독 해지 신청이 완료되었습니다!");
           this.$store.commit("storeSubAuth", "N");
           this.getInfo();
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

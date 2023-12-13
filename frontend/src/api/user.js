@@ -7,7 +7,6 @@ export function apiSignIn(data) {
   const url = `/${baseUrl}/login`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -19,7 +18,6 @@ export function apiSignUp(data) {
   const url = `/${baseUrl}/join`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -31,7 +29,6 @@ export function apiIdCheck(data) {
   const url = `/${baseUrl}/Idcheck`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -44,7 +41,6 @@ export function apiGetInfoMember(data) {
   const url = `/${baseUrl}/info`;
   return http.get(url, { params: data }).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -56,7 +52,6 @@ export function apiEditInfoMember(data) {
   const url = `/${baseUrl}/edit`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -69,7 +64,6 @@ export function apiPostVideo(data) {
   const url = `/${baseUrl}/video/sub`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;
@@ -81,7 +75,6 @@ export function apiDeleteVideo(data) {
   const url = `/${baseUrl}/video/subnot`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;

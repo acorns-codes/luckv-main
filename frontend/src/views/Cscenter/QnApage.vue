@@ -17,22 +17,19 @@
           </tr>
         </thead>
         <tbody v-if="qnaList.length > 0">
-          <tr
-            v-for="item in qnaList"
-            :key="item.no"
-            class="event"
-            @click="checkPwd(item.no, item.qpwd)"
-          >
-            <td>{{ item.no }}</td>
-            <td style="width: 400px">
-              <v-icon size="x-small" v-if="item.qpwd !== null">
-                mdi-lock-outline
-              </v-icon>
-              {{ item.title }} ({{ item.reply }})
-            </td>
-            <td>{{ item.id }}</td>
-            <td>{{ item.qcreate }}</td>
-          </tr>
+          <template v-for="item in qnaList" :key="item.no">
+            <tr class="event" @click="checkPwd(item)">
+              <td>{{ item.no }}</td>
+              <td style="width: 400px">
+                <v-icon size="x-small" v-if="item.qpwd !== null">
+                  mdi-lock-outline
+                </v-icon>
+                {{ item.title }} ({{ item.reply }})
+              </td>
+              <td>{{ item.id }}</td>
+              <td>{{ item.qcreate }}</td>
+            </tr>
+          </template>
         </tbody>
         <tbody v-else>
           <tr style="height: 300px">
@@ -116,7 +113,7 @@ export default {
     qnaDetail() {
       if (this.password === this.selectedItem.qpwd) {
         this.$router.push({
-          name: "qna",
+          name: "qnadetail",
           params: { no: this.selectedItem.no },
         });
       } else {
@@ -127,23 +124,23 @@ export default {
     },
 
     // 비밀번호 체크
-    checkPwd(no, qpwd) {
-      if (this.$store.state.sessionStorageData.auth === "A") {
-        this.$router.push({
+    // no, qpwd
+    checkPwd(item) {
+      console.log(item, "아아아");
+      if (this.$store.state.sessionStorageData.auth == "A") {
+        return this.$router.push({
           name: "qnadetail",
-          params: { no: no },
+          params: { no: item.no },
         });
-      } else {
-        if (qpwd !== null) {
-          this.dialog = true;
-          this.selectedItem = { no, qpwd }; // 데이터 담기
-        } else {
-          this.$router.push({
-            name: "qnadetail",
-            params: { no: no },
-          });
-        }
       }
+      if (!item.qpwd) {
+        return this.$router.push({
+          name: "qnadetail",
+          params: { no: item.no },
+        });
+      }
+      this.dialog = true;
+      this.selectedItem = item;
     },
     // 비밀번호 확인 모달 닫기
     closeModeal() {

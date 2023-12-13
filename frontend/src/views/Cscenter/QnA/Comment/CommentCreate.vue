@@ -20,8 +20,6 @@ export default {
   },
   methods: {
     async createComment() {
-      console.log("댓글 달기");
-      console.log(typeof Number(this.$route.params.no));
       const commnetData = {
         no: this.$route.params.no,
         aid: this.$store.state.sessionStorageData.mno,
@@ -29,14 +27,12 @@ export default {
       };
       try {
         const res = await apiAddAnswer(commnetData);
-        console.log(res);
-        if (res.data) {
-          console.log("댓글수정완료");
-          alert("댓글 수정 완료!");
-          this.$router.go();
+        if (res) {
+          alert("댓글 등록 완료!");
+          this.$emit("getQnACommentList");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

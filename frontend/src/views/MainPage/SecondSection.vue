@@ -128,8 +128,8 @@ export default {
       return this.$store.state.videoSrc;
     },
   },
-  created() {
-    this.getVideo();
+  async created() {
+    await this.getVideo();
   },
   mounted() {
     // 소켓 연결 시도
@@ -158,7 +158,6 @@ export default {
       this.stompClient = Stomp.over(socket);
       // 소켓 전역으로 설정
       this.$store.commit("storeSocket", this.stompClient);
-      console.log(this.$store.state.socket, "소켓저자아아아앙");
       // console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
       this.stompClient.connect(
         {},
@@ -168,11 +167,10 @@ export default {
           console.log("소켓 연결 성공", frame);
           // 서버의 메시지 전송 endpoint를 구독합니다.
           // 이런형태를 pub sub 구조라고 합니다.
-          console.log(this.videoData.ano, "소켓안에서설정");
           this.stompClient.subscribe(
             `/send/${ano}`,
             (res) => {
-              console.log("구독으로 받은 메시지 입니다.", res.body);
+              // console.log("구독으로 받은 메시지 입니다.", res.body);
               // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
               // res.body
               // 처음엔 여기서 아무거도 안받아졌는데, 입찰 버튼 눌러서 입찰하게되면
@@ -181,8 +179,6 @@ export default {
             },
             { ano: ano }
           );
-          console.log(this.stompClient.subscriptions);
-          console.log(this.recvList, "소켓 연결 성공하고 받아는 데이터");
         },
         (error) => {
           // 소켓 연결 실패
@@ -193,7 +189,6 @@ export default {
     },
     // 소켓 종료
     closeSocket() {
-      console.log("소켓종료?");
       this.stompClient.unsubscribe();
       console.log(this.stompClient.unsubscribe);
       console.log("소켓종료!!");
@@ -224,7 +219,7 @@ export default {
         console.error(e);
       }
     },
-
+    // 남은시간 계산
     getRemainingTime() {
       // 0 이하면, 숫자 앞에 0을 붙이는 함수
       function format(item) {

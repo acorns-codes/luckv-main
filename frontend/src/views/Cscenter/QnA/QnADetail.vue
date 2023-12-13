@@ -43,16 +43,14 @@ export default {
   },
   methods: {
     async getQnADetail() {
-      console.log("내용가져오기");
       const req = {
         no: this.$route.params.no,
       };
       try {
         const res = await apiGetQnaDetail(req);
         this.detaillData = res.data;
-        console.log(this.detaillData);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     editBtn() {
@@ -61,7 +59,6 @@ export default {
       });
     },
     async deleteBtn() {
-      console.log("QnA삭제");
       const req = {
         qno: this.$route.params.no,
       };

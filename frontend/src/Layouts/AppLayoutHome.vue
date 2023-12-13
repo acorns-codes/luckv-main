@@ -20,7 +20,6 @@ export default {
   methods: {
     // 구독신청
     async sub() {
-      console.log(this.$store.state.subAuth);
       if (this.$store.state.subAuth === "Y") {
         alert("이미 구독중입니다!");
       } else if (this.$store.state.sessionStorageData.auth !== "B") {
@@ -34,13 +33,12 @@ export default {
           };
           try {
             const res = await apiPostVideo(req);
-            console.log(res);
             if (res.data) {
               alert("구독 신청이 완료되었습니다!");
               this.$store.commit("storeSubAuth", "Y");
             }
           } catch (error) {
-            console.log(error);
+            console.error(error);
           }
         }
       }

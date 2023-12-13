@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     async getQnADetail() {
-      console.log("내용가져오기");
       const req = {
         qno: this.$route.params.no,
       };
@@ -57,7 +56,6 @@ export default {
       }
     },
     async editQnA() {
-      console.log("수정하기");
       const editData = {
         title: this.detaillData.title,
         content: this.detaillData.content,
@@ -75,7 +73,7 @@ export default {
           });
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

@@ -90,9 +90,8 @@ export default {
         } else {
           alert("FAQ를 등록할 수 없습니다!");
         }
-        console.log(res);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

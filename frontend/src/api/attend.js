@@ -19,7 +19,6 @@ export function apiAddAttend(data) {
   const url = `/${baseUrl}/insert`;
   return http.post(url, data).then((response) => {
     if (response) {
-      console.log(response.data);
       return response.data;
     } else {
       return response;

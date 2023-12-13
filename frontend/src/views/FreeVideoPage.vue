@@ -102,7 +102,7 @@ export default {
         this.list = res.list;
         this.pageInfo = res.pageInfo;
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     async goPage(page) {

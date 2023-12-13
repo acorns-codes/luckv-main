@@ -254,7 +254,6 @@ router.beforeEach((to, from, next) => {
     store.state.socket.disconnect(() => {
       console.log("WebSocket 연결이 종료되었습니다.");
       store.state.socket = "";
-      console.log(store.state.socket);
       next();
     });
   } else {

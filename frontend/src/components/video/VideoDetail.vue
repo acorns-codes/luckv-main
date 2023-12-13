@@ -123,7 +123,7 @@ export default {
       recvList: "",
       dialog: false,
       valid: false,
-      price: "",
+      price: 0,
       dday: "",
       ddayData: "",
       days: 0,
@@ -154,18 +154,12 @@ export default {
     this.connect();
   },
   mounted() {
-    console.log(this.videoData.payStart, "시작가!!!");
-    // 비디오 주소 미리 할당
-    console.log(this.videoData.ano);
     // 소켓 연결 시도
     setTimeout(() => {
-      console.log(this.videoData.ano);
       this.connect(this.videoData.ano);
     }, 1000);
-    console.log(this.videoData.ano);
     // dday 게산 함수
     this.getRemainingTime();
-    console.log(this.$route.name);
   },
   methods: {
     // 소켓 연결
@@ -183,7 +177,6 @@ export default {
           console.log("소켓 연결 성공", frame);
           // 서버의 메시지 전송 endpoint를 구독합니다.
           // 이런형태를 pub sub 구조라고 합니다.
-          console.log(this.videoData.ano, "소켓안에서설정");
           this.stompClient.subscribe(
             `/send/${ano}`,
             (res) => {
@@ -196,8 +189,6 @@ export default {
             },
             { ano: ano }
           );
-          console.log(this.stompClient.subscriptions);
-          console.log(this.recvList, "소켓 연결 성공하고 받아는 데이터");
         },
         (error) => {
           // 소켓 연결 실패
@@ -209,30 +200,21 @@ export default {
 
     // 소켓 종료
     closeSocket() {
-      console.log("소켓종료?");
       this.stompClient.unsubscribe();
-      console.log(this.stompClient.unsubscribe);
       console.log("소켓종료!!");
     },
     // 소켓으로 데이터 보내기
-    sendMessage() {
-      console.log(this.recvList.bidding, "뭐지???");
-      if (this.price === "") {
-        alert("입찰 금액을 입력해주세요");
-        this.price = "";
+    async sendMessage() {
+      if (!this.price) {
+        return alert("입찰 금액을 입력해주세요");
       } else if (!this.valid) {
-        console.log(this.valid);
-        alert("입찰가를 확인해주세요!");
-        return;
+        return alert("입찰가를 확인해주세요!");
       } else if (this.$store.state.sessionStorageData.auth !== "B") {
         alert("구매자회원만 입찰에 참여할 수 있습니다!");
-        this.price = "";
-      } else {
-        // 입찰 금액 보내기
-        this.bidding();
-        console.log(this.recvList, "입찰금액보내고 받아옴????");
-        this.price = "";
+        return (this.price = 0);
       }
+      // 입찰 금액 보내기
+      await this.bidding();
     },
 
     // 입찰금액 보내기
@@ -244,35 +226,29 @@ export default {
       };
       try {
         const res = await apiAddAttend(req);
-        console.log(res);
-        this.$store.commit("getUserData", res.data);
-        alert("입찰에 성공하였습니다!");
+        if (res) {
+          if (this.stompClient && this.stompClient.connected) {
+            const msg = {
+              ano: this.videoData.ano,
+              buyer: this.$store.state.sessionStorageData.mno,
+              buyerNm: this.$store.state.sessionStorageData.name,
+              bidding: this.price,
+            };
+            this.stompClient.send(
+              `/attend/${this.videoData.ano}`,
+              JSON.stringify(msg),
+              {}
+            );
+          }
+          alert("입찰에 성공하였습니다!");
+        }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
-      console.log("Send message:" + this.message);
-      if (this.stompClient && this.stompClient.connected) {
-        const msg = {
-          ano: this.videoData.ano,
-          buyer: this.$store.state.sessionStorageData.mno,
-          buyerNm: this.$store.state.sessionStorageData.name,
-          bidding: this.price,
-        };
-        this.stompClient.send(
-          `/attend/${this.videoData.ano}`,
-          JSON.stringify(msg),
-          {}
-        );
-      }
-      console.log(
-        this.recvList,
-        "입찰금액 보내는 함수 안!!! 입찰금액 다 보내진건지??"
-      );
     },
 
     // video 다운로드
     async videoDownload() {
-      console.log("비디오 다운로드");
       if (this.$store.state.subAuth == "N" && this.videoData.kind == "구독") {
         return alert("구독회원만 다운받을 수 있습니다.");
       }
@@ -282,11 +258,9 @@ export default {
           responseType: "blob", // 응답데이터 타입 정의
           url: `${process.env.VUE_APP_API_URL}/video/download/${this.videoData.ano}`,
         });
-        console.log(res);
         const fileName = `video_${res.request.responseURL.substr(
           res.request.responseURL.lastIndexOf("/") + 1
         )}`;
-        console.log(fileName);
         const blob = new Blob([res.data]);
         const fileObjectUrl = window.URL.createObjectURL(blob);
         const fileLink = document.createElement("a");
@@ -295,7 +269,7 @@ export default {
         document.body.appendChild(fileLink);
         fileLink.click();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
 
@@ -310,14 +284,10 @@ export default {
       }
       let x = setInterval(() => {
         const lastDayMs = new Date(this.videoData.lastDay).getTime();
-        // console.log(lastDayMs);
         // 오늘 날짜
         const today = new Date().getTime();
-        // console.log(today);
-        // console.log(lastDayMs, today);
         // dday 산출 값
         const time = lastDayMs - today;
-        // console.log(time, "dday의 ms");
         // dday 산출을 위해 필요한 값
         const oneDay = 24 * 60 * 60 * 1000;
         const oneHour = 60 * 60 * 1000;
