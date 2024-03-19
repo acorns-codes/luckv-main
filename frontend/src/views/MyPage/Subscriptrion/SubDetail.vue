@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="sub-list" v-if="this.userData.subYn === 'Y'">
+    <div class="sub-list" v-if="this.sessionStorageData.subYn === 'Y'">
       <h2>구독 내역</h2>
       <div>
         <div>
@@ -20,8 +20,8 @@
               <tr>
                 <td>구독중</td>
                 <td>구독 동영상 1개월 구독권</td>
-                <td>{{ this.userData.subStartDay }}</td>
-                <td>{{ this.userData.subLastDay }}</td>
+                <td>{{ this.sessionStorageData.subStartDay }}</td>
+                <td>{{ this.sessionStorageData.subLastDay }}</td>
               </tr>
             </tbody>
           </v-table>
@@ -48,12 +48,11 @@
 </template>
 
 <script>
-import { apiPostVideo, apiDeleteVideo, apiGetInfoMember } from "@/api/user";
+import { apiPostVideo, apiDeleteVideo } from "@/api/user";
+
 export default {
   data() {
     return {
-      sessionData: this.$store.state.sessionStorageData,
-      userData: "",
       headers: [
         { title: "status", value: "상태" },
         { title: "name", value: "구독" },
@@ -62,8 +61,11 @@ export default {
       ],
     };
   },
-  mounted() {
-    this.getInfo();
+
+  computed: {
+    sessionStorageData() {
+      return this.$store.state.sessionStorageData;
+    },
   },
   methods: {
     // 현재 시간 구하기
@@ -83,53 +85,62 @@ export default {
       const today = `${day} ${time}`;
       return today;
     },
-    // 회원 정보 불러오기
-    async getInfo() {
-      const req = {
-        mno: this.sessionData.mno,
-      };
+
+    // 구독신청
+    async sub() {
+      let req;
+      if (this.sessionStorageData.subYn === "Y") {
+        req = {
+          mno: this.sessionStorageData.mno,
+          subStartDay:
+            this.sessionStorageData.subLastDay === null ? null : this.getDate(),
+          subLastDay:
+            this.sessionStorageData.subLastDay === null
+              ? null
+              : this.sessionStorageData.subLastDay,
+        };
+      } else {
+        req = {
+          mno: this.sessionStorageData.mno,
+        };
+      }
+      let _confirm;
+      if (this.sessionStorageData.subYn === "Y") {
+        _confirm = confirm("구독을 연장하시겠습니까?");
+      } else {
+        _confirm = confirm("구독을 신청하시겠습니까?");
+      }
+
+      if (!_confirm) {
+        return;
+      }
+
       try {
-        const res = await apiGetInfoMember(req);
-        this.userData = res.data;
+        const res = await apiPostVideo(req);
+        if (res.msg === "SUCCESS") {
+          this.refreshUserInfo();
+          alert("구독 신청 완료");
+        }
       } catch (error) {
         console.error(error);
       }
     },
-    // 구독신청
-    async sub() {
-      const newData = {
-        mno: this.$store.state.sessionStorageData.mno,
-        subStartDay: this.userData.subLastDay === null ? null : this.getDate(),
-        subLastDay:
-          this.userData.subLastDay === null ? null : this.userData.subLastDay,
-      };
-      console.log(newData.subLastDay);
-      if (!confirm("구독을 신청하시겠습니까?")) {
-        alert("구독 신청이 완료되지 못했습니다!");
-      } else {
-        try {
-          const res = await apiPostVideo(newData);
-          if (res.data) {
-            alert("구독 신청이 완료되었습니다!");
-            this.$store.commit("storeSubAuth", "Y");
-            this.getInfo();
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    },
+
     // 구독해지
     async subNot() {
+      const _confirm = confirm("구독을 해지하시겠습니까?");
+      if (!_confirm) {
+        return;
+      }
       const req = {
-        mno: this.$store.state.sessionStorageData.mno,
+        mno: this.sessionStorageData.mno,
       };
+
       try {
         const res = await apiDeleteVideo(req);
         if (res) {
           alert("구독 해지 신청이 완료되었습니다!");
-          this.$store.commit("storeSubAuth", "N");
-          this.getInfo();
+          this.refreshUserInfo();
         }
       } catch (error) {
         console.error(error);

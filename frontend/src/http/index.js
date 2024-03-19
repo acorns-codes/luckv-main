@@ -4,6 +4,7 @@ const http = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 });
 
+import { errorHandler } from "@/utils/errorHandler";
 // 요청 인터셉터 추가
 http.interceptors.request.use(
   (config) => {
@@ -27,7 +28,7 @@ http.interceptors.response.use(
   function (response) {
     if (response.data.res !== "OK" || response.data.msg !== "SUCCESS") {
       if (response.data.msg) {
-        return alert(response.data.msg);
+        return errorHandler(response.data.msg);
       }
       return response;
     }

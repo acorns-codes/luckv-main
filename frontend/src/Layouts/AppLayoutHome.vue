@@ -16,31 +16,35 @@ export default {
     isUserLogin() {
       return this.$store.getters.isLogin;
     },
+    sessionStorageData() {
+      return this.$store.state.sessionStorageData;
+    },
   },
   methods: {
     // 구독신청
     async sub() {
-      if (this.$store.state.subAuth === "Y") {
-        alert("이미 구독중입니다!");
-      } else if (this.$store.state.sessionStorageData.auth !== "B") {
-        alert("구매자 회원만 구독이 가능합니다!");
-      } else {
-        if (!confirm("구독을 신청하시겠습니까?")) {
-          alert("구독 신청이 완료되지 못했습니다!");
-        } else {
-          const req = {
-            mno: this.$store.state.sessionStorageData.mno,
-          };
-          try {
-            const res = await apiPostVideo(req);
-            if (res.data) {
-              alert("구독 신청이 완료되었습니다!");
-              this.$store.commit("storeSubAuth", "Y");
-            }
-          } catch (error) {
-            console.error(error);
-          }
+      if (this.sessionStorageData.subYn === "Y") {
+        return alert("이미 구독중입니다!");
+      }
+
+      if (this.sessionStorageData.auth === "S") {
+        return alert("구매자 회원만 구독이 가능합니다!");
+      }
+      const _confirm = confirm("구독을 신청하시겠습니까?");
+      if (!_confirm) {
+        return;
+      }
+      const req = {
+        mno: this.sessionStorageData.mno,
+      };
+      try {
+        const res = await apiPostVideo(req);
+        if (res.msg === "OK") {
+          this.refreshUserInfo();
+          alert("구독 신청 완료");
         }
+      } catch (e) {
+        console.error(e);
       }
     },
   },

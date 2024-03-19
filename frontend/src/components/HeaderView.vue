@@ -21,7 +21,7 @@
         <router-link
           :to="{
             name: 'mypageEdit',
-            params: { mno: this.sessionData.mno },
+            params: { mno: this.sessionStorageData.mno },
           }"
           >Mypage</router-link
         >
@@ -86,23 +86,20 @@ export default {
 
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
-    this.$store.commit(
-      "storeSubAuth",
-      this.$store.state.sessionStorageData.subYn
-    );
   },
   computed: {
     isUserLogin() {
-      if (this.$store.state.sessionStorageData) {
+      if (this.sessionStorageData) {
         return true;
       } else {
         return false;
       }
     },
-    sessionData() {
+    sessionStorageData() {
       return this.$store.state.sessionStorageData;
     },
   },
+
   methods: {
     handleScroll() {
       const scrollPosition = window.pageYOffset;
@@ -117,7 +114,7 @@ export default {
     },
     logoutUser() {
       this.$store.commit("clearUser");
-      this.$store.state.sessionStorageData = "";
+      this.sessionStorageData = "";
       this.$router.go();
     },
   },
@@ -222,5 +219,42 @@ h1 span {
 #nav a.router-link-active {
   color: #ffffff;
   font-weight: bold;
+}
+
+/* 모바일 화면에 적용 */
+@media (max-width: 767px) {
+  #nav {
+    width: 700px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-left: 40px;
+    transition: width 0.5s ease-in-out;
+
+    & a {
+      text-decoration: none;
+      color: #fff;
+    }
+  }
+  #nav a.router-link-active {
+    color: #ff9100;
+    font-weight: bold;
+  }
+  #nav.short {
+    top: unset;
+    display: none;
+  }
+  #root:hover {
+    #nav.short {
+      box-sizing: border-box;
+      display: flex;
+      width: fit-content;
+      background: #609ea0;
+      height: fit-content;
+      padding: 10px 20px;
+    }
+  }
 }
 </style>

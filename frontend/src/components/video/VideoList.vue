@@ -89,13 +89,15 @@ span {
   display: flex;
   flex-wrap: wrap;
   & > div {
-    width: 264px;
-    height: 250px;
+    width: 20%;
+    position: relative;
+    padding-bottom: 20%;
     margin: 1%;
     cursor: pointer;
     & > video {
-      width: inherit;
-      height: inherit;
+      width: 100%;
+      height: 100%;
+      position: absolute;
       object-fit: cover;
     }
   }
@@ -114,18 +116,23 @@ p {
 
 @media (min-width: 2500px) {
   .video-box {
-    width: 81%;
-  }
-  .video-box > div {
-    width: 632px;
-    height: 500px;
-    margin: 1%;
-    cursor: pointer;
+    width: 2000px;
   }
 }
 
 .no-video {
   width: 100% !important;
   padding: 30px;
+}
+
+@media (max-width: 767px) {
+  .video-box {
+    flex-direction: column;
+    & > div {
+      width: 50%;
+      position: relative;
+      padding-bottom: 50%;
+    }
+  }
 }
 </style>

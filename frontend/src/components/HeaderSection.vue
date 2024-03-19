@@ -55,17 +55,15 @@ export default {
 <style lang="scss" scoped>
 section {
   width: 100%;
-  height: 500px;
+  /* height: 500px; */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 6% 0 0 0;
   & > div {
-    width: 100%;
+    width: 80%;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    margin: 20% 0 0 0;
     & > div:nth-child(2) {
       width: 100%;
       display: flex;
@@ -75,14 +73,14 @@ section {
 }
 
 h3 {
-  font-size: 62px;
+  font-size: 3rem;
   text-decoration: overline;
   text-decoration-color: #ff9414;
   text-decoration-thickness: 2px;
 }
 
 p {
-  font-size: 30px;
+  font-size: 2rem;
 }
 
 .kindclass {
@@ -90,6 +88,23 @@ p {
   flex-direction: column;
   align-items: flex-start;
   padding: 0% 5% 0 10%;
-  margin: 6% 0 0 0;
+  margin-top: 50px;
+}
+
+@media (max-width: 767px) {
+  section {
+    height: unset;
+    margin: 0;
+    & > div {
+      width: 100%;
+      margin: 0;
+    }
+    h3 {
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.5rem;
+    }
+  }
 }
 </style>

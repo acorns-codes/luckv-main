@@ -185,15 +185,11 @@ export default {
           res.request.responseURL.lastIndexOf("/") + 1
         )}`;
         const blob = new Blob([res.data]);
-
         const fileObjectUrl = window.URL.createObjectURL(blob);
-
         const fileLink = document.createElement("a");
         fileLink.href = fileObjectUrl;
-
         fileLink.setAttribute("download", `${fileName}.mp4`);
         document.body.appendChild(fileLink);
-
         fileLink.click();
       } catch (error) {
         console.error(error);

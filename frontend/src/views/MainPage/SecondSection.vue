@@ -1,11 +1,9 @@
 <template>
   <section v-if="deadlineData">
     <div id="f-div">
-      <h2 style="font-size: 70px">마감이 임박한 동영상입니다.</h2>
-      <p style="font-size: 30px">마감이 얼마 남지 않은 동영상입니다.</p>
-      <p style="font-size: 30px">
-        합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!
-      </p>
+      <h2>마감이 임박한 동영상입니다.</h2>
+      <p>마감이 얼마 남지 않은 동영상입니다.</p>
+      <p>합리적인 가격으로 나만의 것으로 동영상을 소유해보세요!</p>
     </div>
     <div class="container">
       <div class="video-box">
@@ -21,31 +19,12 @@
         <h2>{{ deadlineData.title }}</h2>
         <p>{{ deadlineData.content }}</p>
         <p><span>마감일자 </span> {{ deadlineData.lastDay }}</p>
-        <div style="align-items: center">
-          <p
-            style="
-              width: 37%;
-              padding: 2% 8%;
-              display: flex;
-              justify-content: center;
-            "
-          >
-            시작가
-          </p>
+        <div>
+          <p>시작가</p>
           <p>{{ $globalFuc(deadlineData.payStart) }} 원</p>
         </div>
-        <div style="align-items: center">
-          <p
-            style="
-              background-color: red;
-              width: 37%;
-              padding: 2% 8%;
-              display: flex;
-              justify-content: center;
-            "
-          >
-            최고가
-          </p>
+        <div class="btn">
+          <p>최고가</p>
           <p style="color: red">{{ $globalFuc(this.recvList.bidding) }} 원</p>
         </div>
         <div class="dday-box" style="justify-content: center">
@@ -66,12 +45,7 @@
             <span>SECS</span>
           </div>
         </div>
-        <v-btn
-          class="abtn"
-          variant="flat"
-          color="#5f9ea0"
-          @click="modal = true && getInfo(deadlineData.ano)"
-        >
+        <v-btn class="abtn" variant="flat" color="#5f9ea0" @click="attend">
           <p style="color: white; border-radius: 5px; padding: 4px 5px 0 5px">
             입찰
           </p>
@@ -126,6 +100,9 @@ export default {
   computed: {
     videoSrc() {
       return this.$store.state.videoSrc;
+    },
+    sessionStorageData() {
+      return this.$store.state.sessionStorageData;
     },
   },
   async created() {
@@ -204,6 +181,14 @@ export default {
       e.target.pause();
       e.target.currentTime = 0;
     },
+    // 입찰하기
+    async attend() {
+      if (!this.sessionStorageData) {
+        return alert("로그인 후 이용해주세요");
+      }
+      this.modal = true;
+      await this.getInfo(this.deadlineData.ano);
+    },
 
     // 동영상 불러오기
     async getVideo() {
@@ -269,7 +254,6 @@ export default {
 <style lang="scss" scoped>
 section {
   width: 100%;
-  /* height: 1440px; */
   display: flex;
   justify-content: center;
   margin-block: 15% 2%;
@@ -285,6 +269,12 @@ section {
   text-align: left;
   width: 100%;
   padding: 0 0 5% 10%;
+  h2 {
+    font-size: 3rem;
+  }
+  p {
+    font-size: 1.5rem;
+  }
 }
 
 .container {
@@ -312,20 +302,22 @@ section {
     & > div {
       display: flex;
       width: 80%;
-      padding: 3%;
+      padding: 3px 0;
       // margin-bottom: 5%;
       justify-content: space-between;
       border-bottom: 1px solid #343434;
+      box-sizing: border-box;
 
       & > p:nth-child(1) {
         background-color: #343434;
         color: white;
         border-radius: 5px;
-        padding: 4px 5px 0 5px;
+        padding: 5px;
+        box-sizing: border-box;
       }
-      & > p:not(:first-of-type) {
-        width: 100%;
-      }
+    }
+    & > div:nth-child(2) > p:nth-child(2) {
+      background-color: #ff5e5e;
     }
   }
 }
@@ -374,7 +366,7 @@ section {
 }
 
 .video-box {
-  width: 720px;
+  min-width: 500px;
   height: 400px;
   & > video {
     width: 100%;
@@ -392,26 +384,13 @@ button {
   display: flex;
 }
 
-@media (min-width: 500px) {
-  p {
-    font-size: 14px;
+@media (max-width: 767px) {
+  .container {
+    flex-direction: column;
+    gap: 10px;
   }
-  span {
-    font-size: 14px;
-  }
-}
-
-@media (min-width: 2500px) {
-  h2 {
-    font-size: 50px;
-  }
-
-  p {
-    font-size: 30px;
-  }
-
-  span {
-    font-size: 30px;
+  .dday-box {
+    font-size: 1rem;
   }
 }
 </style>

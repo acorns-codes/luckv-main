@@ -77,7 +77,7 @@ export default {
 <style lang="scss" scoped>
 section {
   width: 100%;
-  height: 850px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -143,6 +143,22 @@ a {
   }
   100% {
     transform: translateY(0);
+  }
+}
+/* 모바일 화면에 적용 */
+@media (max-width: 767px) {
+  section {
+    & > div:nth-child(1) {
+      & > h1 {
+        font-size: 2rem;
+      }
+      & > p {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  .btext2 img {
+    width: 50%;
   }
 }
 </style>

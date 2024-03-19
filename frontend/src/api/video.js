@@ -27,6 +27,19 @@ export function apiUploadVideo(data) {
   });
 }
 
+// 비디오 다운로드
+export function apiDownloadVideo(data) {
+  const url = "/video/download";
+  const responseType = "blob";
+  return http.get(url, data, responseType).then((response) => {
+    if (response) {
+      return response.data;
+    } else {
+      return response;
+    }
+  });
+}
+
 // 경매 등록
 export function apiAddAuction(data) {
   const url = `/${baseUrl}/insert`;

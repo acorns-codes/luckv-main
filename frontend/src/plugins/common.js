@@ -1,3 +1,4 @@
+import { apiGetInfoMember } from "@/api/user";
 export default {
   methods: {
     checkObject(object) {
@@ -12,6 +13,30 @@ export default {
         copy[key] = this.checkObject(object[key]);
       }
       return copy;
+    },
+    async refreshUserInfo() {
+      console.log("refresh");
+      const req = {
+        mno: this.sessionStorageData.mno,
+      };
+      try {
+        const res = await apiGetInfoMember(req);
+        if (res) {
+          console.log(res, "resfresh");
+          this.$store.commit("setSessionStorage", JSON.stringify(res.data));
+          this.$store.commit(
+            "readSessionStorage",
+            this.$store.state.sessionStorageData
+          );
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  },
+  computed: {
+    sessionStorageData() {
+      return this.$store.state.sessionStorageData;
     },
   },
 };

@@ -23,7 +23,6 @@
             v-model="name"
             label="이름"
             :rules="nameRules"
-            ß
           ></v-text-field>
           <v-text-field
             v-model="ph"
@@ -169,7 +168,7 @@ export default {
         } else {
           // 회원가입
           const res = await apiSignUp(userData);
-          if (res.data) {
+          if (res.msg === "SUCCESS") {
             alert("회원가입에 성공했습니다!");
             this.$router.push({
               path: "/",
@@ -183,13 +182,22 @@ export default {
     },
     // 아이디 중복 체크
     async idCheck() {
-      const req = { mid: this.id };
-      const res = await apiIdCheck(req);
-      if (!res.data) {
+      if (!this.id) {
         return;
-      } else {
-        alert("중복된 아이디입니다!");
-        this.id = "";
+      }
+      const req = { mid: this.id };
+      try {
+        const res = await apiIdCheck(req);
+        console.log(res, "res");
+        if (res) {
+          if (res.msg === "SUCCESS") {
+            return;
+          }
+        } else {
+          this.id = "";
+        }
+      } catch (error) {
+        console.error(error);
       }
     },
   },

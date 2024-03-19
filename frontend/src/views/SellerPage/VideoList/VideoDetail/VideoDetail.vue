@@ -13,7 +13,7 @@
                     controls
                     @mouseover="playVideo"
                     @mouseleave="stopVideo"
-                    :src="`${videoSrc}/videoplay?ano=${this.auctionData.ano}`"
+                    :src="`${videoSrc}/video/play?ano=${this.auctionData.ano}`"
                   ></video>
                 </div>
               </td>

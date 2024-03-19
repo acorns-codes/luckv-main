@@ -6,11 +6,9 @@ export default createStore({
     videoSrc: process.env.VUE_APP_API_URL,
     userId: "",
     isClicked: false,
-    accessToken: "",
     sessionStorageData: "",
     userData: "",
     socket: "",
-    subAuth: "",
     subData: "",
   },
   getters: {
@@ -21,9 +19,6 @@ export default createStore({
       } else {
         return false;
       }
-    },
-    checkSubAuth(state) {
-      return state.subAuth + "새로저장함";
     },
   },
   mutations: {
@@ -53,9 +48,6 @@ export default createStore({
     },
     storeSocket(state, socket) {
       state.socket = socket;
-    },
-    storeSubAuth(state, subAuth) {
-      state.subAuth = subAuth;
     },
   },
   // 새로고침해도 session정보 유지 될 수 있도록 했음

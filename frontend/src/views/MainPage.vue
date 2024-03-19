@@ -3,8 +3,8 @@
   <SecondSection />
   <!-- <ThirdSection /> -->
   <div id="f-div">
-    <h2 style="font-size: 70px">다양한 분야의 동영상을 만나보세요</h2>
-    <p style="font-size: 30px">
+    <h2>다양한 분야의 동영상을 만나보세요</h2>
+    <p>
       개성이 가득한 다양한 분야의 동영상을 먼저 선점할 수 있는 기회를노려보세요!
     </p>
   </div>
@@ -29,11 +29,7 @@ export default {
     SecondSection,
     HeaderSection,
   },
-  computed: {
-    test() {
-      return this.$store.state.subAuth;
-    },
-  },
+  computed: {},
   data() {
     return {
       kind: [
@@ -84,8 +80,26 @@ export default {
 
 <style lang="scss" scoped>
 #f-div {
-  text-align: left;
-  width: 100%;
-  padding: 10% 0 0% 10%;
+  text-align: center;
+  padding: 10% 0;
+  & > h2 {
+    font-size: 4rem;
+  }
+  & > p {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 767px) {
+  #f-div {
+    text-align: center;
+    padding: 10% 0;
+    & > h2 {
+      font-size: 2rem;
+    }
+    & > p {
+      font-size: 1rem;
+    }
+  }
 }
 </style>

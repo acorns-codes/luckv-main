@@ -39,7 +39,12 @@
             </p>
           </div>
           <div></div>
-          <v-dialog v-model="dialog" persistent width="500">
+          <v-dialog
+            v-model="dialog"
+            persistent
+            width="500"
+            v-if="sessionStorageData.auth !== 'S' && sessionStorageData"
+          >
             <template v-slot:activator="{ props }">
               <v-btn color="#FF9414" size="x-large" v-bind="props">
                 입찰하기
@@ -112,6 +117,8 @@
 
 <script>
 import { apiAddAttend } from "@/api/attend";
+// import { apiDownloadVideo } from "@/api/video";
+
 // import getRemainingTime from "@/plugins/function/functions.js";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
@@ -148,12 +155,16 @@ export default {
     videoSrc() {
       return this.$store.state.videoSrc;
     },
+    sessionStorageData() {
+      return this.$store.state.sessionStorageData;
+    },
   },
   created() {
     // 소켓 연결 시도
     this.connect();
   },
   mounted() {
+    console.log(this.sessionStorageData, "ggggg");
     // 소켓 연결 시도
     setTimeout(() => {
       this.connect(this.videoData.ano);
@@ -205,11 +216,12 @@ export default {
     },
     // 소켓으로 데이터 보내기
     async sendMessage() {
+      // console.log(this.sessionStorageData);
       if (!this.price) {
         return alert("입찰 금액을 입력해주세요");
       } else if (!this.valid) {
         return alert("입찰가를 확인해주세요!");
-      } else if (this.$store.state.sessionStorageData.auth !== "B") {
+      } else if (this.sessionStorageData.auth !== "B") {
         alert("구매자회원만 입찰에 참여할 수 있습니다!");
         return (this.price = 0);
       }
@@ -221,7 +233,7 @@ export default {
     async bidding() {
       const req = {
         ano: this.videoData.ano,
-        buyer: this.$store.state.sessionStorageData.mno,
+        buyer: this.sessionStorageData.mno,
         bidding: this.price,
       };
       try {
@@ -230,8 +242,8 @@ export default {
           if (this.stompClient && this.stompClient.connected) {
             const msg = {
               ano: this.videoData.ano,
-              buyer: this.$store.state.sessionStorageData.mno,
-              buyerNm: this.$store.state.sessionStorageData.name,
+              buyer: this.sessionStorageData.mno,
+              buyerNm: this.sessionStorageData.name,
               bidding: this.price,
             };
             this.stompClient.send(
@@ -240,7 +252,7 @@ export default {
               {}
             );
           }
-          alert("입찰에 성공하였습니다!");
+          alert("입찰 완료");
         }
       } catch (error) {
         console.error(error);
@@ -249,7 +261,13 @@ export default {
 
     // video 다운로드
     async videoDownload() {
-      if (this.$store.state.subAuth == "N" && this.videoData.kind == "구독") {
+      if (!this.sessionStorageData) {
+        return alert("로그인 후 이용해주세요");
+      }
+      if (
+        this.sessionStorageData.subYn == "N" &&
+        this.videoData.kind == "구독"
+      ) {
         return alert("구독회원만 다운받을 수 있습니다.");
       }
       try {
@@ -258,9 +276,13 @@ export default {
           responseType: "blob", // 응답데이터 타입 정의
           url: `${process.env.VUE_APP_API_URL}/video/download/${this.videoData.ano}`,
         });
+        // const res = await apiDownloadVideo(this.videoData.ano);
+        // console.log(res);
         const fileName = `video_${res.request.responseURL.substr(
           res.request.responseURL.lastIndexOf("/") + 1
         )}`;
+        // console.log(res, "dfdfd");
+        // console.log(fileName, "파일이름");
         const blob = new Blob([res.data]);
         const fileObjectUrl = window.URL.createObjectURL(blob);
         const fileLink = document.createElement("a");

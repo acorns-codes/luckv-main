@@ -72,8 +72,8 @@
 <script>
 import { apiGetInfoMember, apiEditInfoMember } from "@/api/user";
 export default {
-  mounted() {
-    this.getuserInfo();
+  async mounted() {
+    await this.getuserInfo();
   },
 
   data() {
@@ -116,10 +116,13 @@ export default {
       };
       try {
         const res = await apiGetInfoMember(req);
-        this.userData = res.data;
-        this.accountInfo = this.userData.acccount.split(":");
-        this.$store.commit("getUserData", res.data);
-        console.log(this.$store.state.userData);
+        if (res.data) {
+          this.userData = res.data;
+          if (res.data.acccount) {
+            this.accountInfo = this.userData.acccount.split(":");
+          }
+          this.$store.commit("getUserData", res.data);
+        }
       } catch (error) {
         console.error(error);
       }

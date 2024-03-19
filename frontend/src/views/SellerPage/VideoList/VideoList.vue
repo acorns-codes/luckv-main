@@ -46,6 +46,7 @@ export default {
         this.reqModel.kind = type;
         await this.getVideo();
       },
+      immediate: true,
     },
     pageInfo: {
       handler(info) {
@@ -56,10 +57,6 @@ export default {
       },
       deep: true,
     },
-  },
-
-  mounted() {
-    this.getVideo();
   },
   methods: {
     async getVideo(page) {

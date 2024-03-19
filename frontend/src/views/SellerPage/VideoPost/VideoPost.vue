@@ -174,7 +174,7 @@ export default {
       if (today < daytime) {
         return "경매전";
       } else {
-        return "경매중";
+        return "판매중";
       }
     },
 

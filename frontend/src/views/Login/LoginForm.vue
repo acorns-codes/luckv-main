@@ -92,6 +92,10 @@ export default {
             this.$store.state.sessionStorageData
           );
           alert(`${res.data.name}님 환영합니다!`);
+          if (this.$route.name === "Home") {
+            this.$router.go();
+          }
+          this.$router.push({ name: "Home" });
           this.close();
         } else {
           this.close();
