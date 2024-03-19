@@ -30,6 +30,9 @@
 			FROM attend  
 			GROUP BY ano) att ON att.ano = a.ano            
 		WHERE 1 = 1  	
+		<if test="seller  != null  and seller  != ''">
+			and seller = #{seller}
+		</if>
 	  	<if test="kind  != null  and kind  != ''">
 	        AND kind = #{kind} /*동영상 판매 형태*/
 	    </if>
@@ -57,7 +60,7 @@
   		<if test="seller != null  and seller != ''">
 	         and seller = #{seller}
 	    </if>
-	    <if test="seller == null  and seller == ''">
+	    <if test="kind  != '무료'">
 	         and status = '판매중'
 	    </if>
 	    <if test="kind  != null  and kind  != ''">

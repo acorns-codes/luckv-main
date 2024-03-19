@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,7 @@ public class VideoController {
 
 	// 동영상파일 업로드
     @PostMapping("/video/upload")
-    public Map<String,Object> videoUpload(@ModelAttribute Video video,
+    public Map<String,Object> videoUpload(
                            @RequestParam MultipartFile file,
                            HttpServletRequest request) throws IOException {
         
@@ -64,6 +65,7 @@ public class VideoController {
         String savedFileName = "";       
         savedFileName = uuid.toString() + "_" + originalFileName;
         
+        Video video = new Video();
         video.setVideoFile(savedFileName);
         
         
@@ -74,9 +76,8 @@ public class VideoController {
             //스프링이 제공하는 기능
             file.transferTo(new File(fullPath)); // 파일 서버로 전송
             
-            boolean b = videoService.videoUpload(video);
             
-            if(!b) {
+            if(!videoService.videoUpload(video)) {
 	        	obj.put("res","OK");
 	        	obj.put("msg","NOT_CREATED_VIDEO");
 	        	return obj;

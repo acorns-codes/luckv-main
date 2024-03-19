@@ -57,7 +57,7 @@ public class FrequentlyController {
 
 		   // FaQ 등록
 		  @PostMapping("/insert/frequently")
-		    public Map<String,Object> insertFrequently(@ModelAttribute Frequently frequently) {		       
+		    public Map<String,Object> insertFrequently(@RequestBody Frequently frequently) {		       
 			  	Map<String,Object> obj = new HashMap<>();
 		        
 		        if(!frequentlyService.insertFrequently(frequently)) {
@@ -85,7 +85,7 @@ public class FrequentlyController {
 		    
 		    // FaQ 수정
 		  @PostMapping("/frequently/update")
-		    public Map<String,Object> frequentlyUpdate(@ModelAttribute Frequently frequently) {  
+		    public Map<String,Object> frequentlyUpdate(@RequestBody Frequently frequently) {  
 			  Map<String,Object> obj = new HashMap<>();
 			  if(!frequentlyService.frequentlyUpdate(frequently)) {
 		        	obj.put("res","OK");

@@ -68,7 +68,7 @@ public class AuctionController {
 
 		   // 판매 등록
 		  @PostMapping("/auction/insert")
-		    public Map<String,Object> insertAuction(@ModelAttribute Auction auction) {
+		    public Map<String,Object> insertAuction(@RequestBody Auction auction) {
 		        
 			  Map<String,Object> obj = new HashMap<>();
 		        
@@ -104,7 +104,7 @@ public class AuctionController {
 		    
 		    // 판매 수정
 		    @PostMapping("/auction/update")
-		    public Map<String,Object> auctionUpdate(@ModelAttribute Auction auction) {  
+		    public Map<String,Object> auctionUpdate(@RequestBody Auction auction) {  
 		    	
 		    	Map<String,Object> obj = new HashMap<>();
 		    	
@@ -120,7 +120,7 @@ public class AuctionController {
 		    
 		    // 경매->구독으로 변경 
 		    @PostMapping("/auction/change")
-		    public Map<String,Object> auctionChange(@ModelAttribute Auction auction) {  
+		    public Map<String,Object> auctionChange(@RequestBody Auction auction) {  
 		    	Map<String,Object> obj = new HashMap<>();
 		    			    	
 		    	if(!auctionService.auctionChange(auction)) {

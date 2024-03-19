@@ -55,7 +55,7 @@ public class AttendController {
        }
     	// 입찰 등록
 	  @PostMapping("/attend/insert")
-	    public Map<String,Object> insertAuction(@ModelAttribute Attend attend) {
+	    public Map<String,Object> insertAuction(@RequestBody Attend attend) {
 	        
 		  	Map<String,Object> obj = new HashMap<>();
 	        
